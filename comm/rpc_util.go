@@ -1,8 +1,8 @@
 package comm
 
 import (
-	"FunFitnessTrainer/db/dao"
-	"FunFitnessTrainer/db/model"
+	"ff_plib/db/dao"
+	"ff_plib/db/model"
 )
 
 func GetAllGym() (map[int]model.GymInfoModel, error) {

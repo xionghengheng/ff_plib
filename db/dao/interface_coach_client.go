@@ -1,6 +1,6 @@
 package dao
 
-import "FunFitnessTrainer/db/model"
+import "ff_plib/db/model"
 
 // CoachClientHomePageBannerInterface 教练端主页顶部banner
 type CoachClientHomePageBannerInterface interface {

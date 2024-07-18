@@ -1,8 +1,8 @@
 package dao
 
 import (
-	"FunFitnessTrainer/db"
-	"FunFitnessTrainer/db/model"
+	"ff_plib/db"
+	"ff_plib/db/model"
 	"errors"
 	"fmt"
 	"github.com/jinzhu/gorm"

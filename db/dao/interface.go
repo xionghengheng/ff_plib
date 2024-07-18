@@ -1,7 +1,7 @@
 package dao
 
 import (
-	"FunFitnessTrainer/db/model"
+	"ff_plib/db/model"
 )
 
 // UserInterface 用户数据模型接口

@@ -1,8 +1,8 @@
 package dao
 
 import (
-	"FunFitnessTrainer/db"
-	"FunFitnessTrainer/db/model"
+	"ff_plib/db"
+	"ff_plib/db/model"
 )
 
 const coach_client_home_page_banner_table_name = "coach_client_home_page_banner"
