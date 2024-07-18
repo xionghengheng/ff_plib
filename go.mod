@@ -1,4 +1,4 @@
-module ff_plib
+module github.com/xionghengheng/ff_plib
 
 go 1.21
 

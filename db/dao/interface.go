@@ -1,7 +1,7 @@
 package dao
 
 import (
-	"ff_plib/db/model"
+	"github.com/xionghengheng/ff_plib/db/model"
 )
 
 // UserInterface 用户数据模型接口

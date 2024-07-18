@@ -1,8 +1,8 @@
 package comm
 
 import (
-	"ff_plib/db/dao"
-	"ff_plib/db/model"
+	"github.com/xionghengheng/ff_plib/db/dao"
+	"github.com/xionghengheng/ff_plib/db/model"
 )
 
 func GetAllGym() (map[int]model.GymInfoModel, error) {

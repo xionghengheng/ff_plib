@@ -1,8 +1,8 @@
 package dao
 
 import (
-	"ff_plib/db"
-	"ff_plib/db/model"
+	"github.com/xionghengheng/ff_plib/db"
+	"github.com/xionghengheng/ff_plib/db/model"
 	"errors"
 	"fmt"
 	"github.com/jinzhu/gorm"
