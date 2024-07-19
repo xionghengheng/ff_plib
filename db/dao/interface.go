@@ -156,7 +156,7 @@ type PaymentOrderInterface interface {
 	GetOrderList(uid int64) ([]model.PaymentOrderModel, error)
 
 	//通过教练id，获取全量属于该教练的订单列表
-	GetOrderListByCoachId(coachId int) ([]model.PaymentOrderModel, error)
+	GetOrderListByCoachId(coachId int, begTs int64) ([]model.PaymentOrderModel, error)
 }
 
 // PaymentOrderInterfaceImp

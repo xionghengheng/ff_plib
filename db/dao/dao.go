@@ -334,11 +334,11 @@ func (imp *PaymentOrderInterfaceImp) GetOrderList(uid int64) ([]model.PaymentOrd
 	return vecPaymentOrderModel, err
 }
 
-func (imp *PaymentOrderInterfaceImp) GetOrderListByCoachId(coachId int) ([]model.PaymentOrderModel, error) {
+func (imp *PaymentOrderInterfaceImp) GetOrderListByCoachId(coachId int, begTs int64) ([]model.PaymentOrderModel, error) {
 	var err error
 	var vecPaymentOrderModel []model.PaymentOrderModel
 	cli := db.Get()
-	err = cli.Table(payment_order_tableName).Where("coach_id = ?", coachId).Find(&vecPaymentOrderModel).Error
+	err = cli.Table(payment_order_tableName).Where("coach_id = ? AND payment_time > ?", coachId, begTs).Find(&vecPaymentOrderModel).Error
 	return vecPaymentOrderModel, err
 }
 
