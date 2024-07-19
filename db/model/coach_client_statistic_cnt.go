@@ -9,3 +9,4 @@ type CoachMonthlyStatisticModel struct {
 	LessonUserCnt uint32 `json:"lesson_user_cnt"`                // 上课用户数(去重的)
 	SaleRevenue   uint32 `json:"sale_revenue"`                   // 销售额(单位元)
 }
+
