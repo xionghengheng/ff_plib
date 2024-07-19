@@ -1,11 +1,11 @@
 package dao
 
 import (
-	"github.com/xionghengheng/ff_plib/db"
-	"github.com/xionghengheng/ff_plib/db/model"
 	"errors"
 	"fmt"
 	"github.com/jinzhu/gorm"
+	"github.com/xionghengheng/ff_plib/db"
+	"github.com/xionghengheng/ff_plib/db/model"
 	"time"
 )
 
@@ -333,6 +333,15 @@ func (imp *PaymentOrderInterfaceImp) GetOrderList(uid int64) ([]model.PaymentOrd
 	err = cli.Table(payment_order_tableName).Where("payer_uid = ?", uid).Order("order_time DESC").Find(&vecPaymentOrderModel).Error
 	return vecPaymentOrderModel, err
 }
+
+func (imp *PaymentOrderInterfaceImp) GetOrderListByCoachId(coachId int) ([]model.PaymentOrderModel, error) {
+	var err error
+	var vecPaymentOrderModel []model.PaymentOrderModel
+	cli := db.Get()
+	err = cli.Table(payment_order_tableName).Where("coach_id = ?", coachId).Find(&vecPaymentOrderModel).Error
+	return vecPaymentOrderModel, err
+}
+
 
 const coach_appointments_tableName = "coach_appointments"
 

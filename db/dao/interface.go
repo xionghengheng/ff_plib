@@ -154,6 +154,9 @@ type PaymentOrderInterface interface {
 
 	//获取订单列表，按时间降序排列
 	GetOrderList(uid int64) ([]model.PaymentOrderModel, error)
+
+	//通过教练id，获取全量属于该教练的订单列表
+	GetOrderListByCoachId(coachId int) ([]model.PaymentOrderModel, error)
 }
 
 // PaymentOrderInterfaceImp
