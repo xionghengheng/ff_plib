@@ -305,6 +305,16 @@ func (imp *CoursePackageSingleLessonInterfaceImp) GetSingleLessonListMissed(limi
 	return vecCoursePackageSingleLessonModel, err
 }
 
+func (imp *CoursePackageSingleLessonInterfaceImp) GetCompletedSingleLessonListByCoachId(coachId int, uBegTs int64) ([]model.CoursePackageSingleLessonModel, error) {
+	var err error
+	var vecCoursePackageSingleLessonModel []model.CoursePackageSingleLessonModel
+	cli := db.Get()
+	err = cli.Table(course_package_single_lesson_tableName).Where("coach_id = ? AND schedule_beg_ts > ? AND status = ?",
+		coachId, uBegTs, model.En_LessonStatusCompleted).Find(&vecCoursePackageSingleLessonModel).Error
+	return vecCoursePackageSingleLessonModel, err
+}
+
+
 const payment_order_tableName = "payment_orders"
 
 func (imp *PaymentOrderInterfaceImp) UpdateOrderSucc(orderId string, uid int64, mapUpdates map[string]interface{}) error {
