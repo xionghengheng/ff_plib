@@ -343,6 +343,8 @@ func (imp *PaymentOrderInterfaceImp) GetOrderListByCoachId(coachId int) ([]model
 }
 
 
+
+
 const coach_appointments_tableName = "coach_appointments"
 
 func (imp *AppointmentInterfaceImp) SetAppointmentSchedule(stCoachAppointmentModel model.CoachAppointmentModel) error {
