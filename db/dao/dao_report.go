@@ -5,10 +5,10 @@ import (
 	"github.com/xionghengheng/ff_plib/db/model"
 )
 
-const report_table_expourse_name = "report_table_expourse_name"
-const report_table_write_name = "report_table_write_name"
-const report_table_coach_client_expourse_name = "report_table_coach_client_expourse_name"
-const report_table_coach_client_write_name = "report_table_coach_client_write_name"
+const report_table_expourse_name = "report_table_expourse"
+const report_table_write_name = "report_table_write"
+const report_table_coach_client_expourse_name = "report_table_coach_client_expourse"
+const report_table_coach_client_write_name = "report_table_coach_client_write"
 
 func (imp *ReportInterfaceImp) DoReport(stReportItem model.ReportModel) (error) {
 	cli := db.Get()
