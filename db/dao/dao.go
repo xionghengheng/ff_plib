@@ -46,6 +46,15 @@ func (imp *UserInterfaceImp) GetUserByOpenId(openid string) (*model.UserInfoMode
 	return user, err
 }
 
+func (imp *UserInterfaceImp) GetUserByTraceId(traceid string) (*model.UserInfoModel, error) {
+	var err error
+	var user = new(model.UserInfoModel)
+	cli := db.Get()
+	err = cli.Table(user_tableName).Where("head_pic_safe_trace_id = ?", traceid).First(user).Error
+	return user, err
+}
+
+
 func (imp *UserInterfaceImp) RemoveUser(openid string) error {
 	return db.Get().Table(user_tableName).Where("wechat_id = ?", openid).Delete(&model.UserInfoModel{}).Error
 }

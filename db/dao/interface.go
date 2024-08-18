@@ -6,13 +6,25 @@ import (
 
 // UserInterface 用户数据模型接口
 type UserInterface interface {
+	//根据uid获取用户信息
 	GetUser(uid int64) (*model.UserInfoModel, error)
+
+	//根据openid获取用户信息
 	GetUserByOpenId(openid string) (*model.UserInfoModel, error)
+
+	//根据wx安全回调的traceid获取用户信息
+	GetUserByTraceId(traceid string) (*model.UserInfoModel, error)
+
+	//插入用户信息
 	UpsertUser(user *model.UserInfoModel) error
 
+	//更新用户信息
 	UpdateUserInfo(uid int64, mapUpdates map[string]interface{}) error
+
+	//更新用户电话号码
 	UpdateUserPhone(uid int64, phone string) error
 
+	//删除用户信息（慎用，用户后台清空数据）
 	RemoveUser(openid string) error
 }
 
