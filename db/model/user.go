@@ -24,10 +24,22 @@ type UserInfoModel struct {
 	VipExpiredTs            int64   `json:"vip_expired_ts"`                   //vip过期时间
 	IsCoach                 bool    `json:"is_coach"`                         //是否教练
 	CoachId                 int     `json:"coach_id"`                         //如果是教练，关联的教练id
+	HeadPicSafeStatus       int     `json:"head_pic_safe_status"`             //头像审核结果(参考 Enum_HeadPic_Check)
+	HeadPicWaitSafe         string  `json:"head_pic_wait_safe"`               //等待审核的头像
+	HeadPicSafeTraceId      string  `json:"head_pic_safe_trace_id"`           //等待审核的traceid，用户和异步回调匹配
+	RegistTs                int64   `json:"regist_ts"`                        //用户注册时间
+	BeVipTs                 int64   `json:"be_vip_ts"`                        //付费成为订阅会员的时间
 }
 
 const (
 	Enum_VipType_Non      int = iota // 0 = 非会员
 	Enum_VipType_Trial               // 1 = 体验会员
 	Enum_VipType_PaidYear            // 2 = 付费年费会员
+)
+
+const (
+	Enum_HeadPic_Check_Non  int = iota // 0 = 无审核状态
+	Enum_HeadPic_Check_Ing             // 1 = 审核中
+	Enum_HeadPic_Check_Pass            // 2 = 审核通过
+	Enum_HeadPic_Check_Deny            // 3 = 审核拒绝
 )
