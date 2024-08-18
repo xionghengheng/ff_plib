@@ -150,6 +150,14 @@ func (imp *CoursePackageInterfaceImp) GetCoursePackageById(packageId string) (*m
 	return coursePackage, err
 }
 
+func (imp *CoursePackageInterfaceImp) GetTrailCoursePackage(uid int64) (*model.CoursePackageModel, error) {
+	var err error
+	var coursePackage = new(model.CoursePackageModel)
+	cli := db.Get()
+	err = cli.Table(course_package_tableName).Where("uid = ? AND package_type = ?", uid, model.Enum_PackageType_TrialFree).First(coursePackage).Error
+	return coursePackage, err
+}
+
 func (imp *CoursePackageInterfaceImp) GetAllCoursePackageListByCoachId(coachId int, limit int) ([]model.CoursePackageModel, error) {
 	var err error
 	var vecCoursePackageModel []model.CoursePackageModel
@@ -227,6 +235,28 @@ func (imp *CoursePackageInterfaceImp) SubCourseCnt(packageId string) error {
 }
 
 func (imp *CoursePackageInterfaceImp) AddCourseCnt(packageId string, cnt int) error {
+	cli := db.Get()
+
+	err := cli.Transaction(func(tx *gorm.DB) error {
+		err := cli.Table(course_package_tableName).Model(&model.CoursePackageModel{}).Where("package_id = ?", packageId).UpdateColumn("remain_cnt", gorm.Expr("remain_cnt + ?", cnt)).Error
+		if err != nil {
+			fmt.Printf("update remain_cnt err, packageId:%s cnt:%d\n", packageId, cnt)
+			tx.Rollback()
+			return err
+		}
+
+		err = cli.Table(course_package_tableName).Model(&model.CoursePackageModel{}).Where("package_id = ?", packageId).UpdateColumn("total_cnt", gorm.Expr("total_cnt + ?", cnt)).Error
+		if err != nil {
+			fmt.Printf("update total_cnt err, packageId:%s cnt:%d\n", packageId, cnt)
+			tx.Rollback()
+			return err
+		}
+		return nil
+	})
+	return err
+}
+
+func (imp *CoursePackageInterfaceImp) AddRemainCourseCnt(packageId string, cnt int) error {
 	cli := db.Get()
 	return cli.Table(course_package_tableName).Model(&model.CoursePackageModel{}).Where("package_id = ?", packageId).UpdateColumn("remain_cnt", gorm.Expr("remain_cnt + ?", cnt)).Error
 }

@@ -80,6 +80,9 @@ var ImpCoach CoachInterface = &CoachInterfaceImp{}
 // CoursePackageInterface 课包数据模型接口
 type CoursePackageInterface interface {
 
+	//根据uid获取免费课包
+	GetTrailCoursePackage(uid int64) (*model.CoursePackageModel, error)
+
 	//按时间降序拉取某个uid的课包列表
 	GetCoursePackageListByUid(uid int64) ([]model.CoursePackageModel, error)
 
@@ -88,23 +91,30 @@ type CoursePackageInterface interface {
 
 	//按时间降序拉取某个教练的所有课课包列表
 	GetAllCoursePackageListByCoachId(coachId int, limit int) ([]model.CoursePackageModel, error)
+
 	//按时间降序拉取某个教练的体验课课包列表
 	GetTrailCoursePackageListByCoachId(coachId int, limit int) ([]model.CoursePackageModel, error)
+
 	//按时间降序拉取某个教练的付费课课包列表
 	GetPayCoursePackageListByCoachId(coachId int, limit int) ([]model.CoursePackageModel, error)
+
 	//按最后一节课上课的升序，拉取某个教练的所有课课包列表
 	GetListByCoachIdAndLastFinishLessonTs(coachId int, limit int) ([]model.CoursePackageModel, error)
 
 	//按时间降序拉取某个教练下，用户购买的的所有课包列表
 	GetAllPackageListByCoachIdAndUid(coachId int, uid int64) ([]model.CoursePackageModel, error)
+
 	//按时间降序拉取某个教练下，用户购买的的付费课包列表
 	GetPayCoursePackageListByCoachIdAndUid(coachId int, uid int64) ([]model.CoursePackageModel, error)
 
 	//预约成功后，扣减一节课时
 	SubCourseCnt(packageId string) error
 
-	//取消预约后，返回一节课时
+	//总数和剩余数都会添加
 	AddCourseCnt(packageId string, cnt int) error
+
+	//归还剩余计数（因为取消或旷课 归还剩余次数）
+	AddRemainCourseCnt(packageId string, cnt int) error
 
 	//发放课包到用户资产
 	AddCoursePackage2Uid(stCoursePackageModel *model.CoursePackageModel) error
