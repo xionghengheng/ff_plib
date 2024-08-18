@@ -160,9 +160,10 @@ type CoursePackageSingleLessonInterface interface {
 	GetSingleLessonListNotFinish(nowTs int64, limit int) ([]model.CoursePackageSingleLessonModel, error)
 	GetSingleLessonListMissed(limit int) ([]model.CoursePackageSingleLessonModel, error)
 	GetTodaySingleLessonListNotSendMsgGoLesson(ts int64, limit int) ([]model.CoursePackageSingleLessonModel, error)
-
-
 	GetCompletedSingleLessonListByCoachId(coachId int, uBegTs int64) ([]model.CoursePackageSingleLessonModel, error)
+
+	//获取所有次课信息，通过创建时间来分页
+	GetAllSingleLessonList(createTs int64) ([]model.CoursePackageSingleLessonModel, error)
 }
 
 // CoursePackageSingleLessonInterfaceImp 课包单次课数据模型实现
