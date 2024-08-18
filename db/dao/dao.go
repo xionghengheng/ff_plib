@@ -61,7 +61,7 @@ func (imp *UserInterfaceImp) GetAllUser() ([]model.UserInfoModel, error) {
 	var err error
 	var allUser []model.UserInfoModel
 	cli := db.Get()
-	err = cli.Table(user_tableName).Find(allUser).Error
+	err = cli.Table(user_tableName).Find(&allUser).Error
 	return allUser, err
 }
 
