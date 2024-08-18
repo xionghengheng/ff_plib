@@ -26,6 +26,9 @@ type UserInterface interface {
 
 	//删除用户信息（慎用，用户后台清空数据）
 	RemoveUser(openid string) error
+
+	//根据uid获取用户信息
+	GetAllUser() ([]model.UserInfoModel, error)
 }
 
 // UserInterfaceImp 用户数据模型实现

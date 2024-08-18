@@ -29,10 +29,8 @@ func (imp *UserInterfaceImp) UpdateUserInfo(uid int64, mapUpdates map[string]int
 func (imp *UserInterfaceImp) GetUser(uid int64) (*model.UserInfoModel, error) {
 	var err error
 	var user = new(model.UserInfoModel)
-
 	cli := db.Get()
 	err = cli.Table(user_tableName).Where("user_id = ?", uid).First(user).Error
-
 	return user, err
 }
 
@@ -57,6 +55,14 @@ func (imp *UserInterfaceImp) GetUserByTraceId(traceid string) (*model.UserInfoMo
 
 func (imp *UserInterfaceImp) RemoveUser(openid string) error {
 	return db.Get().Table(user_tableName).Where("wechat_id = ?", openid).Delete(&model.UserInfoModel{}).Error
+}
+
+func (imp *UserInterfaceImp) GetAllUser() ([]model.UserInfoModel, error) {
+	var err error
+	var allUser []model.UserInfoModel
+	cli := db.Get()
+	err = cli.Table(user_tableName).Find(allUser).Error
+	return allUser, err
 }
 
 const sms_tableName = "verification_codes"
