@@ -282,6 +282,19 @@ func (imp *CoursePackageInterfaceImp) UpdateCoursePackage(uid int64, packageId s
 		uid, packageId).Updates(mapUpdates).Error
 }
 
+func (imp *CoursePackageInterfaceImp) GetAllCoursePackageList(ts int64) ([]model.CoursePackageModel, error) {
+	cli := db.Get()
+	var vecCoursePackageModel []model.CoursePackageModel
+	var err error
+	if ts != 0 {
+		err = cli.Raw("SELECT * FROM course_packages WHERE ts < ? ORDER BY ts DESC Limit 500", ts).Scan(&vecCoursePackageModel).Error
+	}else{
+		err = cli.Raw("SELECT * FROM course_packages ORDER BY ts DESC Limit 500").Scan(&vecCoursePackageModel).Error
+	}
+	return vecCoursePackageModel, err
+}
+
+
 const course_package_single_lesson_tableName = "course_package_single_lessons"
 
 func (imp *CoursePackageSingleLessonInterfaceImp) GetSingleLessonListByPackageId(uid int64, packageId string) ([]model.CoursePackageSingleLessonModel, error) {

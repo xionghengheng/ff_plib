@@ -139,6 +139,9 @@ type CoursePackageInterface interface {
 
 	//新用户可以更新体验课课包里的教练or场地【谨慎使用】
 	UpdateCoursePackage(uid int64, packageId string, mapUpdates map[string]interface{}) error
+
+	//获取所有课包，通过创建时间来分页
+	GetAllCoursePackageList(ts int64) ([]model.CoursePackageModel, error)
 }
 
 // CoursePackageInterfaceImp 课包数据模型实现
