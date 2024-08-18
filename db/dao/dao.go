@@ -378,7 +378,7 @@ func (imp *CoursePackageSingleLessonInterfaceImp) GetAllSingleLessonList(createT
 	var vecRes []model.CoursePackageSingleLessonModel
 	var err error
 	if createTs != 0 {
-		err = cli.Raw("SELECT * FROM course_package_single_lessons WHERE create_ts < ? ORDER BY ts DESC Limit 500", createTs).Scan(&vecRes).Error
+		err = cli.Raw("SELECT * FROM course_package_single_lessons WHERE create_ts < ? ORDER BY create_ts DESC Limit 500", createTs).Scan(&vecRes).Error
 	}else{
 		err = cli.Raw("SELECT * FROM course_package_single_lessons ORDER BY create_ts DESC Limit 500").Scan(&vecRes).Error
 	}
