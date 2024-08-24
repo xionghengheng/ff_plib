@@ -4,6 +4,8 @@ go 1.21
 
 require (
 	github.com/jinzhu/gorm v1.9.16
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.989
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sms v1.0.989
 )
 
 require (
