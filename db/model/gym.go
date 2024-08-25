@@ -13,5 +13,6 @@ type GymInfoModel struct {
 	HeaderImage4        string  `json:"header_image4,omitempty"`
 	LocationGuideImage  string  `json:"location_guide_image,omitempty"`
 	NearbySubwayStation string  `json:"nearby_subway_station,omitempty"`
-	GymDiscount         string  `json:"gym_discount"` //场馆优惠信息
+	GymDiscount         string  `json:"gym_discount"`    //场馆优惠信息
+	LocSimpleName       string  `json:"loc_simple_name"` //健身房场地简单地址（用户短信）
 }
