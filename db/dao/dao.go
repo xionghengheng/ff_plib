@@ -165,6 +165,14 @@ func (imp *CoursePackageInterfaceImp) GetCoursePackageById(packageId string) (*m
 	return coursePackage, err
 }
 
+func (imp *CoursePackageInterfaceImp) GetPayCoursePackageList(uid int64) ([]model.CoursePackageModel, error) {
+	var err error
+	var vecCoursePackageModel []model.CoursePackageModel
+	cli := db.Get()
+	err = cli.Table(course_package_tableName).Where("uid = ? AND package_type = ?", uid, model.Enum_PackageType_PaidPackage).Order("ts DESC").Find(&vecCoursePackageModel).Error
+	return vecCoursePackageModel, err
+}
+
 func (imp *CoursePackageInterfaceImp) GetTrailCoursePackage(uid int64) (*model.CoursePackageModel, error) {
 	var err error
 	var coursePackage = new(model.CoursePackageModel)

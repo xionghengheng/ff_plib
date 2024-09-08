@@ -98,6 +98,9 @@ type CoursePackageInterface interface {
 	//根据uid获取免费课包
 	GetTrailCoursePackage(uid int64) (*model.CoursePackageModel, error)
 
+	//根据uid获取付费课包
+	GetPayCoursePackageList(uid int64) ([]model.CoursePackageModel, error)
+
 	//按时间降序拉取某个uid的课包列表
 	GetCoursePackageListByUid(uid int64) ([]model.CoursePackageModel, error)
 
