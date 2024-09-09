@@ -20,6 +20,9 @@ type CoursePackageSingleLessonModel struct {
 	CancelByCoachDelCard    bool   `json:"cancel_by_coach_del_card"`    // 教练取消的情况，是否被叉掉课程卡，叉掉后卡片不常驻
 	WriteOffMissedReturnCnt bool   `json:"write_off_missed_return_cnt"` // 是否发生了旷课归还次数
 	SendMsgGoLesson         bool   `json:"send_msg_go_lesson"`          // 是否已发送上课前的提醒
+	TrainContent            string `json:"train_content"`               // 训练内容（教练端设置）
+	ScheduledByCoach        bool   `json:"scheduled_by_coach"`          // 是否为教练排课
+	WriteOffTs              int64  `json:"write_off_ts"`                // 核销时间
 
 	//评论相关内容
 	Overall              int    `json:"overall"`                // 整体
