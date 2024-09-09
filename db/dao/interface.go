@@ -183,6 +183,7 @@ type PaymentOrderInterface interface {
 
 	//添加订单
 	GetOrderById(orderId string, uid int64) (*model.PaymentOrderModel, error)
+	GetOrder(orderId string) (*model.PaymentOrderModel, error)
 
 	//订单支付成功，更新订单数据
 	UpdateOrderSucc(orderId string, uid int64, mapUpdates map[string]interface{}) error
@@ -192,6 +193,12 @@ type PaymentOrderInterface interface {
 
 	//从某个时间点开始，通过教练id，获取全量属于该教练的订单列表
 	GetOrderListByCoachId(coachId int, begTs int64) ([]model.PaymentOrderModel, error)
+
+	//通过课包id获取退款订单信息
+	GetRefundOrderByPackageId(uid int64, packageId string) (*model.PaymentOrderModel, error)
+
+	//通过课包id获取订单信息
+	GetOrderByPackageId(uid int64, packageId string) ([]model.PaymentOrderModel, error)
 }
 
 // PaymentOrderInterfaceImp

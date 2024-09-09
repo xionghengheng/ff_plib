@@ -412,6 +412,14 @@ func (imp *PaymentOrderInterfaceImp) GetOrderById(orderId string, uid int64) (*m
 	return code, err
 }
 
+func (imp *PaymentOrderInterfaceImp) GetOrder(orderId string) (*model.PaymentOrderModel, error) {
+	var err error
+	var order = new(model.PaymentOrderModel)
+	cli := db.Get()
+	err = cli.Table(payment_order_tableName).Where("order_id = ?", orderId).First(order).Error
+	return order, err
+}
+
 func (imp *PaymentOrderInterfaceImp) AddOrder(stPaymentOrderModel model.PaymentOrderModel) error {
 	cli := db.Get()
 	return cli.Table(payment_order_tableName).Save(stPaymentOrderModel).Error
@@ -430,6 +438,23 @@ func (imp *PaymentOrderInterfaceImp) GetOrderListByCoachId(coachId int, begTs in
 	var vecPaymentOrderModel []model.PaymentOrderModel
 	cli := db.Get()
 	err = cli.Table(payment_order_tableName).Where("coach_id = ? AND payment_time > ?", coachId, begTs).Find(&vecPaymentOrderModel).Error
+	return vecPaymentOrderModel, err
+}
+
+func (imp *PaymentOrderInterfaceImp) GetRefundOrderByPackageId(uid int64, packageId string) (*model.PaymentOrderModel, error) {
+	var err error
+	var order = new(model.PaymentOrderModel)
+	cli := db.Get()
+	err = cli.Table(payment_order_tableName).Where("payer_uid = ? AND package_id = ? AND order_status = ?",
+		uid, packageId, model.Enum_Pay_Status_Refunded).First(order).Error
+	return order, err
+}
+
+func (imp *PaymentOrderInterfaceImp) GetOrderByPackageId(uid int64, packageId string) ([]model.PaymentOrderModel, error) {
+	var err error
+	var vecPaymentOrderModel []model.PaymentOrderModel
+	cli := db.Get()
+	err = cli.Table(payment_order_tableName).Where("payer_uid = ? AND package_id = ?", uid, packageId).Find(&vecPaymentOrderModel).Error
 	return vecPaymentOrderModel, err
 }
 

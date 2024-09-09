@@ -36,4 +36,5 @@ const (
 	Enum_Pay_Status_Paid                 // 1 - 已支付
 	Enum_Pay_Status_Cancelled            // 2 - 已取消
 	Enum_Pay_Status_Expired              // 3 - 已过期
+	Enum_Pay_Status_Refunded             // 4 - 已退款
 )
