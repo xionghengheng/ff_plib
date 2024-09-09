@@ -181,8 +181,10 @@ type PaymentOrderInterface interface {
 	//添加订单
 	AddOrder(stPaymentOrderModel model.PaymentOrderModel) error
 
-	//添加订单
+	//获取订单信息
 	GetOrderById(orderId string, uid int64) (*model.PaymentOrderModel, error)
+
+	//获取订单信息
 	GetOrder(orderId string) (*model.PaymentOrderModel, error)
 
 	//订单支付成功，更新订单数据
