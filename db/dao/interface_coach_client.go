@@ -25,9 +25,6 @@ type CoachClientTraineeReddotInterfaceImp struct{}
 // Imp 实现实例
 var ImpCoachClientTraineeReddot CoachClientTraineeReddotInterface = &CoachClientTraineeReddotInterfaceImp{}
 
-
-
-
 // CoachClientTraineeCommentInterface
 type CoachClientTraineeCommentInterface interface {
 	GetTraineeCommentList(coachId int, limit int) ([]model.CoachClientTraineeCommentModel, error)
@@ -40,10 +37,9 @@ type CoachClientTraineeCommentInterfaceImp struct{}
 // Imp 实现实例
 var ImpCoachClientTraineeComment CoachClientTraineeCommentInterface = &CoachClientTraineeCommentInterfaceImp{}
 
-
-
 // CoachClientMonthlyStatisticInterface
 type CoachClientMonthlyStatisticInterface interface {
+	GetAllItem() ([]model.CoachMonthlyStatisticModel, error)
 	GetItem(coachId int, monthBegTs int64) (*model.CoachMonthlyStatisticModel, error)
 	AddItem(stCoachMonthlyStatisticModel *model.CoachMonthlyStatisticModel) error
 }

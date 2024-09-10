@@ -58,6 +58,15 @@ func (imp *CoachClientMonthlyStatisticInterfaceImp) GetItem(coachId int, monthBe
 	return stCoachMonthlyStatisticModel, err
 }
 
+func (imp *CoachClientMonthlyStatisticInterfaceImp) GetAllItem() ([]model.CoachMonthlyStatisticModel, error) {
+	var err error
+	var vecCoachMonthlyStatisticModel []model.CoachMonthlyStatisticModel
+	cli := db.Get()
+	err = cli.Table(coach_client_monthly_statistics_table_name).Find(&vecCoachMonthlyStatisticModel).Error
+	return vecCoachMonthlyStatisticModel, err
+}
+
+
 func (imp *CoachClientMonthlyStatisticInterfaceImp) AddItem(stCoachMonthlyStatisticModel *model.CoachMonthlyStatisticModel) error {
 	cli := db.Get()
 	return cli.Table(coach_client_monthly_statistics_table_name).Save(stCoachMonthlyStatisticModel).Error
