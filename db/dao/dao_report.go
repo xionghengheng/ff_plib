@@ -40,6 +40,6 @@ func (imp *ReportInterfaceImp) GetButtonReport(strButtonId string, begTs int64, 
 	var err error
 	var vecReportModel []model.ReportModel
 	cli := db.Get()
-	err = cli.Table(report_table_coach_client_write_name).Where("item_id = ? AND report_time >= ? AND report_time <= ?", strButtonId, begTs, endTs).Order("report_time DESC").Find(&vecReportModel).Error
+	err = cli.Table(report_table_write_name).Where("item_id = ? AND report_time >= ? AND report_time <= ?", strButtonId, begTs, endTs).Order("report_time DESC").Find(&vecReportModel).Error
 	return vecReportModel, err
 }
