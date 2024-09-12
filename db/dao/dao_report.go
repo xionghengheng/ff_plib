@@ -28,18 +28,18 @@ func (imp *ReportInterfaceImp) DoReport(stReportItem model.ReportModel) (error) 
 	return nil
 }
 
-func (imp *ReportInterfaceImp) GetPageReport(strPageId string, begTs int64) ([]model.ReportModel, error) {
+func (imp *ReportInterfaceImp) GetPageReport(strPageId string, begTs int64, endTs int64) ([]model.ReportModel, error) {
 	var err error
 	var vecReportModel []model.ReportModel
 	cli := db.Get()
-	err = cli.Table(report_table_expourse_name).Where("page_id = ? AND report_time >= ?", strPageId, begTs).Order("report_time DESC").Find(&vecReportModel).Error
+	err = cli.Table(report_table_expourse_name).Where("page_id = ? AND report_time >= ? AND report_time <= ?", strPageId, begTs, endTs).Order("report_time DESC").Find(&vecReportModel).Error
 	return vecReportModel, err
 }
 
-func (imp *ReportInterfaceImp) GetButtonReport(strButtonId string, begTs int64) ([]model.ReportModel, error) {
+func (imp *ReportInterfaceImp) GetButtonReport(strButtonId string, begTs int64, endTs int64) ([]model.ReportModel, error) {
 	var err error
 	var vecReportModel []model.ReportModel
 	cli := db.Get()
-	err = cli.Table(report_table_expourse_name).Where("item_id = ? AND report_time >= ?", strButtonId, begTs).Order("report_time DESC").Find(&vecReportModel).Error
+	err = cli.Table(report_table_coach_client_write_name).Where("item_id = ? AND report_time >= ? AND report_time <= ?", strButtonId, begTs, endTs).Order("report_time DESC").Find(&vecReportModel).Error
 	return vecReportModel, err
 }
