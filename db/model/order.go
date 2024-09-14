@@ -11,7 +11,7 @@ type PaymentOrderModel struct {
 	DiscountAmount int    `json:"discount_amount"` // 优惠金额（以最小货币单位存储，如分）
 	PaymentChannel string `json:"payment_channel"` // 付款渠道
 	PurchaseType   int    `json:"purchase_type"`   // 购买类型（1=vip，2=vip续费，3=课包）
-	PackageID      int    `json:"package_id"`      // 课包的唯一标识符（用户id_教练id_获取课包的时间戳）
+	PackageID      string `json:"package_id"`      // 课包的唯一标识符（用户id_教练id_获取课包的时间戳）
 	CancelTime     int64  `json:"cancel_time"`     // 取消时间
 
 	//每一笔订单，需要记录微信的payment参数
