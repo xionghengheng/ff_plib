@@ -29,6 +29,19 @@ func GetAllCoach() (map[int]model.CoachModel, error) {
 	return mapCoach, nil
 }
 
+
+func GetAllUser() (map[int64]model.UserInfoModel, error) {
+	mapUser := make(map[int64]model.UserInfoModel)
+	vecAllUserModel, err := dao.ImpUser.GetAllUser()
+	if err != nil {
+		return mapUser, err
+	}
+	for _, v := range vecAllUserModel {
+		mapUser[v.UserID] = v
+	}
+	return mapUser, nil
+}
+
 func GetAllCouse() (map[int]model.CourseModel, error) {
 	mapCourse := make(map[int]model.CourseModel)
 	vecCourseInfoModel, err := dao.ImpCourse.GetCourseList()
