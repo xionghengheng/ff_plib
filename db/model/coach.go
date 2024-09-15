@@ -14,4 +14,5 @@ type CoachModel struct {
 	GoodAt        string `json:"good_at"`         //教练擅长领域
 	Phone         string `json:"phone"`           //手机号
 	CircleAvatar  string `json:"circle_avatar"`   //教练圆形头像url
+	JoinTs        int64  `json:"join_ts"`         //教练入驻时间
 }
