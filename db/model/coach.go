@@ -10,10 +10,8 @@ type CoachModel struct {
 	RecReason     string `json:"rec_reason"`      //教练推荐原因
 	Priority      int    `json:"priority"`        //教练优先级
 	CourseIdList  string `json:"course_id_list"`  //教练可上课程列表，英文逗号分割
-	BannerPicList string `json:"banner_pic_list"` //教练详情页顶部banner图
+	BannerPicList string `json:"banner_pic_list"` //教练详情页顶部banner图（英文逗号分割）
 	GoodAt        string `json:"good_at"`         //教练擅长领域
 	Phone         string `json:"phone"`           //手机号
 	CircleAvatar  string `json:"circle_avatar"`   //教练圆形头像url
-	JoinTs        int64  `json:"join_ts"`         //教练入驻时间
-
 }

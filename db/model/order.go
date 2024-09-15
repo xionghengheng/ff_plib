@@ -26,8 +26,13 @@ type PaymentOrderModel struct {
 	GymId     int `json:"gym_id"`     // 场地id
 	CoachId   int `json:"coach_id"`   // 教练id
 	CourseId  int `json:"course_id"`  // 课程id
-	Price     int `json:"price"`      // 价格
+	Price     int `json:"price"`      // 总付款价格（业务侧保存的）
 	CourseCnt int `json:"course_cnt"` // 购买课程的次数
+
+	//退款相关参数
+	RefundTime      int64 `json:"refund_time"`       // 发生退款的时间
+	RefundCourseCnt int   `json:"refund_course_cnt"` // 已退课程节数
+	RefundAmount    int   `json:"refund_amount"`     // 退款金额(单位分)
 }
 
 // PaymentStatus 枚举类型

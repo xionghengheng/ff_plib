@@ -16,6 +16,9 @@ type CoursePackageModel struct {
 	CloseBarRemain2 bool   `json:"close_bar_remain2"` // 是否关闭了剩余2节体验课底部bar展示
 	CloseBarRemain1 bool   `json:"close_bar_remain1"` // 是否关闭了剩余1节体验课底部bar展示
 	LastLessonTs    int64  `json:"last_lesson_ts"`    // 最后一次上课时间
+	UniidList       string `json:"uniid_list"`        // 扣减or增加次数的唯一订单号
+	ChangeCoachTs   int64  `json:"change_coach_ts"`   // 更换教练的时间戳
+	RefundTs        int64  `json:"refund_ts"`         // 发生退款的时间
 }
 
 const (

@@ -6,7 +6,8 @@ type CourseModel struct {
 	Introduction string `json:"introduction"` //课程介绍
 	Price        int    `json:"price"`        //课程价格，单位元
 	Duration     int    `json:"duration"`     //课程时长，单位分钟
-	Image        string `json:"image"`        //课程图片
+	Image        string `json:"image"`        //课程图片-方行
+	ImageCircle  string `json:"image_circle"` //课程图片-圆形
 	MarketPrice  int    `json:"market_price"` //课程市场价格，单位元
 	ChargeType   int    `json:"charge_type"`  //1=付费，2=免费体验课
 }
