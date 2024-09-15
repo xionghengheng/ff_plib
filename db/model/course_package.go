@@ -19,6 +19,7 @@ type CoursePackageModel struct {
 	UniidList       string `json:"uniid_list"`        // 扣减or增加次数的唯一订单号
 	ChangeCoachTs   int64  `json:"change_coach_ts"`   // 更换教练的时间戳
 	RefundTs        int64  `json:"refund_ts"`         // 发生退款的时间
+	RefundLessonCnt int    `json:"refund_lesson_cnt"` // 退款课程数
 }
 
 const (
