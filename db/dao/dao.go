@@ -6,6 +6,7 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/xionghengheng/ff_plib/db"
 	"github.com/xionghengheng/ff_plib/db/model"
+	"strings"
 	"time"
 )
 
@@ -52,7 +53,6 @@ func (imp *UserInterfaceImp) GetUserByTraceId(traceid string) (*model.UserInfoMo
 	return user, err
 }
 
-
 func (imp *UserInterfaceImp) RemoveUser(openid string) error {
 	return db.Get().Table(user_tableName).Where("wechat_id = ?", openid).Delete(&model.UserInfoModel{}).Error
 }
@@ -63,6 +63,14 @@ func (imp *UserInterfaceImp) GetAllUser() ([]model.UserInfoModel, error) {
 	cli := db.Get()
 	err = cli.Table(user_tableName).Find(&allUser).Error
 	return allUser, err
+}
+
+func (imp *UserInterfaceImp) GetUserByCoachId(coachId int) (*model.UserInfoModel, error) {
+	var err error
+	var user = new(model.UserInfoModel)
+	cli := db.Get()
+	err = cli.Table(user_tableName).Where("coach_id = ?", coachId).First(user).Error
+	return user, err
 }
 
 const sms_tableName = "verification_codes"
@@ -243,18 +251,116 @@ func (imp *CoursePackageInterfaceImp) AddCoursePackage2Uid(stCoursePackageModel 
 	return cli.Table(course_package_tableName).Save(stCoursePackageModel).Error
 }
 
-func (imp *CoursePackageInterfaceImp) FindSamePackage(uid int64, gymId int, coachId int, courseId int) (string, error) {
+func (imp *CoursePackageInterfaceImp) FindSamePackage(uid int64, gymId int, coachId int, courseId int) (*model.CoursePackageModel, error) {
 	var err error
 	var coursePackage = new(model.CoursePackageModel)
 	cli := db.Get()
 	err = cli.Table(course_package_tableName).Where("uid = ? AND gym_id = ? AND coach_id = ? AND course_id = ?",
 		uid, gymId, coachId, courseId).First(coursePackage).Error
-	return coursePackage.PackageID, err
+	return coursePackage, err
 }
 
-func (imp *CoursePackageInterfaceImp) SubCourseCnt(packageId string) error {
+func (imp *CoursePackageInterfaceImp) AddLessonAndSubCourseCnt(packageId string, uniId string, stCoursePackageSingleLessonModel *model.CoursePackageSingleLessonModel) error {
 	cli := db.Get()
-	return cli.Table(course_package_tableName).Model(&model.CoursePackageModel{}).Where("package_id = ?", packageId).UpdateColumn("remain_cnt", gorm.Expr("remain_cnt - ?", 1)).Error
+	err := cli.Transaction(func(tx *gorm.DB) error {
+
+		err := cli.Table(course_package_single_lesson_tableName).Save(stCoursePackageSingleLessonModel).Error
+		if err != nil {
+			fmt.Printf("Save lesson err, err:%+v packageId:%s stCoursePackageSingleLessonModel:%+v\n", err, packageId, stCoursePackageSingleLessonModel)
+			tx.Rollback()
+			return err
+		}
+
+		var coursePackage = new(model.CoursePackageModel)
+		err = cli.Table(course_package_tableName).Where("package_id = ?", packageId).First(coursePackage).Error
+		if err != nil {
+			fmt.Printf("get coursePackage err, err:%+v packageId:%s\n", err, packageId)
+			tx.Rollback()
+			return err
+		}
+
+		var vecUniidList []string
+		if len(coursePackage.UniidList) > 0 {
+			vecUniidList = strings.Split(coursePackage.UniidList, ",")
+			for _, v := range vecUniidList {
+				if v == uniId {
+					fmt.Printf("dup uniid coursePackage return, packageId:%s uniId:%s\n", packageId, uniId)
+					return nil
+				}
+			}
+		}
+
+		newSlice := append([]string{uniId}, vecUniidList...)
+		if len(newSlice) > 30 {
+			newSlice = newSlice[0:30]
+		}
+		newUniidList := ""
+		for _, v := range newSlice {
+			newUniidList += ("," + v)
+		}
+		newUniidList = strings.TrimLeft(newUniidList, ",")
+		newUniidList = strings.TrimRight(newUniidList, ",")
+		mapUpdates := map[string]interface{}{}
+		mapUpdates["remain_cnt"] = gorm.Expr("remain_cnt - ?", 1)
+		mapUpdates["uniid_list"] = newUniidList
+		err = cli.Table(course_package_tableName).Model(&model.CoursePackageModel{}).Where("package_id = ?", packageId).Updates(mapUpdates).Error
+		if err != nil {
+			fmt.Printf("update remain_cnt err, err:%+v packageId:%s mapUpdates:%+v\n", err, packageId, mapUpdates)
+			tx.Rollback()
+			return err
+		}
+
+		return nil
+	})
+	return err
+}
+
+func (imp *CoursePackageInterfaceImp) SubCourseCnt(packageId string, uniId string) error {
+	cli := db.Get()
+	err := cli.Transaction(func(tx *gorm.DB) error {
+
+		var coursePackage = new(model.CoursePackageModel)
+		err := cli.Table(course_package_tableName).Where("package_id = ?", packageId).First(coursePackage).Error
+		if err != nil {
+			fmt.Printf("get coursePackage err, err:%+v packageId:%s\n", err, packageId)
+			tx.Rollback()
+			return err
+		}
+
+		var vecUniidList []string
+		if len(coursePackage.UniidList) > 0 {
+			vecUniidList = strings.Split(coursePackage.UniidList, ",")
+			for _, v := range vecUniidList {
+				if v == uniId {
+					fmt.Printf("dup uniid coursePackage return, packageId:%s uniId:%s\n", packageId, uniId)
+					return nil
+				}
+			}
+		}
+
+		newSlice := append([]string{uniId}, vecUniidList...)
+		if len(newSlice) > 30 {
+			newSlice = newSlice[0:30]
+		}
+		newUniidList := ""
+		for _, v := range newSlice {
+			newUniidList += ("," + v)
+		}
+		newUniidList = strings.TrimLeft(newUniidList, ",")
+		newUniidList = strings.TrimRight(newUniidList, ",")
+		mapUpdates := map[string]interface{}{}
+		mapUpdates["remain_cnt"] = gorm.Expr("remain_cnt - ?", 1)
+		mapUpdates["uniid_list"] = newUniidList
+		err = cli.Table(course_package_tableName).Model(&model.CoursePackageModel{}).Where("package_id = ?", packageId).Updates(mapUpdates).Error
+		if err != nil {
+			fmt.Printf("update remain_cnt err, err:%+v packageId:%s mapUpdates:%+v\n", err, packageId, mapUpdates)
+			tx.Rollback()
+			return err
+		}
+
+		return nil
+	})
+	return err
 }
 
 func (imp *CoursePackageInterfaceImp) AddCourseCnt(packageId string, cnt int) error {
@@ -296,12 +402,11 @@ func (imp *CoursePackageInterfaceImp) GetAllCoursePackageList(ts int64) ([]model
 	var err error
 	if ts != 0 {
 		err = cli.Raw("SELECT * FROM course_packages WHERE ts < ? ORDER BY ts DESC Limit 500", ts).Scan(&vecCoursePackageModel).Error
-	}else{
+	} else {
 		err = cli.Raw("SELECT * FROM course_packages ORDER BY ts DESC Limit 500").Scan(&vecCoursePackageModel).Error
 	}
 	return vecCoursePackageModel, err
 }
-
 
 const course_package_single_lesson_tableName = "course_package_single_lessons"
 
@@ -309,16 +414,17 @@ func (imp *CoursePackageSingleLessonInterfaceImp) GetSingleLessonListByPackageId
 	var err error
 	var vecCoursePackageSingleLessonModel []model.CoursePackageSingleLessonModel
 	cli := db.Get()
-	err = cli.Table(course_package_single_lesson_tableName).Where("uid = ? AND package_id = ?", uid, packageId).Order("schedule_beg_ts DESC").Find(&vecCoursePackageSingleLessonModel).Error
+	err = cli.Table(course_package_single_lesson_tableName).Where("uid = ? AND package_id = ?", uid, packageId).Order("schedule_beg_ts DESC, create_ts DESC").Find(&vecCoursePackageSingleLessonModel).Error
 	return vecCoursePackageSingleLessonModel, err
 }
 
-func (imp *CoursePackageSingleLessonInterfaceImp) GetSingleLessonByAppointmentId(uid int64, appointmentID int) (*model.CoursePackageSingleLessonModel, error) {
+func (imp *CoursePackageSingleLessonInterfaceImp) GetSingleLessonByAppointmentId(uid int64, appointmentID int) ([]model.CoursePackageSingleLessonModel, error) {
 	var err error
-	var lesson = new(model.CoursePackageSingleLessonModel)
+	var lessons []model.CoursePackageSingleLessonModel
 	cli := db.Get()
-	err = cli.Table(course_package_single_lesson_tableName).Select("lesson_id, package_id, appointment_id, status").Where("uid = ? AND appointment_id = ?", uid, appointmentID).First(lesson).Error
-	return lesson, err
+	err = cli.Table(course_package_single_lesson_tableName).Select("lesson_id, package_id, appointment_id, scheduled_by_coach, status, create_ts").
+		Where("uid = ? AND appointment_id = ?", uid, appointmentID).Find(&lessons).Error
+	return lessons, err
 }
 
 func (imp *CoursePackageSingleLessonInterfaceImp) AddSingleLesson2Package(stCoursePackageSingleLessonModel *model.CoursePackageSingleLessonModel) error {
@@ -380,21 +486,17 @@ func (imp *CoursePackageSingleLessonInterfaceImp) GetCompletedSingleLessonListBy
 	return vecCoursePackageSingleLessonModel, err
 }
 
-
 func (imp *CoursePackageSingleLessonInterfaceImp) GetAllSingleLessonList(createTs int64) ([]model.CoursePackageSingleLessonModel, error) {
 	cli := db.Get()
 	var vecRes []model.CoursePackageSingleLessonModel
 	var err error
 	if createTs != 0 {
 		err = cli.Raw("SELECT * FROM course_package_single_lessons WHERE create_ts < ? ORDER BY create_ts DESC Limit 500", createTs).Scan(&vecRes).Error
-	}else{
+	} else {
 		err = cli.Raw("SELECT * FROM course_package_single_lessons ORDER BY create_ts DESC Limit 500").Scan(&vecRes).Error
 	}
 	return vecRes, err
 }
-
-
-
 
 const payment_order_tableName = "payment_orders"
 
@@ -458,9 +560,6 @@ func (imp *PaymentOrderInterfaceImp) GetOrderByPackageId(uid int64, packageId st
 	return vecPaymentOrderModel, err
 }
 
-
-
-
 const coach_appointments_tableName = "coach_appointments"
 
 func (imp *AppointmentInterfaceImp) SetAppointmentSchedule(stCoachAppointmentModel model.CoachAppointmentModel) error {
@@ -478,7 +577,6 @@ func (imp *AppointmentInterfaceImp) GetAppointmentScheduleHasUidFromBegTs(gymId 
 	return vecCoachAppointmentModel, err
 }
 
-
 func (imp *AppointmentInterfaceImp) GetAppointmentScheduleFromBegTs(gymId int, coachId int, dayBegTs int64) ([]model.CoachAppointmentModel, error) {
 	var err error
 	var vecCoachAppointmentModel []model.CoachAppointmentModel
@@ -495,7 +593,7 @@ func (imp *AppointmentInterfaceImp) GetAppointmentScheduleOneDay(gymId int, coac
 	return vecCoachAppointmentModel, err
 }
 
-func (imp *AppointmentInterfaceImp) DelAppointmentByCoach(appointmentID int, coachId int) (error) {
+func (imp *AppointmentInterfaceImp) DelAppointmentByCoach(appointmentID int, coachId int) error {
 	var err error
 	cli := db.Get()
 	err = cli.Table(coach_appointments_tableName).Where("appointment_id = ? AND coach_id = ?", appointmentID, coachId).Delete(model.CoachAppointmentModel{}).Error
@@ -586,7 +684,7 @@ func (imp *AppointmentInterfaceImp) SetAppointmentBooked(uid int64, appointmentI
 }
 
 // 用户取消约课，将课程变回可用状态，即所有用户都可预约
-func (imp *AppointmentInterfaceImp) CancelAppointmentBooked(uid int64, appointmentID int) error {
+func (imp *AppointmentInterfaceImp) CancelAppointmentBooked(uid int64, lessonID string, appointmentID int) error {
 	var err error
 	cli := db.Get().Table(coach_appointments_tableName)
 
@@ -608,6 +706,7 @@ func (imp *AppointmentInterfaceImp) CancelAppointmentBooked(uid int64, appointme
 		mapUpdates["status"] = model.Enum_Appointment_Status_Available
 		mapUpdates["user_id"] = 0
 		mapUpdates["user_course_id"] = 0
+		mapUpdates["canceled_course"] = lessonID
 		mapUpdates["update_ts"] = time.Now().Unix()
 		stCoachAppointmentModel.Status = model.Enum_Appointment_Status_Available
 		stCoachAppointmentModel.UserID = 0
@@ -675,6 +774,13 @@ func (imp *InvitationCodeInterfaceImp) UpdateCode(code string, uid int64) error 
 		return nil
 	})
 	return err
+}
+
+func (imp *InvitationCodeInterfaceImp) GetCount() (int64, error) {
+	cli := db.Get()
+	var count int64
+	err := cli.Table(invitation_code_tableName).Model(&model.InvitationCodeModel{}).Count(&count).Error
+	return count, err
 }
 
 const coach_page_banner_tableName = "coach_page_banner"

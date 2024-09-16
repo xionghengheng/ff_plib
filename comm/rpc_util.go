@@ -42,7 +42,7 @@ func GetAllUser() (map[int64]model.UserInfoModel, error) {
 	return mapUser, nil
 }
 
-func GetAllCouse() (map[int]model.CourseModel, error) {
+func GetAllCourse() (map[int]model.CourseModel, error) {
 	mapCourse := make(map[int]model.CourseModel)
 	vecCourseInfoModel, err := dao.ImpCourse.GetCourseList()
 	if err != nil {

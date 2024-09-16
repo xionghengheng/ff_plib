@@ -29,6 +29,9 @@ type UserInterface interface {
 
 	//根据uid获取用户信息
 	GetAllUser() ([]model.UserInfoModel, error)
+
+	//通过教练id获取用户信息
+	GetUserByCoachId(coachId int) (*model.UserInfoModel, error)
 }
 
 // UserInterfaceImp 用户数据模型实现
@@ -126,7 +129,7 @@ type CoursePackageInterface interface {
 	GetPayCoursePackageListByCoachIdAndUid(coachId int, uid int64) ([]model.CoursePackageModel, error)
 
 	//预约成功后，扣减一节课时
-	SubCourseCnt(packageId string) error
+	SubCourseCnt(packageId string, uniId string) error
 
 	//总数和剩余数都会添加
 	AddCourseCnt(packageId string, cnt int) error
@@ -138,10 +141,14 @@ type CoursePackageInterface interface {
 	AddCoursePackage2Uid(stCoursePackageModel *model.CoursePackageModel) error
 
 	//场地id、教练id和课程id一致，则直接走续费逻辑
-	FindSamePackage(uid int64, gymId int, coachId int, courseId int) (string, error)
+	FindSamePackage(uid int64, gymId int, coachId int, courseId int) (*model.CoursePackageModel, error)
 
 	//新用户可以更新体验课课包里的教练or场地【谨慎使用】
 	UpdateCoursePackage(uid int64, packageId string, mapUpdates map[string]interface{}) error
+
+	//跨表事务，添加单次课，并扣减次数
+	//预约成功后，扣减一节课时
+	AddLessonAndSubCourseCnt(packageId string, uniId string, stCoursePackageSingleLessonModel *model.CoursePackageSingleLessonModel) error
 
 	//获取所有课包，通过创建时间来分页
 	GetAllCoursePackageList(ts int64) ([]model.CoursePackageModel, error)
@@ -156,7 +163,7 @@ var ImpCoursePackage CoursePackageInterface = &CoursePackageInterfaceImp{}
 // GetSingleLessonListByPackageId 课包单次课数据模型接口
 type CoursePackageSingleLessonInterface interface {
 	GetSingleLessonById(uid int64, lessonId string) (*model.CoursePackageSingleLessonModel, error)
-	GetSingleLessonByAppointmentId(uid int64, appointmentID int) (*model.CoursePackageSingleLessonModel, error)
+	GetSingleLessonByAppointmentId(uid int64, appointmentID int) ([]model.CoursePackageSingleLessonModel, error)
 	GetSingleLessonListByPackageId(uid int64, packageId string) ([]model.CoursePackageSingleLessonModel, error)
 	AddSingleLesson2Package(stCoursePackageSingleLessonModel *model.CoursePackageSingleLessonModel) error
 	UpdateSingleLesson(uid int64, lessonId string, mapUpdates map[string]interface{}) error
@@ -240,7 +247,7 @@ type AppointmentInterface interface {
 	SetAppointmentBooked(uid int64, appointmentID int, courseId int) (error, model.CoachAppointmentModel)
 
 	//用户取消约课
-	CancelAppointmentBooked(uid int64, appointmentID int) error
+	CancelAppointmentBooked(uid int64, lessonID string, appointmentID int) error
 
 	//教练端，设置可预约时间
 	SetAppointmentSchedule(stCoachAppointmentModel model.CoachAppointmentModel) error
@@ -263,6 +270,9 @@ type InvitationCodeInterface interface {
 
 	//生成邀请码
 	AddCode(stInvitationCodeModel *model.InvitationCodeModel) error
+
+	//获取邀请码表的计数
+	GetCount() (int64,error)
 }
 
 // InvitationCodeInterfaceImp
