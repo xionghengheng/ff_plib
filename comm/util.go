@@ -2,6 +2,7 @@ package comm
 
 import (
 	"fmt"
+	"os"
 	"path"
 	"runtime"
 	"strconv"
@@ -111,4 +112,20 @@ func GetTodayEndTs() int64 {
 
 	// 返回次日零点的时间戳
 	return nextMidnight.Unix()
+}
+
+// 是否生产环境
+func IsProd() bool{
+	if os.Getenv("MiniprogramState") == "formal"{
+		return true
+	}
+	return false
+}
+
+// 是否测试环境
+func IsTrial() bool{
+	if os.Getenv("MiniprogramState") == "trial"{
+		return true
+	}
+	return false
 }
