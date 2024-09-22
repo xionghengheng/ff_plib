@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
 )
 
 // 微信官方文字安全打击
@@ -64,6 +65,11 @@ func WxCheckContentSafe(uid int64, stWxCheckContentSafeReq WxCheckContentSafeReq
 	}
 
 	Printf("Unmarshal json succ, uid:%d req:%+v rsp:%+v\n", uid, stWxCheckContentSafeReq, stWxCheckContentSafeRsp)
+
+	//测试环境，微信不会做检测，直接返回成功
+	if os.Getenv("MiniprogramState") == "trial"{
+		return nil, true
+	}
 
 	if stWxCheckContentSafeRsp.ErrCode != 0 {
 		return errors.New(fmt.Sprintf("msg_sec_check err, code:%d", stWxCheckContentSafeRsp.ErrCode)), false
