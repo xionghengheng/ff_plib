@@ -15,4 +15,5 @@ type CoachModel struct {
 	Phone         string `json:"phone"`           //手机号
 	CircleAvatar  string `json:"circle_avatar"`   //教练圆形头像url
 	JoinTs        int64  `json:"join_ts"`         //教练入驻时间（后台配置生效）
+	BTestCoach    bool   `json:"b_test_coach"`    //是否测试教练，外网白名单测试专用
 }
