@@ -45,6 +45,15 @@ func (imp *UserInterfaceImp) GetUserByOpenId(openid string) (*model.UserInfoMode
 	return user, err
 }
 
+func (imp *UserInterfaceImp) GetUserByPhone(phone string) (*model.UserInfoModel, error) {
+	var err error
+	var user = new(model.UserInfoModel)
+	cli := db.Get()
+	err = cli.Table(user_tableName).Where("phone_number = ?", phone).First(user).Error
+	return user, err
+}
+
+
 func (imp *UserInterfaceImp) GetUserByTraceId(traceid string) (*model.UserInfoModel, error) {
 	var err error
 	var user = new(model.UserInfoModel)

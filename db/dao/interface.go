@@ -15,6 +15,9 @@ type UserInterface interface {
 	//根据wx安全回调的traceid获取用户信息
 	GetUserByTraceId(traceid string) (*model.UserInfoModel, error)
 
+	//根据手机号获取用户信息
+	GetUserByPhone(phone string) (*model.UserInfoModel, error)
+
 	//插入用户信息
 	UpsertUser(user *model.UserInfoModel) error
 
