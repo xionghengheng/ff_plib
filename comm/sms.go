@@ -10,6 +10,14 @@ import (
 	"os"
 )
 
+// 定义字符串常量
+const (
+	SmsTemplateId_LoginVerifyCode    = "2272690" // 登录验证码
+	SmsTemplateId_CoachCancelLesson  = "2272688" // 课程取消通知
+	SmsTemplateId_CoachSchedueLesson = "2272687" // 排课成功的预约提醒
+	SmsTemplateId_LessonStartRemind  = "2272686" // 课程开始前提醒
+)
+
 func SendSmsMsg2User(templateId string, uid int64, vecTemplateParam []string, phone string) error {
 
 	/* 必要步骤：
