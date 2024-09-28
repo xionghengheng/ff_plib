@@ -66,7 +66,7 @@ func SendSmsMsg2User(templateId string, uid int64, vecTemplateParam []string, ph
 	 * 腾讯云短信小助手: https://cloud.tencent.com/document/product/382/3773#.E6.8A.80.E6.9C.AF.E4.BA.A4.E6.B5.81 */
 	/* 短信应用ID: 短信SdkAppId在 [短信控制台] 添加应用后生成的实际SdkAppId，示例如1400006666 */
 	// 应用 ID 可前往 [短信控制台](https://console.cloud.tencent.com/smsv2/app-manage) 查看
-	request.SmsSdkAppId = common.StringPtr("1400911460")
+	request.SmsSdkAppId = common.StringPtr("1400911457")
 
 	/* 短信签名内容: 使用 UTF-8 编码，必须填写已审核通过的签名 */
 	// 签名信息可前往 [国内短信](https://console.cloud.tencent.com/smsv2/csms-sign) 或 [国际/港澳台短信](https://console.cloud.tencent.com/smsv2/isms-sign) 的签名管理查看
