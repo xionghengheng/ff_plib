@@ -70,7 +70,8 @@ func SendSmsMsg2User(templateId string, uid int64, vecTemplateParam []string, ph
 
 	/* 短信签名内容: 使用 UTF-8 编码，必须填写已审核通过的签名 */
 	// 签名信息可前往 [国内短信](https://console.cloud.tencent.com/smsv2/csms-sign) 或 [国际/港澳台短信](https://console.cloud.tencent.com/smsv2/isms-sign) 的签名管理查看
-	request.SignName = common.StringPtr("趣私教FunCoach")
+	//request.SignName = common.StringPtr("趣私教FunCoach")
+	request.SignName = common.StringPtr(os.Getenv("TENCENTCLOUD_SMS_SIGN_NAME"))
 
 	/* 模板 ID: 必须填写已审核通过的模板 ID */
 	// 模板 ID 可前往 [国内短信](https://console.cloud.tencent.com/smsv2/csms-template) 或 [国际/港澳台短信](https://console.cloud.tencent.com/smsv2/isms-template) 的正文模板管理查看
