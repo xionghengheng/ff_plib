@@ -148,12 +148,15 @@ func (imp *CourseInterfaceImp) GetCourseById(id int) (*model.CourseModel, error)
 const coach_tableName = "coaches"
 
 func (imp *CoachInterfaceImp) GetCoachListByGymId(gymId int) ([]model.CoachModel, error) {
-	var err error
-	var vecCoachModel []model.CoachModel
+	//var err error
+	//var vecCoachModel []model.CoachModel
 
+	//cli := db.Get()
+	//err = cli.Table(coach_tableName).Where("gym_id = ?", gymId).Order("priority DESC").Find(&vecCoachModel).Error
+	//return vecCoachModel, err
+	var vecCoachModel []model.CoachModel
 	cli := db.Get()
-	err = cli.Table(coach_tableName).Where("gym_id = ?", gymId).Order("priority DESC").Find(&vecCoachModel).Error
-	return vecCoachModel, err
+	return vecCoachModel, cli.Raw("SELECT * FROM coaches WHERE gym_id = ? ORDER BY priority DESC", gymId).Scan(&vecCoachModel).Error
 }
 
 func (imp *CoachInterfaceImp) GetCoachById(id int) (*model.CoachModel, error) {
