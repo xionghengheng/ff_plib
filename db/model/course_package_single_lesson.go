@@ -23,6 +23,7 @@ type CoursePackageSingleLessonModel struct {
 	TrainContent            string `json:"train_content"`               // 训练内容（教练端设置）
 	ScheduledByCoach        bool   `json:"scheduled_by_coach"`          // 是否为教练排课
 	WriteOffTs              int64  `json:"write_off_ts"`                // 核销时间
+	IsConfirm               bool   `json:"is_confirm"`                  // 是否已被教练确认
 
 	//评论相关内容
 	Overall              int    `json:"overall"`                // 整体
