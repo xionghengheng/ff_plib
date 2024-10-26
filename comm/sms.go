@@ -16,6 +16,8 @@ const (
 	SmsTemplateId_CoachCancelLesson  = "2272688" // 课程取消通知
 	SmsTemplateId_CoachSchedueLesson = "2272687" // 排课成功的预约提醒
 	SmsTemplateId_LessonStartRemind  = "2272686" // 课程开始前提醒
+	SmsTemplateId_LessonFirstBook    = "2291782" // 用户首次约课提醒
+	SmsTemplateId_UserBeVip          = "2291779" // 用户订阅提醒
 )
 
 func SendSmsMsg2User(templateId string, uid int64, vecTemplateParam []string, phone string) error {
