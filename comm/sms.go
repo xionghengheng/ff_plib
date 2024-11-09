@@ -12,16 +12,17 @@ import (
 
 // 定义字符串常量
 const (
-	SmsTemplateId_LoginVerifyCode       = "2272690" // 登录验证码
-	SmsTemplateId_CoachCancelLesson     = "2272688" // 课程取消通知
-	SmsTemplateId_CoachSchedueLesson    = "2272687" // 排课成功的预约提醒
-	SmsTemplateId_LessonStartRemind     = "2272686" // 课程开始前提醒
-	SmsTemplateId_LessonFirstBook       = "2296175" // 用户首次约课提醒
-	SmsTemplateId_UserBeVip             = "2291779" // 用户订阅提醒
-	SmsTemplateId_UserBook              = "2300116" // 学员约课通知
-	SmsTemplateId_UserCancelBook        = "2300121" // 学员取消预约提醒
-	SmsTemplateId_UserBuyPackage        = "2300119" // 学员购课通知
-	SmsTemplateId_CoachSetAvaTimeRemind = "2291778" // 教练设置可约时间提醒
+	SmsTemplateId_LoginVerifyCode         = "2272690" // 登录验证码
+	SmsTemplateId_CoachCancelLesson       = "2272688" // 课程取消通知
+	SmsTemplateId_CoachSchedueLesson      = "2272687" // 排课成功的预约提醒
+	SmsTemplateId_LessonStartRemind       = "2272686" // 课程开始前提醒
+	SmsTemplateId_LessonFirstBook         = "2296175" // 用户首次约课提醒
+	SmsTemplateId_UserBeVip               = "2291779" // 用户订阅提醒
+	SmsTemplateId_UserBook                = "2300116" // 学员约课通知
+	SmsTemplateId_UserCancelBook          = "2300121" // 学员取消预约提醒
+	SmsTemplateId_UserBuyPackage          = "2300119" // 学员购课通知
+	SmsTemplateId_CoachSetAvaTimeRemind   = "2291778" // 教练设置可约时间提醒
+	SmsTemplateId_LessonMissedRemindCoach = "2305573" // 课程旷课提醒
 )
 
 func SendSmsMsg2User(templateId string, uid int64, vecTemplateParam []string, phone string) error {
