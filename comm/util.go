@@ -2,6 +2,7 @@ package comm
 
 import (
 	"fmt"
+	"github.com/xionghengheng/ff_plib/db/model"
 	"os"
 	"path"
 	"runtime"
@@ -128,4 +129,31 @@ func IsTrial() bool{
 		return true
 	}
 	return false
+}
+
+func uniqueVec(vecID *[]string) {
+	tmpMap := make(map[string]int)
+	for _, id := range *vecID {
+		tmpMap[id] = 1
+	}
+	tmpVecID := make([]string, 0)
+	for key, _ := range tmpMap {
+		tmpVecID = append(tmpVecID, key)
+	}
+	*vecID = tmpVecID
+	return
+}
+
+
+func uniqueVecCoach(vecID *[]model.CoachModel) {
+	tmpMap := make(map[model.CoachModel]int)
+	for _, id := range *vecID {
+		tmpMap[id] = 1
+	}
+	tmpVecID := make([]model.CoachModel, 0)
+	for key, _ := range tmpMap {
+		tmpVecID = append(tmpVecID, key)
+	}
+	*vecID = tmpVecID
+	return
 }

@@ -113,7 +113,7 @@ func SendSmsMsg2User(templateId string, uid int64, vecTemplateParam []string, ph
 	}
 	b, _ := json.Marshal(response.Response)
 	// 打印返回的json字符串
-	Printf("send msCode succ:%s\n", b)
+	Printf("send msCode succ, templateId:%d rsp:%s\n", templateId, b)
 	if len(response.Response.SendStatusSet) == 0 || response.Response.SendStatusSet[0].Code == nil || response.Response.SendStatusSet[0].Message == nil {
 		Printf("rspData format error, uid:%d response:%+v", uid, response)
 		return err

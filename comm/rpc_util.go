@@ -3,6 +3,9 @@ package comm
 import (
 	"github.com/xionghengheng/ff_plib/db/dao"
 	"github.com/xionghengheng/ff_plib/db/model"
+	"sort"
+	"strconv"
+	"strings"
 )
 
 func GetAllGym() (map[int]model.GymInfoModel, error) {
@@ -29,6 +32,52 @@ func GetAllCoach() (map[int]model.CoachModel, error) {
 	return mapCoach, nil
 }
 
+func GetAllCoachByGym() (map[int][]model.CoachModel, error) {
+	tmp := make(map[int][]model.CoachModel)
+	vecCoachModel, err := dao.ImpCoach.GetCoachAll()
+	if err != nil {
+		return tmp, err
+	}
+	for _, v := range vecCoachModel {
+		if v.GymIdList == "" {
+			continue
+		}
+
+		vecGymIdList := strings.Split(v.GymIdList, ",")
+		uniqueVec(&vecGymIdList)
+		if len(vecGymIdList) > 0 {
+			for _, gym := range vecGymIdList {
+				tmpGym, _ := strconv.ParseInt(gym, 10, 64)
+				nGym := int(tmpGym)
+				tmp[nGym] = append(tmp[nGym], v)
+			}
+		}
+	}
+
+	mapGymId2CoachList := make(map[int][]model.CoachModel)
+	for k, v := range tmp {
+
+		//去重
+		uniqueVecCoach(&v)
+
+		//按照优先级从大到小排序
+		sort.Slice(v, func(i, j int) bool {
+			return v[i].Priority > v[j].Priority
+		})
+
+		mapGymId2CoachList[k] = v
+	}
+
+	return mapGymId2CoachList, nil
+}
+
+func GetCoachListByGymId(gymId int) ([]model.CoachModel, error) {
+	mapGymId2CoachList, err := GetAllCoachByGym()
+	if err != nil {
+		return nil, err
+	}
+	return mapGymId2CoachList[gymId], nil
+}
 
 func GetAllUser() (map[int64]model.UserInfoModel, error) {
 	mapUser := make(map[int64]model.UserInfoModel)
@@ -66,7 +115,7 @@ func GetUserInfoByOpenId(openId string) (*model.UserInfoModel, error) {
 // GetCoachIdByOpenId 查询用户绑定的教练id
 func GetCoachIdByOpenId(openId string) (int, error) {
 	user, err := dao.ImpUser.GetUserByOpenId(openId)
-	if err != nil || user == nil{
+	if err != nil || user == nil {
 		return 0, err
 	}
 	return user.CoachId, nil
