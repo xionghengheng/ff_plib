@@ -104,23 +104,24 @@ func SendSmsMsg2User(templateId string, uid int64, vecTemplateParam []string, ph
 	response, err := client.SendSms(request)
 	// 处理异常
 	if _, ok := err.(*tencentclouderrors.TencentCloudSDKError); ok {
-		Printf("An API error has returned: %s", err)
+		Printf("An API error has returned, templateId:%d phone:%s uid:%d err:%+v", templateId, phone, uid, err)
 		return err
 	}
 	// 非SDK异常，直接失败。实际代码中可以加入其他的处理。
 	if err != nil {
+		Printf("非SDK异常，直接失败。实际代码中可以加入其他的处理, templateId:%d phone:%s uid:%d err:%+v\n", templateId, phone, uid, err)
 		return err
 	}
 	b, _ := json.Marshal(response.Response)
 	// 打印返回的json字符串
-	Printf("send msCode succ, templateId:%d rsp:%s\n", templateId, b)
+	Printf("send msCode succ, templateId:%d phone:%s uid:%d rsp:%s\n", templateId, phone, uid, b)
 	if len(response.Response.SendStatusSet) == 0 || response.Response.SendStatusSet[0].Code == nil || response.Response.SendStatusSet[0].Message == nil {
-		Printf("rspData format error, uid:%d response:%+v", uid, response)
+		Printf("rspData format error, templateId:%d phone:%s uid:%d response:%+v", templateId, phone, uid, response)
 		return err
 	}
 
 	if (*response.Response.SendStatusSet[0].Code) != "Ok" {
-		Printf("rspData format error, uid:%d response:%+v", uid, response)
+		Printf("rspData format error, templateId:%d phone:%s uid:%d response:%+v", templateId, phone, uid, response)
 		return errors.New(*response.Response.SendStatusSet[0].Message)
 	}
 	return nil
