@@ -24,6 +24,7 @@ type CoursePackageSingleLessonModel struct {
 	ScheduledByCoach        bool   `json:"scheduled_by_coach"`          // 是否为教练排课
 	WriteOffTs              int64  `json:"write_off_ts"`                // 核销时间
 	IsConfirm               bool   `json:"is_confirm"`                  // 是否已被教练确认
+	SendMsgWriteComment     bool   `json:"send_msg_write_comment"`      // 是否已发送消息提醒用户写评论
 
 	//评论相关内容
 	Overall              int    `json:"overall"`                // 整体

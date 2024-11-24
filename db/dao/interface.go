@@ -170,6 +170,7 @@ type CoursePackageSingleLessonInterface interface {
 	GetSingleLessonListByPackageId(uid int64, packageId string) ([]model.CoursePackageSingleLessonModel, error)
 	AddSingleLesson2Package(stCoursePackageSingleLessonModel *model.CoursePackageSingleLessonModel) error
 	UpdateSingleLesson(uid int64, lessonId string, mapUpdates map[string]interface{}) error
+	GetSingleLessonListFinishNotSendMsgWriteComment(nowTs int64, limit int) ([]model.CoursePackageSingleLessonModel, error)
 	GetSingleLessonListNotFinish(nowTs int64, limit int) ([]model.CoursePackageSingleLessonModel, error)
 	GetSingleLessonListMissed(limit int) ([]model.CoursePackageSingleLessonModel, error)
 	GetTodaySingleLessonListNotSendMsgGoLesson(ts int64, limit int) ([]model.CoursePackageSingleLessonModel, error)

@@ -53,7 +53,6 @@ func (imp *UserInterfaceImp) GetUserByPhone(phone string) (*model.UserInfoModel,
 	return user, err
 }
 
-
 func (imp *UserInterfaceImp) GetUserByTraceId(traceid string) (*model.UserInfoModel, error) {
 	var err error
 	var user = new(model.UserInfoModel)
@@ -465,6 +464,14 @@ func (imp *CoursePackageSingleLessonInterfaceImp) GetSingleLessonListNotFinish(n
 
 	//如果当前时间已经超过了课程终止时间，还没有核销，那么则认为用户旷课，或者是教练忘记核销了
 	err = cli.Table(course_package_single_lesson_tableName).Where("status = ? AND schedule_end_ts < ? ", model.En_LessonStatus_Scheduled, nowTs).Find(&vecCoursePackageSingleLessonModel).Limit(limit).Error
+	return vecCoursePackageSingleLessonModel, err
+}
+
+func (imp *CoursePackageSingleLessonInterfaceImp) GetSingleLessonListFinishNotSendMsgWriteComment(nowTs int64, limit int) ([]model.CoursePackageSingleLessonModel, error) {
+	var err error
+	var vecCoursePackageSingleLessonModel []model.CoursePackageSingleLessonModel
+	cli := db.Get()
+	err = cli.Table(course_package_single_lesson_tableName).Where("status = ? AND schedule_end_ts < ?  AND send_msg_write_comment = false", model.En_LessonStatusCompleted, nowTs).Find(&vecCoursePackageSingleLessonModel).Limit(limit).Error
 	return vecCoursePackageSingleLessonModel, err
 }
 
