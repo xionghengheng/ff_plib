@@ -26,8 +26,8 @@ const (
 	SmsTemplateId_UserCancelBook = "2306242" // 学员取消预约提醒
 
 	//购课相关
-	SmsTemplateId_UserBuyPackageNotifyConsultant = "2306244" // 学员购课通知，给教练通知
-	SmsTemplateId_UserBuyPackage                 = "2306213" // 学员购课通知，给顾问通知
+	SmsTemplateId_UserBuyPackage                 = "2306213" // 学员购课通知，给教练通知
+	SmsTemplateId_UserBuyPackageNotifyConsultant = "2306244" // 学员购课通知，给顾问通知
 )
 
 func SendSmsMsg2User(templateId string, uid int64, vecTemplateParam []string, phone string) error {
