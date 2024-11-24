@@ -155,6 +155,9 @@ type CoursePackageInterface interface {
 
 	//获取所有课包，通过创建时间来分页
 	GetAllCoursePackageList(ts int64) ([]model.CoursePackageModel, error)
+
+	//获取体验课课包，通过创建时间来分页
+	GetAllTrailCoursePackageList(ts int64) ([]model.CoursePackageModel, error)
 }
 
 // CoursePackageInterfaceImp 课包数据模型实现
