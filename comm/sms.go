@@ -121,12 +121,12 @@ func SendSmsMsg2User(templateId string, uid int64, vecTemplateParam []string, ph
 	// 打印返回的json字符串
 	Printf("send msCode succ, templateId:%d phone:%s uid:%d rsp:%s\n", templateId, phone, uid, b)
 	if len(response.Response.SendStatusSet) == 0 || response.Response.SendStatusSet[0].Code == nil || response.Response.SendStatusSet[0].Message == nil {
-		Printf("rspData format error, templateId:%d phone:%s uid:%d response:%+v", templateId, phone, uid, response)
+		Printf("rspData format error, templateId:%s phone:%s uid:%d response:%+v", templateId, phone, uid, response)
 		return err
 	}
 
 	if (*response.Response.SendStatusSet[0].Code) != "Ok" {
-		Printf("rspData format error, templateId:%d phone:%s uid:%d response:%+v", templateId, phone, uid, response)
+		Printf("rspData format error, templateId:%s phone:%s uid:%d response:%+v", templateId, phone, uid, response)
 		return errors.New(*response.Response.SendStatusSet[0].Message)
 	}
 	return nil
