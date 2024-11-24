@@ -18,11 +18,16 @@ const (
 	SmsTemplateId_LessonStartRemind       = "2272686" // 课程开始前提醒
 	SmsTemplateId_LessonFirstBook         = "2296175" // 用户首次约课提醒
 	SmsTemplateId_UserBeVip               = "2291779" // 用户订阅提醒
-	SmsTemplateId_UserBook                = "2300116" // 学员约课通知
-	SmsTemplateId_UserCancelBook          = "2300121" // 学员取消预约提醒
-	SmsTemplateId_UserBuyPackage          = "2300119" // 学员购课通知
 	SmsTemplateId_CoachSetAvaTimeRemind   = "2291778" // 教练设置可约时间提醒
 	SmsTemplateId_LessonMissedRemindCoach = "2305573" // 课程旷课提醒
+
+	//用户约课相关
+	SmsTemplateId_UserBook       = "2306223" // 学员约课通知
+	SmsTemplateId_UserCancelBook = "2306242" // 学员取消预约提醒
+
+	//购课相关
+	SmsTemplateId_UserBuyPackageNotifyConsultant = "2306244" // 学员购课通知，给教练通知
+	SmsTemplateId_UserBuyPackage                 = "2306213" // 学员购课通知，给顾问通知
 )
 
 func SendSmsMsg2User(templateId string, uid int64, vecTemplateParam []string, phone string) error {
