@@ -24,6 +24,7 @@ type CoachModel struct {
 	TotalCompleteLesson string `json:"total_complete_lesson"` //累计上课节数
 }
 
+
 const (
 	Enum_Coach_QualifyType_Basic        int = iota + 1 // 1 = 基础
 	Enum_Coach_QualifyType_Intermediate                // 2 = 中级
