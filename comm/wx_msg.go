@@ -14,6 +14,8 @@ import (
 // 订阅消息模板配置平台：https://mp.weixin.qq.com/wxamp/newtmpl/mytmpl?start=0&limit=10&token=2018136501&lang=zh_CN
 // 云托管参考文档：https://developers.weixin.qq.com/miniprogram/dev/wxcloudrun/src/scene/deploy/subscribe.html
 // 参考文档：https://developers.weixin.qq.com/miniprogram/dev/OpenApiDoc/mp-message-management/subscribe-message/sendMessage.html#%E8%AE%A2%E9%98%85%E6%B6%88%E6%81%AF%E5%8F%82%E6%95%B0%E5%80%BC%E5%86%85%E5%AE%B9%E9%99%90%E5%88%B6%E8%AF%B4%E6%98%8E
+
+// thing.DATA	事物	20个以内字符
 type MsgDataField struct {
 	Value string `json:"value"`
 }
