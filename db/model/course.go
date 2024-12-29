@@ -22,6 +22,6 @@ const (
 	Enum_Course_Type_Trial        = iota // 0=基础
 	Enum_Course_Type_Intermediate        // 1=中级
 	Enum_Course_Type_Advanced            // 2=高级
-	Enum_Course_Type_Specialty           // 3=资深
-	Enum_Course_Type_Senior              // 4=特色
+	Enum_Course_Type_Senior              // 3=资深
+	Enum_Course_Type_Specialty           // 4=特色
 )
