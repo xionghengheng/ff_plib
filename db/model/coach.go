@@ -22,8 +22,8 @@ type CoachModel struct {
 	Style               string `json:"style"`                 //教练风格（英文逗号分割）
 	YearsOfWork         string `json:"years_of_work"`         //从业时长
 	TotalCompleteLesson string `json:"total_complete_lesson"` //累计上课节数
+	CanShow             int    `json:"can_show"`              //是否可以在平台展示，0=可展示 1=不可展示
 }
-
 
 const (
 	Enum_Coach_QualifyType_Basic        int = iota + 1 // 1 = 基础
