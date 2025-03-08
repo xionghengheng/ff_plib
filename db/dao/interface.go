@@ -158,6 +158,9 @@ type CoursePackageInterface interface {
 
 	//获取体验课课包，通过创建时间来分页
 	GetAllTrailCoursePackageList(ts int64) ([]model.CoursePackageModel, error)
+
+	//获取付费课课包，通过创建时间来分页
+	GetAllPaidCoursePackageList(ts int64) ([]model.CoursePackageModel, error)
 }
 
 // CoursePackageInterfaceImp 课包数据模型实现
@@ -232,11 +235,8 @@ type AppointmentInterface interface {
 	//查询教练预约时间表，从某一天的零点时间戳开始(已经有用户预约的)
 	GetAppointmentScheduleHasUidFromBegTs(gymId int, coachid int, dayBegTs int64) ([]model.CoachAppointmentModel, error)
 
-
 	//查询教练某一天的预约时间表
 	GetAppointmentScheduleOneDay(gymId int, coachid int, dayBegTs int64) ([]model.CoachAppointmentModel, error)
-
-
 
 	//查询用户预约时间记录
 	GetUserAppointmentRecordOneDay(uid int64, dayBegTs int64) ([]model.CoachAppointmentModel, error)
@@ -246,7 +246,7 @@ type AppointmentInterface interface {
 	//通过预约id获取预约详情信息
 	GetAppointmentById(appointmentID int) (*model.CoachAppointmentModel, error)
 
-	DelAppointmentByCoach(appointmentID int, coachId int) (error)
+	DelAppointmentByCoach(appointmentID int, coachId int) error
 
 	GetAppointmentByBegTsAndEndTs(gymId int, coachid int, begTs int64, endTs int64) (*model.CoachAppointmentModel, error)
 
@@ -279,7 +279,7 @@ type InvitationCodeInterface interface {
 	AddCode(stInvitationCodeModel *model.InvitationCodeModel) error
 
 	//获取邀请码表的计数
-	GetCount() (int64,error)
+	GetCount() (int64, error)
 }
 
 // InvitationCodeInterfaceImp

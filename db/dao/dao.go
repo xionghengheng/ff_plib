@@ -431,6 +431,18 @@ func (imp *CoursePackageInterfaceImp) GetAllTrailCoursePackageList(ts int64) ([]
 	return vecCoursePackageModel, err
 }
 
+func (imp *CoursePackageInterfaceImp) GetAllPaidCoursePackageList(ts int64) ([]model.CoursePackageModel, error) {
+	cli := db.Get()
+	var vecCoursePackageModel []model.CoursePackageModel
+	var err error
+	if ts != 0 {
+		err = cli.Raw("SELECT * FROM course_packages WHERE package_type = 2 AND ts < ? ORDER BY ts DESC Limit 500", ts).Scan(&vecCoursePackageModel).Error
+	} else {
+		err = cli.Raw("SELECT * FROM course_packages WHERE package_type = 2 ORDER BY ts DESC Limit 500").Scan(&vecCoursePackageModel).Error
+	}
+	return vecCoursePackageModel, err
+}
+
 const course_package_single_lesson_tableName = "course_package_single_lessons"
 
 func (imp *CoursePackageSingleLessonInterfaceImp) GetSingleLessonListByPackageId(uid int64, packageId string) ([]model.CoursePackageSingleLessonModel, error) {
