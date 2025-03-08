@@ -174,6 +174,13 @@ func (imp *CoachInterfaceImp) GetCoachAll() ([]model.CoachModel, error) {
 	return vecCoachModel, err
 }
 
+func (imp *CoachInterfaceImp) SetCoachCloneLessonUnAvaliableSwitch(id int, value int) error {
+	var err error
+	cli := db.Get()
+	err = cli.Raw("UPDATE coaches SET clone_lesson_unava_switch = ? WHERE id = ?;", value, id).Error
+	return err
+}
+
 const course_package_tableName = "course_packages"
 
 func (imp *CoursePackageInterfaceImp) GetCoursePackageById(packageId string) (*model.CoursePackageModel, error) {
