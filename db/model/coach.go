@@ -35,6 +35,11 @@ const (
 )
 
 const (
+	Enum_Coach_Can_Show_YES int = iota // 0 = 默认可以在平台展示
+	Enum_Coach_Can_Show_NO             // 1 = 不可在平台展示
+)
+
+const (
 	Enum_Coach_Clone_Lesson_Unavaliable_YES int = iota // 0 = 默认同步
 	Enum_Coach_Clone_Lesson_Unavaliable_NO             // 1 = 不同步下周
 )
