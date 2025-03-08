@@ -33,3 +33,8 @@ const (
 	Enum_Coach_QualifyType_Advanced                    // 3 = 高级
 	Enum_Coach_QualifyType_Senior                      // 4 = 资深
 )
+
+const (
+	Enum_Coach_Clone_Lesson_Unavaliable_YES int = iota // 0 = 默认同步
+	Enum_Coach_Clone_Lesson_Unavaliable_NO             // 1 = 不同步下周
+)
