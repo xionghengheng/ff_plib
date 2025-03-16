@@ -450,6 +450,22 @@ func (imp *CoursePackageInterfaceImp) GetAllPaidCoursePackageList(ts int64) ([]m
 	return vecCoursePackageModel, err
 }
 
+func (imp *CoursePackageInterfaceImp) JudgeUserHadBuyPaidPackage(uid int64) (bool, error) {
+	var err error
+	var coursePackage = new(model.CoursePackageModel)
+	cli := db.Get()
+	err = cli.Raw("SELECT package_id FROM course_packages WHERE uid = ? AND package_type = 2 Limit 1", uid).Scan(coursePackage).Error
+	//err = cli.Table(course_package_tableName).Where("uid = ? AND package_type = ? Limit 1", uid, model.Enum_PackageType_PaidPackage).First(coursePackage).Error
+	if err != nil {
+		return false, err
+	}
+	if len(coursePackage.PackageID) > 0 {
+		return true, nil
+	} else {
+		return false, nil
+	}
+}
+
 const course_package_single_lesson_tableName = "course_package_single_lessons"
 
 func (imp *CoursePackageSingleLessonInterfaceImp) GetSingleLessonListByPackageId(uid int64, packageId string) ([]model.CoursePackageSingleLessonModel, error) {

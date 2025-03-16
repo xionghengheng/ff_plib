@@ -107,6 +107,9 @@ type CoursePackageInterface interface {
 	//根据uid获取免费课包
 	GetTrailCoursePackage(uid int64) (*model.CoursePackageModel, error)
 
+	//轻量级判断用户是否买过付费课包
+	JudgeUserHadBuyPaidPackage(uid int64) (bool, error)
+
 	//根据uid获取付费课包
 	GetPayCoursePackageList(uid int64) ([]model.CoursePackageModel, error)
 

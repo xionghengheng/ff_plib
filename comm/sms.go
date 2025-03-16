@@ -28,6 +28,7 @@ const (
 	//购课相关
 	SmsTemplateId_UserBuyPackage                 = "2306213" // 学员购课通知，给教练通知
 	SmsTemplateId_UserBuyPackageNotifyConsultant = "2306244" // 学员购课通知，给顾问通知
+	SmsTemplateId_PushUserBuy                    = "1"       // 学员体验课已完成，通知学员购课优惠
 )
 
 func SendSmsMsg2User(templateId string, uid int64, vecTemplateParam []string, phone string) error {
