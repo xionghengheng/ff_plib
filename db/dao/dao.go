@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/jinzhu/gorm"
+	"github.com/xionghengheng/ff_plib/comm"
 	"github.com/xionghengheng/ff_plib/db"
 	"github.com/xionghengheng/ff_plib/db/model"
 	"strings"
@@ -175,10 +176,13 @@ func (imp *CoachInterfaceImp) GetCoachAll() ([]model.CoachModel, error) {
 }
 
 func (imp *CoachInterfaceImp) SetCoachCloneLessonUnAvaliableSwitch(coach_id int, value int) error {
-	var err error
 	cli := db.Get()
-	err = cli.Raw("UPDATE coaches SET clone_lesson_unava_switch = ? WHERE coach_id = ?", value, coach_id).Error
-	return err
+	result := cli.Raw("UPDATE coaches SET clone_lesson_unava_switch = ? WHERE coach_id = ?", value, coach_id)
+	if result.Error != nil {
+		return result.Error
+	}
+	comm.Printf("coach_id:%d RowsAffected:%d", coach_id, result.RowsAffected)
+	return nil
 }
 
 const course_package_tableName = "course_packages"
