@@ -4,9 +4,10 @@ import (
 	"errors"
 	"fmt"
 	"github.com/jinzhu/gorm"
-	"github.com/xionghengheng/ff_plib/comm"
 	"github.com/xionghengheng/ff_plib/db"
 	"github.com/xionghengheng/ff_plib/db/model"
+	"path"
+	"runtime"
 	"strings"
 	"time"
 )
@@ -181,7 +182,7 @@ func (imp *CoachInterfaceImp) SetCoachCloneLessonUnAvaliableSwitch(coach_id int,
 	if result.Error != nil {
 		return result.Error
 	}
-	comm.Printf("coach_id:%d RowsAffected:%d", coach_id, result.RowsAffected)
+	Printf("coach_id:%d RowsAffected:%d", coach_id, result.RowsAffected)
 	return nil
 }
 
@@ -875,4 +876,33 @@ func getTodayEndTs() int64 {
 
 	// 返回次日零点的时间戳
 	return nextMidnight.Unix()
+}
+
+// 包装 fmt.Printf，增加文件名和函数名打印
+func Printf(format string, args ...interface{}) {
+	// 这里传递 2 以获取更上层的调用者信息
+	fileName, fullFuncName := getCallerInfo(2)
+
+	var funcName string
+	vecFullFuncName := strings.Split(fullFuncName, ".")
+	if len(vecFullFuncName) > 0 {
+		funcName = vecFullFuncName[len(vecFullFuncName)-1]
+	} else {
+		funcName = fullFuncName
+	}
+	format = fmt.Sprintf("[%s:%s] %s\n", fileName, funcName, format)
+	fmt.Printf(format, args...)
+}
+
+// 获取调用者的文件名和函数名
+func getCallerInfo(skip int) (string, string) {
+	pc, file, _, ok := runtime.Caller(skip)
+	if !ok {
+		return "unknown", "unknown"
+	}
+	fn := runtime.FuncForPC(pc)
+	if fn == nil {
+		return "unknown", "unknown"
+	}
+	return path.Base(file), fn.Name()
 }
