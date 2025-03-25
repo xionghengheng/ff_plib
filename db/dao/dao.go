@@ -177,7 +177,7 @@ func (imp *CoachInterfaceImp) GetCoachAll() ([]model.CoachModel, error) {
 func (imp *CoachInterfaceImp) SetCoachCloneLessonUnAvaliableSwitch(coach_id int, value int) error {
 	var err error
 	cli := db.Get()
-	err = cli.Raw("UPDATE coaches SET clone_lesson_unava_switch = ? WHERE coach_id = ?", value, coach_id).Error
+	err = cli.Raw("UPDATE coaches SET clone_lesson_unava_switch = ? WHERE coach_id = ?", uint8(value), coach_id).Error
 	return err
 }
 
