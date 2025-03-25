@@ -92,7 +92,7 @@ type CoachInterface interface {
 	GetCoachListByGymId(gymId int) ([]model.CoachModel, error)
 
 	//设置不可约时间是否同步到下周
-	SetCoachCloneLessonUnAvaliableSwitch(id int, value int) error
+	SetCoachCloneLessonUnAvaliableSwitch(coach_id int, value int) error
 }
 
 // CoachInterfaceImp 教练数据模型实现
