@@ -178,6 +178,10 @@ func (imp *CoachInterfaceImp) GetCoachAll() ([]model.CoachModel, error) {
 
 func (imp *CoachInterfaceImp) SetCoachCloneLessonUnAvaliableSwitch(coach_id int, value int) error {
 	cli := db.Get()
+	mapUpdates := map[string]interface{}{}
+	mapUpdates["clone_lesson_unava_switch"] = value
+	return cli.Table(coach_tableName).Model(&model.CoachModel{}).Where("coach_id = ?", coach_id).Updates(mapUpdates).Error
+
 	result := cli.Raw("UPDATE coaches SET clone_lesson_unava_switch = ? WHERE coach_id = ?", value, coach_id)
 	if result.Error != nil {
 		return result.Error
