@@ -14,7 +14,7 @@ type CoachAppointmentModel struct {
 	UpdateTs                 int64  `json:"update_ts"`                   // 更新时间
 	CanceledCourse           string `json:"canceled_course"`             // 被取消的课程
 	BSetUnavailableByCoach   bool   `json:"b_set_unavailable_by_coach"`  // 是否为教练主动设置不可用
-	UnavailableByCoachReason bool   `json:"unavailable_by_coach_reason"` // 不可用的原因
+	UnavailableByCoachReason int    `json:"unavailable_by_coach_reason"` // 不可用的原因
 }
 
 // AppointmentStatus 预约状态
