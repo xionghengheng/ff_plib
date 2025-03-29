@@ -264,6 +264,9 @@ type AppointmentInterface interface {
 
 	//教练端，设置可预约时间
 	SetAppointmentSchedule(stCoachAppointmentModel model.CoachAppointmentModel) error
+
+	//教练端，设置可预约时间
+	SetAppointmentScheduleWithNewAppointment(stCoachAppointmentModel model.CoachAppointmentModel) (model.CoachAppointmentModel, error)
 }
 
 // AppointmentInterfaceImp
