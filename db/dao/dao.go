@@ -644,15 +644,14 @@ func (imp *AppointmentInterfaceImp) SetAppointmentSchedule(stCoachAppointmentMod
 
 func (imp *AppointmentInterfaceImp) SetAppointmentScheduleWithNewAppointment(stCoachAppointmentModel model.CoachAppointmentModel) (model.CoachAppointmentModel, error) {
 	cli := db.Get()
-
+	var newAppointment model.CoachAppointmentModel
 	// 使用Create代替Save，更符合创建语义
 	result := cli.Table(coach_appointments_tableName).Create(&stCoachAppointmentModel)
 	if result.Error != nil {
-		return nil, result.Error
+		return newAppointment, result.Error
 	}
 
 	// 查询刚插入的记录（确保返回最新数据）
-	var newAppointment model.CoachAppointmentModel
 	err := cli.Table(coach_appointments_tableName).
 		Where("appointment_id = ?", stCoachAppointmentModel.AppointmentID).
 		First(&newAppointment).
