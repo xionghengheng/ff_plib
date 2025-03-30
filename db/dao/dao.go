@@ -693,6 +693,13 @@ func (imp *AppointmentInterfaceImp) DelAppointmentByCoach(appointmentID int, coa
 	return err
 }
 
+func (imp *AppointmentInterfaceImp) DelAppointmentByTime(coachId int, begTs int64, endTs int64) error {
+	var err error
+	cli := db.Get()
+	err = cli.Table(coach_appointments_tableName).Where("coach_id = ? AND start_time = ? AND end_time = ?", coachId, begTs, endTs).Delete(model.CoachAppointmentModel{}).Error
+	return err
+}
+
 func (imp *AppointmentInterfaceImp) GetUserAppointmentRecordOneDay(uid int64, dayBegTs int64) ([]model.CoachAppointmentModel, error) {
 	var err error
 	var vecCoachAppointmentModel []model.CoachAppointmentModel

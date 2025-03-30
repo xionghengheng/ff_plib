@@ -253,6 +253,7 @@ type AppointmentInterface interface {
 	GetAppointmentById(appointmentID int) (*model.CoachAppointmentModel, error)
 
 	DelAppointmentByCoach(appointmentID int, coachId int) error
+	DelAppointmentByTime(coachId int, begTs int64, endTs int64) error
 
 	GetAppointmentByBegTsAndEndTs(gymId int, coachid int, begTs int64, endTs int64) (*model.CoachAppointmentModel, error)
 
