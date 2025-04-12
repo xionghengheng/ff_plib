@@ -30,6 +30,7 @@ type UserInfoModel struct {
 	RegistTs                int64   `json:"regist_ts"`                        //用户注册时间
 	BeVipTs                 int64   `json:"be_vip_ts"`                        //成为订阅会员的时间
 	LastLoginTs             int64   `json:"last_login_ts"`                    //上次登录时间（目前只记录教练的）
+	HasShownNoStoreHint     bool    `json:"has_shown_no_store_hint"`          //是否展示过未覆盖门店提醒
 }
 
 const (
