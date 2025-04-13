@@ -308,3 +308,16 @@ type CoachPageBannerInterfaceImp struct{}
 
 // Imp 实现实例
 var ImpCoachPageBanner CoachPageBannerInterface = &CoachPageBannerInterfaceImp{}
+
+// 用户反馈
+type UserFeedBackInterface interface {
+	CreateFeedback(feedback *model.UserFeedbackModel) error
+	GetFeedbackList(userID int64, page, pageSize int) ([]model.UserFeedbackModel, error)
+	GetFeedbackByID(id int64) (*model.UserFeedbackModel, error)
+	UpdateFeedbackStatus(id int64, status int, reply string) error
+}
+
+type UserFeedBackInterfaceInterfaceImp struct{}
+
+// Imp 实现实例
+var ImpUserFeedBack UserFeedBackInterface = &UserFeedBackInterfaceInterfaceImp{}
