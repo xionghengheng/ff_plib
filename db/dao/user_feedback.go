@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-const user_feedback_tableName = "user_feed_back"
+const user_feedback_tableName = "user_feedback"
 
 // CreateFeedback 创建反馈记录
 func (d *UserFeedBackInterfaceInterfaceImp) CreateFeedback(feedback *model.UserFeedbackModel) error {
