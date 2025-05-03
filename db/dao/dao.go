@@ -665,7 +665,7 @@ func (imp *AppointmentInterfaceImp) GetAppointmentScheduleHasUidFromBegTs(gymId 
 	var vecCoachAppointmentModel []model.CoachAppointmentModel
 	cli := db.Get()
 	//err = cli.Table(coach_appointments_tableName).Where("coach_id = ? AND gym_id = ? AND appointment_date >= ?", coachId, gymId, dayBegTs).Order("start_time ASC").Find(&vecCoachAppointmentModel).Error
-	err = cli.Raw("SELECT * FROM coach_appointments WHERE coach_id = ? AND gym_id = ? AND appointment_date >= ? AND user_id > 0 ORDER BY start_time ASC Limit 100",
+	err = cli.Raw("SELECT * FROM coach_appointments WHERE coach_id = ? AND gym_id = ? AND appointment_date >= ? AND (user_id > 0 OR status = 2) ORDER BY start_time ASC Limit 100",
 		coachId, gymId, dayBegTs).Scan(&vecCoachAppointmentModel).Error
 	return vecCoachAppointmentModel, err
 }
