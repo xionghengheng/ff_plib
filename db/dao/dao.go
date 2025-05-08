@@ -783,7 +783,7 @@ func (imp *AppointmentInterfaceImp) SetAppointmentBooked(uid int64, appointmentI
 	return err, stCoachAppointmentModel
 }
 
-func (imp *AppointmentInterfaceImp) SetAppointmentUnAvailable(uid int64, appointmentID int, unavailableReason int) (error, model.CoachAppointmentModel) {
+func (imp *AppointmentInterfaceImp) SetAppointmentUnAvailable(coachid int, appointmentID int, unavailableReason int) (error, model.CoachAppointmentModel) {
 	var err error
 	cli := db.Get().Table(coach_appointments_tableName)
 
@@ -792,7 +792,7 @@ func (imp *AppointmentInterfaceImp) SetAppointmentUnAvailable(uid int64, appoint
 	err = cli.Transaction(func(tx *gorm.DB) error {
 		// 获取用户记录
 		if err := tx.First(&stCoachAppointmentModel, "appointment_id = ?", appointmentID).Error; err != nil {
-			fmt.Printf("get err, uid:%d appointmentID:%d\n", uid, appointmentID)
+			fmt.Printf("get err, coachid:%d appointmentID:%d\n", coachid, appointmentID)
 			return err
 		}
 
@@ -811,7 +811,7 @@ func (imp *AppointmentInterfaceImp) SetAppointmentUnAvailable(uid int64, appoint
 
 		// 更新用户数据，使用 Update 方法
 		if err := tx.Model(&model.CoachAppointmentModel{}).Where("appointment_id = ?", appointmentID).Updates(mapUpdates).Error; err != nil {
-			fmt.Printf("update err, uid:%d appointmentID:%d mapUpdates:%+v\n", uid, appointmentID, mapUpdates)
+			fmt.Printf("update err, coachid:%d appointmentID:%d mapUpdates:%+v\n", coachid, appointmentID, mapUpdates)
 			tx.Rollback()
 			return err
 		}
