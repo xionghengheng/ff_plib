@@ -259,6 +259,7 @@ type AppointmentInterface interface {
 
 	//用户发起约课
 	SetAppointmentBooked(uid int64, appointmentID int, courseId int) (error, model.CoachAppointmentModel)
+	SetAppointmentUnAvailable(uid int64, appointmentID int, unavailableReason int) (error, model.CoachAppointmentModel)
 
 	//用户取消约课
 	CancelAppointmentBooked(uid int64, lessonID string, appointmentID int) error
