@@ -174,6 +174,24 @@ func GetAllGymIds(gymIDs string) []int {
 	return rsp
 }
 
+func GetAllMapGymIds(gymIDs string) map[int]bool {
+	rsp := make(map[int]bool)
+	if len(gymIDs) == 0 {
+		return rsp
+	}
+
+	vecStrGymId := strings.Split(gymIDs, ",")
+	for _, v := range vecStrGymId {
+		nGymId, err := strconv.ParseInt(v, 10, 64)
+		if err != nil {
+			Printf("ParseInt err, err:%+v gymIDs:%s\n", err, gymIDs)
+			continue
+		}
+		rsp[int(nGymId)] = true
+	}
+	return rsp
+}
+
 func GetGymIdsByCoachId(coachId int) ([]int, error) {
 	var rsp []int
 	stCoachModel, err := dao.ImpCoach.GetCoachById(coachId)
@@ -194,4 +212,26 @@ func GetGymIdsByCoachId(coachId int) ([]int, error) {
 		rsp = append(rsp, int(nGynId))
 	}
 	return rsp, nil
+}
+
+// GetCoachListByGymIdNew 根据健身房ID获取教练列表
+func GetCoachListByGymIdNew(gymId int) ([]model.CoachModel, error) {
+	// 获取所有教练
+	allCoaches, err := GetAllCoach()
+	if err != nil {
+		return nil, fmt.Errorf("获取教练列表失败: %w", err)
+	}
+
+	// 过滤出指定健身房的教练
+	var rspVecGymCoache []model.CoachModel
+	for _, coach := range allCoaches {
+
+		mapGymIdsOfCoach := GetAllMapGymIds(coach.GymIDs)
+
+		// 检查多门店健身房ID列表是否包含目标健身房
+		if _, ok := mapGymIdsOfCoach[gymId]; ok {
+			rspVecGymCoache = append(rspVecGymCoache, coach)
+		}
+	}
+	return rspVecGymCoache, nil
 }
