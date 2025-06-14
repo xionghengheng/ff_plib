@@ -57,7 +57,6 @@ func GetTodayBegTsByTs(givenTimestamp int64) int64 {
 	return midnightTimestamp
 }
 
-
 // 获取调用者的文件名和函数名
 func getCallerInfo(skip int) (string, string) {
 	pc, file, _, ok := runtime.Caller(skip)
@@ -100,7 +99,6 @@ func CalculateDaysSinceTimestamp(timestamp int64) int {
 	return days
 }
 
-
 func GetTodayEndTs() int64 {
 	// 获取当前时间
 	now := time.Now()
@@ -116,16 +114,16 @@ func GetTodayEndTs() int64 {
 }
 
 // 是否生产环境
-func IsProd() bool{
-	if os.Getenv("MiniprogramState") == "formal"{
+func IsProd() bool {
+	if os.Getenv("MiniprogramState") == "formal" {
 		return true
 	}
 	return false
 }
 
 // 是否测试环境
-func IsTrial() bool{
-	if os.Getenv("MiniprogramState") == "trial"{
+func IsTrial() bool {
+	if os.Getenv("MiniprogramState") == "trial" {
 		return true
 	}
 	return false
@@ -144,7 +142,6 @@ func uniqueVec(vecID *[]string) {
 	return
 }
 
-
 func uniqueVecCoach(vecID *[]model.CoachModel) {
 	tmpMap := make(map[model.CoachModel]int)
 	for _, id := range *vecID {
@@ -156,4 +153,22 @@ func uniqueVecCoach(vecID *[]model.CoachModel) {
 	}
 	*vecID = tmpVecID
 	return
+}
+
+func GetAllGymIds(gymIDs string) []int {
+	var rsp []int
+	if len(gymIDs) == 0 {
+		return rsp
+	}
+
+	vecStrGymId := strings.Split(gymIDs, ",")
+	for _, v := range vecStrGymId {
+		nGynId, err := strconv.ParseInt(v, 10, 64)
+		if err != nil {
+			Printf("ParseInt err, err:%+v gymIDs:%s\n", err, gymIDs)
+			continue
+		}
+		rsp = append(rsp, int(nGynId))
+	}
+	return rsp
 }
