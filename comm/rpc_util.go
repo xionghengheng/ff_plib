@@ -39,11 +39,11 @@ func GetAllCoachByGym() (map[int][]model.CoachModel, error) {
 		return tmp, err
 	}
 	for _, v := range vecCoachModel {
-		if v.GymIdList == "" {
+		if v.GymIDs == "" {
 			continue
 		}
 
-		vecGymIdList := strings.Split(v.GymIdList, ",")
+		vecGymIdList := strings.Split(v.GymIDs, ",")
 		uniqueVec(&vecGymIdList)
 		if len(vecGymIdList) > 0 {
 			for _, gym := range vecGymIdList {
