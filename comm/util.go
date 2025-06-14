@@ -2,6 +2,7 @@ package comm
 
 import (
 	"fmt"
+	"github.com/xionghengheng/ff_plib/db/dao"
 	"github.com/xionghengheng/ff_plib/db/model"
 	"os"
 	"path"
@@ -171,4 +172,26 @@ func GetAllGymIds(gymIDs string) []int {
 		rsp = append(rsp, int(nGynId))
 	}
 	return rsp
+}
+
+func GetGymIdsByCoachId(coachId int) ([]int, error) {
+	var rsp []int
+	stCoachModel, err := dao.ImpCoach.GetCoachById(coachId)
+	if err != nil {
+		return rsp, err
+	}
+	if len(stCoachModel.GymIDs) == 0 {
+		return rsp, nil
+	}
+
+	vecStrGymId := strings.Split(stCoachModel.GymIDs, ",")
+	for _, v := range vecStrGymId {
+		nGynId, err := strconv.ParseInt(v, 10, 64)
+		if err != nil {
+			Printf("ParseInt err, err:%+v gymIDs:%s\n", err, stCoachModel.GymIDs)
+			continue
+		}
+		rsp = append(rsp, int(nGynId))
+	}
+	return rsp, nil
 }
