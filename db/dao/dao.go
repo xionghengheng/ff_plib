@@ -287,6 +287,14 @@ func (imp *CoursePackageInterfaceImp) FindSamePackage(uid int64, gymId int, coac
 	return coursePackage, err
 }
 
+func (imp *CoursePackageInterfaceImp) FindSamePackageNew(uid int64, coachId int, courseId int) (*model.CoursePackageModel, error) {
+	var err error
+	var coursePackage = new(model.CoursePackageModel)
+	cli := db.Get()
+	err = cli.Table(course_package_tableName).Where("uid = ? AND coach_id = ? AND course_id = ?", uid, coachId, courseId).First(coursePackage).Error
+	return coursePackage, err
+}
+
 func (imp *CoursePackageInterfaceImp) AddLessonAndSubCourseCnt(packageId string, uniId string, stCoursePackageSingleLessonModel *model.CoursePackageSingleLessonModel) error {
 	cli := db.Get()
 	err := cli.Transaction(func(tx *gorm.DB) error {

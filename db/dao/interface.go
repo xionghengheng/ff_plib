@@ -152,6 +152,9 @@ type CoursePackageInterface interface {
 	//场地id、教练id和课程id一致，则直接走续费逻辑
 	FindSamePackage(uid int64, gymId int, coachId int, courseId int) (*model.CoursePackageModel, error)
 
+	//课包和场地解耦
+	FindSamePackageNew(uid int64, coachId int, courseId int) (*model.CoursePackageModel, error)
+
 	//新用户可以更新体验课课包里的教练or场地【谨慎使用】
 	UpdateCoursePackage(uid int64, packageId string, mapUpdates map[string]interface{}) error
 
