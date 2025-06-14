@@ -3,6 +3,7 @@ package model
 type CoachModel struct {
 	CoachID                int    `json:"coach_id"`                  //教练id
 	GymID                  int    `json:"gym_id"`                    //健身房id
+	GymIDs                 string `json:"gym_ids"`                   //单个教练多门店，榜单健身房id数组
 	CoachName              string `json:"coach_name"`                //教练名称
 	Avatar                 string `json:"avatar"`                    //教练头像url
 	Bio                    string `json:"bio"`                       //教练简介
