@@ -686,11 +686,27 @@ func (imp *AppointmentInterfaceImp) GetAppointmentScheduleFromBegTs(gymId int, c
 	return vecCoachAppointmentModel, err
 }
 
+func (imp *AppointmentInterfaceImp) GetAppointmentScheduleFromBegTsNew(coachId int, dayBegTs int64) ([]model.CoachAppointmentModel, error) {
+	var err error
+	var vecCoachAppointmentModel []model.CoachAppointmentModel
+	cli := db.Get()
+	err = cli.Table(coach_appointments_tableName).Where("coach_id = ? AND appointment_date >= ?", coachId, dayBegTs).Order("start_time ASC").Find(&vecCoachAppointmentModel).Error
+	return vecCoachAppointmentModel, err
+}
+
 func (imp *AppointmentInterfaceImp) GetAppointmentScheduleOneDay(gymId int, coachId int, dayBegTs int64) ([]model.CoachAppointmentModel, error) {
 	var err error
 	var vecCoachAppointmentModel []model.CoachAppointmentModel
 	cli := db.Get()
 	err = cli.Table(coach_appointments_tableName).Where("coach_id = ? AND gym_id = ? AND appointment_date = ?", coachId, gymId, dayBegTs).Order("start_time ASC").Find(&vecCoachAppointmentModel).Error
+	return vecCoachAppointmentModel, err
+}
+
+func (imp *AppointmentInterfaceImp) GetAppointmentScheduleOneDayNew(coachId int, dayBegTs int64) ([]model.CoachAppointmentModel, error) {
+	var err error
+	var vecCoachAppointmentModel []model.CoachAppointmentModel
+	cli := db.Get()
+	err = cli.Table(coach_appointments_tableName).Where("coach_id = ? AND appointment_date = ?", coachId, dayBegTs).Order("start_time ASC").Find(&vecCoachAppointmentModel).Error
 	return vecCoachAppointmentModel, err
 }
 
@@ -748,6 +764,14 @@ func (imp *AppointmentInterfaceImp) GetAppointmentByBegTsAndEndTs(gymId int, coa
 	cli := db.Get()
 	err = cli.Table(coach_appointments_tableName).Where("coach_id = ? AND gym_id = ? AND start_time = ? AND end_time = ?",
 		coachid, gymId, begTs, endTs).First(appointment).Error
+	return appointment, err
+}
+func (imp *AppointmentInterfaceImp) GetAppointmentByBegTsAndEndTsNew(coachid int, begTs int64, endTs int64) (*model.CoachAppointmentModel, error) {
+	var err error
+	var appointment = new(model.CoachAppointmentModel)
+	cli := db.Get()
+	err = cli.Table(coach_appointments_tableName).Where("coach_id = ? AND start_time = ? AND end_time = ?",
+		coachid, begTs, endTs).First(appointment).Error
 	return appointment, err
 }
 

@@ -240,12 +240,16 @@ type AppointmentInterface interface {
 
 	//查询教练预约时间表，从某一天的零点时间戳开始
 	GetAppointmentScheduleFromBegTs(gymId int, coachid int, dayBegTs int64) ([]model.CoachAppointmentModel, error)
+	// 教练支持多门店（一套时间表）
+	GetAppointmentScheduleFromBegTsNew(coachid int, dayBegTs int64) ([]model.CoachAppointmentModel, error)
 
 	//查询教练预约时间表，从某一天的零点时间戳开始(已经有用户预约的)
 	GetAppointmentScheduleHasUidFromBegTs(gymId int, coachid int, dayBegTs int64) ([]model.CoachAppointmentModel, error)
 
 	//查询教练某一天的预约时间表
 	GetAppointmentScheduleOneDay(gymId int, coachid int, dayBegTs int64) ([]model.CoachAppointmentModel, error)
+	// 教练支持多门店（一套时间表）
+	GetAppointmentScheduleOneDayNew(coachid int, dayBegTs int64) ([]model.CoachAppointmentModel, error)
 
 	//查询用户预约时间记录
 	GetUserAppointmentRecordOneDay(uid int64, dayBegTs int64) ([]model.CoachAppointmentModel, error)
@@ -259,6 +263,8 @@ type AppointmentInterface interface {
 	DelAppointmentByTime(coachId int, begTs int64, endTs int64) error
 
 	GetAppointmentByBegTsAndEndTs(gymId int, coachid int, begTs int64, endTs int64) (*model.CoachAppointmentModel, error)
+	// 教练支持多门店（一套时间表）
+	GetAppointmentByBegTsAndEndTsNew(coachid int, begTs int64, endTs int64) (*model.CoachAppointmentModel, error)
 
 	//用户发起约课
 	SetAppointmentBooked(uid int64, appointmentID int, courseId int) (error, model.CoachAppointmentModel)
