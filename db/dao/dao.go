@@ -678,6 +678,16 @@ func (imp *AppointmentInterfaceImp) GetAppointmentScheduleHasUidFromBegTs(gymId 
 	return vecCoachAppointmentModel, err
 }
 
+func (imp *AppointmentInterfaceImp) GetAppointmentScheduleHasUidFromBegTsNew(coachId int, dayBegTs int64) ([]model.CoachAppointmentModel, error) {
+	var err error
+	var vecCoachAppointmentModel []model.CoachAppointmentModel
+	cli := db.Get()
+	//err = cli.Table(coach_appointments_tableName).Where("coach_id = ? AND gym_id = ? AND appointment_date >= ?", coachId, gymId, dayBegTs).Order("start_time ASC").Find(&vecCoachAppointmentModel).Error
+	err = cli.Raw("SELECT * FROM coach_appointments WHERE coach_id = ? AND appointment_date >= ? AND (user_id > 0 OR status = 2) ORDER BY start_time ASC Limit 100",
+		coachId, dayBegTs).Scan(&vecCoachAppointmentModel).Error
+	return vecCoachAppointmentModel, err
+}
+
 func (imp *AppointmentInterfaceImp) GetAppointmentScheduleFromBegTs(gymId int, coachId int, dayBegTs int64) ([]model.CoachAppointmentModel, error) {
 	var err error
 	var vecCoachAppointmentModel []model.CoachAppointmentModel

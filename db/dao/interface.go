@@ -245,6 +245,8 @@ type AppointmentInterface interface {
 
 	//查询教练预约时间表，从某一天的零点时间戳开始(已经有用户预约的)
 	GetAppointmentScheduleHasUidFromBegTs(gymId int, coachid int, dayBegTs int64) ([]model.CoachAppointmentModel, error)
+	// 教练支持多门店（一套时间表）
+	GetAppointmentScheduleHasUidFromBegTsNew(coachid int, dayBegTs int64) ([]model.CoachAppointmentModel, error)
 
 	//查询教练某一天的预约时间表
 	GetAppointmentScheduleOneDay(gymId int, coachid int, dayBegTs int64) ([]model.CoachAppointmentModel, error)
