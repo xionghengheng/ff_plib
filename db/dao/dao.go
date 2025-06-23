@@ -825,6 +825,48 @@ func (imp *AppointmentInterfaceImp) SetAppointmentBooked(uid int64, appointmentI
 	return err, stCoachAppointmentModel
 }
 
+func (imp *AppointmentInterfaceImp) SetAppointmentBookedNew(uid int64, appointmentID int, courseId int, gymId int) (error, model.CoachAppointmentModel) {
+	var err error
+	cli := db.Get().Table(coach_appointments_tableName)
+
+	// 先获取再更新的原子操作
+	var stCoachAppointmentModel model.CoachAppointmentModel
+	err = cli.Transaction(func(tx *gorm.DB) error {
+		// 获取用户记录
+		if err := tx.First(&stCoachAppointmentModel, "appointment_id = ?", appointmentID).Error; err != nil {
+			fmt.Printf("get err, uid:%d appointmentID:%d\n", uid, appointmentID)
+			return err
+		}
+
+		if stCoachAppointmentModel.Status != model.Enum_Appointment_Status_Available {
+			return errors.New("book status unavailable")
+		}
+
+		// 更新用户记录
+		mapUpdates := map[string]interface{}{}
+		mapUpdates["status"] = model.Enum_Appointment_Status_UnAvailable
+		mapUpdates["user_id"] = uid
+		mapUpdates["user_course_id"] = courseId
+		mapUpdates["gym_id"] = gymId
+		mapUpdates["update_ts"] = time.Now().Unix()
+		stCoachAppointmentModel.Status = model.Enum_Appointment_Status_UnAvailable
+		stCoachAppointmentModel.UserID = uid
+		stCoachAppointmentModel.UserCourseID = courseId
+		stCoachAppointmentModel.UpdateTs = time.Now().Unix()
+		stCoachAppointmentModel.GymId = gymId
+
+		// 更新用户数据，使用 Update 方法
+		if err := tx.Model(&model.CoachAppointmentModel{}).Where("appointment_id = ?", appointmentID).Updates(mapUpdates).Error; err != nil {
+			fmt.Printf("update err, uid:%d appointmentID:%d mapUpdates:%+v\n", uid, appointmentID, mapUpdates)
+			tx.Rollback()
+			return err
+		}
+
+		return nil
+	})
+	return err, stCoachAppointmentModel
+}
+
 func (imp *AppointmentInterfaceImp) SetAppointmentUnAvailable(coachid int, appointmentID int, unavailableReason int) (error, model.CoachAppointmentModel) {
 	var err error
 	cli := db.Get().Table(coach_appointments_tableName)
