@@ -13,9 +13,9 @@ type UserInfoModel struct {
 	Weight                  int     `json:"weight"`                           //体重
 	Height                  int     `json:"height"`                           //身高
 	FitnessExperience       int     `json:"fitness_experience"`               //健身经验（初级=1，中级=2，高级=3）
-	FitnessGoal             int     `json:"fitness_goal"`                     //健身目标
+	FitnessGoal             int     `json:"fitness_goal"`                     //健身目标（1=减脂减重 2=增肌增重 3=塑型体态）
 	DesiredWeight           int     `json:"desired_weight"`                   //期望体重
-	TimeFrame               int     `json:"time_frame"`                       //期望多快达到
+	TimeFrame               int     `json:"time_frame"`                       //达成目标时间（1=慢一点但稳定 2=正常速度 3=越快真好）
 	PreferredBodyPart       string  `json:"preferred_body_part"`              //最期望增强部位
 	WeeklyExerciseFrequency int     `json:"weekly_exercise_frequency"`        //每周运动次数（频次1~2次/周=1，频次3~4次/周=2，频次5~7次/周=3）
 	PreferredPriceRange     int     `json:"preferred_price_range"`            //偏好价格档位(对应的体验课程id)
