@@ -31,6 +31,7 @@ type UserInfoModel struct {
 	BeVipTs                 int64   `json:"be_vip_ts"`                        //成为订阅会员的时间
 	LastLoginTs             int64   `json:"last_login_ts"`                    //上次登录时间（目前只记录教练的）
 	HasShownNoStoreHint     bool    `json:"has_shown_no_store_hint"`          //是否展示过未覆盖门店提醒
+	BeVipFromType           int     `json:"be_vip_from_type"`                 //成为订阅会员的方式
 }
 
 const (
@@ -44,4 +45,9 @@ const (
 	Enum_HeadPic_Check_Ing             // 1 = 审核中
 	Enum_HeadPic_Check_Pass            // 2 = 审核通过
 	Enum_HeadPic_Check_Deny            // 3 = 审核拒绝
+)
+
+const (
+	Enum_BE_VIP_FROM_TYPE_Non          int = iota // 0 = 无审核状态
+	Enum_BE_VIP_FROM_TYPE_BUY_FROM_REC            // 线下完成体验课，通过顾问或教练分享，直接购买课包
 )
