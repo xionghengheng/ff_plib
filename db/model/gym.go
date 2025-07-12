@@ -15,4 +15,5 @@ type GymInfoModel struct {
 	NearbySubwayStation string  `json:"nearby_subway_station,omitempty"`
 	GymDiscount         string  `json:"gym_discount"`    //场馆优惠信息
 	LocSimpleName       string  `json:"loc_simple_name"` //健身房场地简单地址（用户短信）
+	CanShow             int     `json:"can_show"`        //是否可以在平台展示，0=默认可展示 1=不可展示
 }
