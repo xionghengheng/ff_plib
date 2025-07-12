@@ -22,7 +22,7 @@ type CoachModel struct {
 	Style                  string `json:"style"`                     //教练风格（英文逗号分割）
 	YearsOfWork            string `json:"years_of_work"`             //从业时长
 	TotalCompleteLesson    string `json:"total_complete_lesson"`     //累计上课节数
-	CanShow                int    `json:"can_show"`                  //是否可以在平台展示，0=可展示 1=不可展示
+	CanShow                int    `json:"can_show"`                  //是否可以在平台展示，0=不可展示 1=可展示
 	CloneLessonUnavaSwitch int    `json:"clone_lesson_unava_switch"` //是否把可约状态同步到下周 0=默认同步
 }
 
