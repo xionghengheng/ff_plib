@@ -215,7 +215,7 @@ func GetGymIdsByCoachId(coachId int) ([]int, error) {
 	return rsp, nil
 }
 
-// GetCoachListByGymIdNew 根据健身房ID获取教练列表
+// GetCoachListByGymIdNew 根据健身房ID获取教练列表(不会对教练可见性做处理，需要调用方自己处理)
 func GetCoachListByGymIdNew(reqGymId int) ([]model.CoachModel, error) {
 	var rsp []model.CoachModel
 	mapCoach := make(map[int][]model.CoachModel)
