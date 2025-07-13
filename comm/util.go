@@ -7,6 +7,7 @@ import (
 	"os"
 	"path"
 	"runtime"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -215,23 +216,29 @@ func GetGymIdsByCoachId(coachId int) ([]int, error) {
 }
 
 // GetCoachListByGymIdNew 根据健身房ID获取教练列表
-func GetCoachListByGymIdNew(gymId int) ([]model.CoachModel, error) {
-	// 获取所有教练（需要保持原样顺序）
-	allCoaches, err := dao.ImpCoach.GetCoachListByGymId(gymId)
+func GetCoachListByGymIdNew(reqGymId int) ([]model.CoachModel, error) {
+	var rsp []model.CoachModel
+	mapCoach := make(map[int][]model.CoachModel)
+	vecCoachModel, err := dao.ImpCoach.GetCoachAll()
 	if err != nil {
-		return nil, fmt.Errorf("获取教练列表失败: %w", err)
+		return rsp, err
 	}
 
-	// 过滤出指定健身房的教练
-	var rspVecGymCoache []model.CoachModel
-	for _, coach := range allCoaches {
-
-		mapGymIdsOfCoach := GetAllMapGymIds(coach.GymIDs)
-
-		// 检查多门店健身房ID列表是否包含目标健身房
-		if _, ok := mapGymIdsOfCoach[gymId]; ok {
-			rspVecGymCoache = append(rspVecGymCoache, coach)
+	// 将教练按健身房ID分组
+	for _, coach := range vecCoachModel {
+		vecGymOfCoach := GetAllGymIds(coach.GymIDs)
+		for _, gymId := range vecGymOfCoach {
+			mapCoach[gymId] = append(mapCoach[gymId], coach)
 		}
 	}
-	return rspVecGymCoache, nil
+
+	// 对每个健身房的教练列表按Priority降序排序
+	for gymId, coaches := range mapCoach {
+		sort.Slice(coaches, func(i, j int) bool {
+			return coaches[i].Priority > coaches[j].Priority // 降序排列
+		})
+		mapCoach[gymId] = coaches
+	}
+
+	return mapCoach[reqGymId], nil
 }
