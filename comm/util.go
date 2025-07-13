@@ -216,7 +216,7 @@ func GetGymIdsByCoachId(coachId int) ([]int, error) {
 
 // GetCoachListByGymIdNew 根据健身房ID获取教练列表
 func GetCoachListByGymIdNew(gymId int) ([]model.CoachModel, error) {
-	// 获取所有教练
+	// 获取所有教练（需要保持原样顺序）
 	allCoaches, err := dao.ImpCoach.GetCoachListByGymId(gymId)
 	if err != nil {
 		return nil, fmt.Errorf("获取教练列表失败: %w", err)
