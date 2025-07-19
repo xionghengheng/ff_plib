@@ -131,6 +131,14 @@ func IsTrial() bool {
 	return false
 }
 
+// 打开多门店
+func OpenMultiGym() bool {
+	if os.Getenv("OpenMultiGym") == "1" {
+		return true
+	}
+	return false
+}
+
 func uniqueVec(vecID *[]string) {
 	tmpMap := make(map[string]int)
 	for _, id := range *vecID {
