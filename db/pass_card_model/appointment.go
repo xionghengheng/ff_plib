@@ -10,7 +10,7 @@ type PassCardAppointmentModel struct {
 	Status          int    `json:"status"`           // 门店端设置的可用状态，参考 Enum_PassCardAppointment_Status
 	CreateTs        int64  `json:"create_ts"`        // 创建时间
 	UpdateTs        int64  `json:"update_ts"`        // 更新时间
-	MaxBookCnt      string `json:"max_book_cnt"`     // 最大可约人数
+	MaxBookCnt      uint32 `json:"max_book_cnt"`     // 最大可约人数
 }
 
 // 门店端设置的可用状态
