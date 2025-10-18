@@ -22,3 +22,17 @@ func (imp *PassCardGymInterfaceImp) GetGymInfoByGymId(gymId int) (pass_card_mode
 	err = cli.Table(pass_card_gym_tableName).Where("gym_id = ?", gymId).Find(&stGym).Error
 	return stGym, err
 }
+
+const pass_card_gym_appointments_tableName = "pass_card_gym_appointments"
+
+func (imp *PassCardAppointmentInterfaceImp) GetAppointmentScheduleOneDay(gymId int, dayBegTs int64) ([]pass_card_model.PassCardAppointmentModel, error) {
+	var err error
+	var vecCoachAppointmentModel []pass_card_model.PassCardAppointmentModel
+	cli := db.Get()
+	err = cli.Table(pass_card_gym_appointments_tableName).Where("gym_id = ? AND appointment_date = ?", gymId, dayBegTs).Order("start_time ASC").Find(&vecCoachAppointmentModel).Error
+	return vecCoachAppointmentModel, err
+}
+
+func (imp *PassCardAppointmentInterfaceImp) SetAppointmentSchedule(stPassCardAppointmentModel pass_card_model.PassCardAppointmentModel) error {
+	return db.Get().Table(pass_card_gym_appointments_tableName).Save(stPassCardAppointmentModel).Error
+}

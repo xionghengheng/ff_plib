@@ -3,7 +3,7 @@ package pass_card_model
 type PassCardAppointmentModel struct {
 	AppointmentID   int    `json:"appointment_id"`   // 预约ID
 	GymId           int    `json:"gym_id"`           // 健身房场地ID
-	Uids            string `json:"user_ids"`         // 用户ID数组，最多x个(用户预约成功后更新)
+	Uids            string `json:"uids"`             // 用户ID数组，最多x个(用户预约成功后更新)
 	AppointmentDate int64  `json:"appointment_date"` // 预约日期（当天0点时间戳）
 	StartTime       int64  `json:"start_time"`       // 起始时间
 	EndTime         int64  `json:"end_time"`         // 结束时间
