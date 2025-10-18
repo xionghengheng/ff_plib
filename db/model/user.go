@@ -32,12 +32,21 @@ type UserInfoModel struct {
 	LastLoginTs             int64   `json:"last_login_ts"`                    //上次登录时间（目前只记录教练的）
 	HasShownNoStoreHint     bool    `json:"has_shown_no_store_hint"`          //是否展示过未覆盖门店提醒
 	BeVipFromType           int     `json:"be_vip_from_type"`                 //成为订阅会员的方式
+	VipPassCardType         int     `json:"vip_pass_card_type"`               //通卡会员类型 0=非通卡会员 1=体验通卡会员 2=付费通卡会员月卡
+	VipPassCardExpiredTs    int64   `json:"vip_pass_card_expired_ts"`         //通卡会员过期时间
+	BeVipPassCardTs         int64   `json:"be_vip_pass_card_ts"`              //成为通卡订阅会员的时间
 }
 
 const (
 	Enum_VipType_Non      int = iota // 0 = 非会员
 	Enum_VipType_Trial               // 1 = 体验会员
 	Enum_VipType_PaidYear            // 2 = 付费年费会员
+)
+
+const (
+	Enum_VipPassCardType_Non       int = iota // 0 = 非会员
+	Enum_VipPassCardType_Trial                // 1 = 通卡体验会员
+	Enum_VipPassCardType_PaidMonth            // 2 = 通卡付费会员月卡
 )
 
 const (
