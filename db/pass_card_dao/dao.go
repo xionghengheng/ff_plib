@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/jinzhu/gorm"
 	"github.com/xionghengheng/ff_plib/db"
+	"github.com/xionghengheng/ff_plib/db/model"
 	"github.com/xionghengheng/ff_plib/db/pass_card_model"
 	"time"
 )
@@ -86,8 +87,8 @@ func (imp *PassCardAppointmentInterfaceImp) SetAppointmentBooked(uid int64, appo
 		if uint32(len(appointmentModel.BookedUids)) >= appointmentModel.MaxBookCnt {
 			appointmentModel.Status = pass_card_model.Enum_PassCardAppointment_Status_UnAvailable
 		}
+		appointmentModel.BookedUids = appointmentModel.BookedUids
 		appointmentModel.UpdateTs = time.Now().Unix()
-		appointmentModel.GymId = gymId
 
 		// 更新用户数据，使用 Update 方法
 		if err := tx.Model(&pass_card_model.PassCardAppointmentModel{}).Where("appointment_id = ?", appointmentID).Updates(mapUpdates).Error; err != nil {
@@ -98,6 +99,51 @@ func (imp *PassCardAppointmentInterfaceImp) SetAppointmentBooked(uid int64, appo
 		return nil
 	})
 	return appointmentModel, err
+}
+
+// 用户取消约课，将课程变回可用状态，即所有用户都可预约
+func (imp *PassCardAppointmentInterfaceImp) CancelAppointmentBooked(uid int64, lessonID string, appointmentID int) error {
+	var err error
+	cli := db.Get().Table(pass_card_gym_appointments_tableName)
+
+	// 先获取再更新的原子操作
+	err = cli.Transaction(func(tx *gorm.DB) error {
+		var appointmentModel pass_card_model.PassCardAppointmentModel
+		// 获取用户记录
+		if err := tx.First(&appointmentModel, "appointment_id = ?", appointmentID).Error; err != nil {
+			fmt.Printf("get err, uid:%d appointmentID:%d\n", uid, appointmentID)
+			return err
+		}
+
+		findIdx := -1
+		for idx, v := range appointmentModel.BookedUids {
+			if v.Uid == uid {
+				findIdx = idx
+			}
+		}
+		if findIdx == -1 {
+			return errors.New("user already cancel")
+		}
+		appointmentModel.BookedUids = append(appointmentModel.BookedUids[:findIdx], appointmentModel.BookedUids[findIdx+1:]...)
+
+		// 更新用户记录
+		mapUpdates := map[string]interface{}{}
+		mapUpdates["status"] = model.Enum_Appointment_Status_Available
+		mapUpdates["booked_uids"] = appointmentModel.BookedUids
+		mapUpdates["update_ts"] = time.Now().Unix()
+		appointmentModel.Status = model.Enum_Appointment_Status_Available
+		appointmentModel.BookedUids = appointmentModel.BookedUids
+		appointmentModel.UpdateTs = time.Now().Unix()
+
+		// 更新用户数据，使用 Update 方法
+		if err := tx.Model(&pass_card_model.PassCardAppointmentModel{}).Where("appointment_id = ?", appointmentID).Updates(mapUpdates).Error; err != nil {
+			fmt.Printf("update err, uid:%d appointmentID:%d mapUpdates:%+v\n", uid, appointmentID, mapUpdates)
+			tx.Rollback()
+			return err
+		}
+		return nil
+	})
+	return err
 }
 
 const pass_card_lesson_tableName = "pass_card_lesson"
@@ -112,4 +158,10 @@ func (imp *PassCardLessonInterfaceImp) GetSingleLessonById(uid int64, lessonId s
 
 func (imp *PassCardLessonInterfaceImp) AddLesson(lesson *pass_card_model.LessonModel) error {
 	return db.Get().Table(pass_card_lesson_tableName).Save(lesson).Error
+}
+
+func (imp *PassCardLessonInterfaceImp) UpdateLesson(uid int64, lessonId string, mapUpdates map[string]interface{}) error {
+	cli := db.Get()
+	return cli.Table(pass_card_lesson_tableName).Model(&pass_card_model.LessonModel{}).
+		Where("uid = ? AND lesson_id = ?", uid, lessonId).Updates(mapUpdates).Error
 }

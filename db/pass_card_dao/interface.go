@@ -30,6 +30,9 @@ type PassCardAppointmentInterface interface {
 
 	// 设置场地可预约时间
 	SetAppointmentSchedule(stPassCardAppointmentModel pass_card_model.PassCardAppointmentModel) error
+
+	// 用户取消约课
+	CancelAppointmentBooked(uid int64, lessonID string, appointmentID int) error
 }
 
 type PassCardAppointmentInterfaceImp struct{}
@@ -44,6 +47,9 @@ type PassCardLessonInterface interface {
 
 	// 创建课程
 	AddLesson(lesson *pass_card_model.LessonModel) error
+
+	// 更新课程
+	UpdateLesson(uid int64, lessonId string, mapUpdates map[string]interface{}) error
 }
 
 type PassCardLessonInterfaceImp struct{}
