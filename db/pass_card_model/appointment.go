@@ -11,7 +11,7 @@ type PassCardAppointmentModel struct {
 	// ✨ 关键修改在这里 ✨
 	// Uids 字段的类型现在直接是 []UserID
 	// 它精确地映射了 [{"uid":123}, {"uid":567}] 这个JSON数组
-	Uids            []UserID `json:"uids" gorm:"type:json"`
+	BookedUids      []UserID `json:"booked_uids" gorm:"type:json"`
 	AppointmentDate int64    `json:"appointment_date"` // 预约日期（当天0点时间戳）
 	StartTime       int64    `json:"start_time"`       // 起始时间
 	EndTime         int64    `json:"end_time"`         // 结束时间
