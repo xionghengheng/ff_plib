@@ -23,7 +23,7 @@ type PassCardAppointmentInterface interface {
 	GetAppointmentById(appointmentID int) (pass_card_model.PassCardAppointmentModel, error)
 
 	// 设置已预约状态
-	SetAppointmentBooked(uid int64, appointmentID int, gymId int) (error, pass_card_model.PassCardAppointmentModel)
+	SetAppointmentBooked(uid int64, appointmentID int, gymId int) (pass_card_model.PassCardAppointmentModel, error)
 
 	// 查询场地某一天的预约时间表
 	GetAppointmentScheduleOneDay(gymId int, dayBegTs int64) ([]pass_card_model.PassCardAppointmentModel, error)

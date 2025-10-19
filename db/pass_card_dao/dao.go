@@ -49,7 +49,7 @@ func (imp *PassCardAppointmentInterfaceImp) GetAppointmentById(appointmentID int
 	return appointment, err
 }
 
-func (imp *PassCardAppointmentInterfaceImp) SetAppointmentBookedNew(uid int64, appointmentID int, courseId int, gymId int) (error, pass_card_model.PassCardAppointmentModel) {
+func (imp *PassCardAppointmentInterfaceImp) SetAppointmentBookedNew(uid int64, appointmentID int, courseId int, gymId int) (pass_card_model.PassCardAppointmentModel, error) {
 	var err error
 	cli := db.Get().Table(pass_card_gym_appointments_tableName)
 
@@ -97,5 +97,5 @@ func (imp *PassCardAppointmentInterfaceImp) SetAppointmentBookedNew(uid int64, a
 		}
 		return nil
 	})
-	return err, appointmentModel
+	return appointmentModel, err
 }
