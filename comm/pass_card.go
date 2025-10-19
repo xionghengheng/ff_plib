@@ -5,10 +5,13 @@ import (
 	"time"
 )
 
-func IsPassCardVip(userModel model.UserInfoModel) bool {
+func IsPassCardVip(user *model.UserInfoModel) bool {
+	if user == nil {
+		return false
+	}
 	nowTs := time.Now().Unix()
-	if userModel.VipExpiredTs <= nowTs &&
-		(userModel.VipPassCardType == model.Enum_VipPassCardType_Trial || userModel.VipPassCardType == model.Enum_VipPassCardType_PaidMonth) {
+	if user.VipExpiredTs <= nowTs &&
+		(user.VipPassCardType == model.Enum_VipPassCardType_Trial || user.VipPassCardType == model.Enum_VipPassCardType_PaidMonth) {
 		return false
 	}
 	return false
