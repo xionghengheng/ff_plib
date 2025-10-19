@@ -35,3 +35,18 @@ type PassCardAppointmentInterface interface {
 type PassCardAppointmentInterfaceImp struct{}
 
 var ImpAppointment PassCardAppointmentInterface = &PassCardAppointmentInterfaceImp{}
+
+// 课数据模型接口
+type PassCardLessonInterface interface {
+
+	// 通过课程id获取课程详情
+	GetSingleLessonById(uid int64, lessonId string) (pass_card_model.LessonModel, error)
+
+	// 创建课程
+	AddLesson(lesson *pass_card_model.LessonModel) error
+}
+
+type PassCardLessonInterfaceImp struct{}
+
+// Imp 实现实例
+var ImpPassCardLesson PassCardLessonInterface = &PassCardLessonInterfaceImp{}

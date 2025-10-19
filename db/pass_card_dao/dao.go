@@ -49,7 +49,7 @@ func (imp *PassCardAppointmentInterfaceImp) GetAppointmentById(appointmentID int
 	return appointment, err
 }
 
-func (imp *PassCardAppointmentInterfaceImp) SetAppointmentBookedNew(uid int64, appointmentID int, courseId int, gymId int) (pass_card_model.PassCardAppointmentModel, error) {
+func (imp *PassCardAppointmentInterfaceImp) SetAppointmentBooked(uid int64, appointmentID int, gymId int) (pass_card_model.PassCardAppointmentModel, error) {
 	var err error
 	cli := db.Get().Table(pass_card_gym_appointments_tableName)
 
@@ -98,4 +98,18 @@ func (imp *PassCardAppointmentInterfaceImp) SetAppointmentBookedNew(uid int64, a
 		return nil
 	})
 	return appointmentModel, err
+}
+
+const pass_card_lesson_tableName = "pass_card_lesson"
+
+func (imp *PassCardLessonInterfaceImp) GetSingleLessonById(uid int64, lessonId string) (pass_card_model.LessonModel, error) {
+	var err error
+	var lesson pass_card_model.LessonModel
+	cli := db.Get()
+	err = cli.Table(pass_card_lesson_tableName).Where("uid = ? AND lesson_id = ?", uid, lessonId).Find(&lesson).Error
+	return lesson, err
+}
+
+func (imp *PassCardLessonInterfaceImp) AddLesson(lesson *pass_card_model.LessonModel) error {
+	return db.Get().Table(pass_card_lesson_tableName).Save(lesson).Error
 }
