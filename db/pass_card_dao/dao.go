@@ -36,3 +36,11 @@ func (imp *PassCardAppointmentInterfaceImp) GetAppointmentScheduleOneDay(gymId i
 func (imp *PassCardAppointmentInterfaceImp) SetAppointmentSchedule(stPassCardAppointmentModel pass_card_model.PassCardAppointmentModel) error {
 	return db.Get().Table(pass_card_gym_appointments_tableName).Save(stPassCardAppointmentModel).Error
 }
+
+func (imp *PassCardAppointmentInterfaceImp) GetAppointmentById(appointmentID int) (pass_card_model.PassCardAppointmentModel, error) {
+	var err error
+	var appointment pass_card_model.PassCardAppointmentModel
+	cli := db.Get()
+	err = cli.Table(pass_card_gym_appointments_tableName).Where("appointment_id = ?", appointmentID).First(&appointment).Error
+	return appointment, err
+}
