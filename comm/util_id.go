@@ -27,10 +27,6 @@ func GenCoursePackageSingleLessonID(uid int64, gymid int, courseId int, coachid 
 	return fmt.Sprintf("sl_%d_%d_%d_%d_%d", uid, gymid, courseId, coachid, ts)
 }
 
-func GenPassCardSingleLessonID(uid int64, gymid int, cardType int, ts int64) string {
-	return fmt.Sprintf("sl_%d_%d_%d_%d_%d", uid, gymid, cardType, ts)
-}
-
 func ParseCoursePackageSingleLessonID(strLessonId string) (int64, int, int, int, int64) {
 	vecPackageId := strings.Split(strLessonId, "_")
 	if len(vecPackageId) >= 6 {
@@ -51,4 +47,20 @@ func GetUidFromCoursePackageSingleLessonID(strLessonId string) int64 {
 		return uid
 	}
 	return 0
+}
+
+func GenPassCardLessonID(uid int64, gymid int, cardType int, ts int64) string {
+	return fmt.Sprintf("pcl_%d_%d_%d_%d_%d", uid, gymid, cardType, ts)
+}
+
+func ParsePassCardLessonID(strLessonId string) (int64, int, int, int64) {
+	vecPackageId := strings.Split(strLessonId, "_")
+	if len(vecPackageId) >= 6 {
+		uid, _ := strconv.ParseInt(vecPackageId[1], 10, 64)
+		gymid, _ := strconv.ParseInt(vecPackageId[2], 10, 64)
+		cardType, _ := strconv.ParseInt(vecPackageId[3], 10, 64)
+		ts, _ := strconv.ParseInt(vecPackageId[5], 10, 64)
+		return uid, int(gymid), int(cardType), ts
+	}
+	return 0, 0, 0, 0
 }
