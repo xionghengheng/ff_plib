@@ -24,7 +24,7 @@ type WxGetQrCodePicRsp struct {
 }
 
 // 二维码生成文档：https://developers.weixin.qq.com/miniprogram/dev/OpenApiDoc/qrcode-link/qr-code/getUnlimitedQRCode.html
-func getQrCodePic(uid int64, lessonId string) (error, WxGetQrCodePicRsp) {
+func GetQrCodePic(uid int64, lessonId string) (error, WxGetQrCodePicRsp) {
 	strWxQrcodePath := os.Getenv("WX_QRCODE_PATH")
 	if len(strWxQrcodePath) == 0 {
 		strWxQrcodePath = "pages/business/write-off/index"
