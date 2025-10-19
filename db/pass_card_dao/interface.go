@@ -19,9 +19,11 @@ var ImpGym PassCardGymInterface = &PassCardGymInterfaceImp{}
 
 // 通卡预约信息
 type PassCardAppointmentInterface interface {
-
 	// 通过预约id获取预约详情信息
 	GetAppointmentById(appointmentID int) (pass_card_model.PassCardAppointmentModel, error)
+
+	// 设置已预约状态
+	SetAppointmentBooked(uid int64, appointmentID int, gymId int) (error, pass_card_model.PassCardAppointmentModel)
 
 	// 查询场地某一天的预约时间表
 	GetAppointmentScheduleOneDay(gymId int, dayBegTs int64) ([]pass_card_model.PassCardAppointmentModel, error)
