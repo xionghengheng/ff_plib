@@ -45,6 +45,9 @@ type PassCardLessonInterface interface {
 	// 通过课程id获取课程详情
 	GetSingleLessonById(uid int64, lessonId string) (pass_card_model.LessonModel, error)
 
+	// 根据uid拉取课程列表，根据创建时间降序拉取
+	GetLessonListByUid(uid int64, limit int) ([]pass_card_model.PassCardAppointmentModel, error)
+
 	// 创建课程
 	AddLesson(lesson *pass_card_model.LessonModel) error
 

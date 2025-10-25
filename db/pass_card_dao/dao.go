@@ -194,3 +194,11 @@ func (imp *PassCardLessonInterfaceImp) UpdateLesson(uid int64, lessonId string, 
 	return cli.Table(pass_card_lesson_tableName).Model(&pass_card_model.LessonModel{}).
 		Where("uid = ? AND lesson_id = ?", uid, lessonId).Updates(mapUpdates).Error
 }
+
+func (imp *PassCardLessonInterfaceImp) GetLessonListByUid(uid int64, limit int) ([]pass_card_model.PassCardAppointmentModel, error) {
+	var err error
+	var vecPassCardAppointmentModel []pass_card_model.PassCardAppointmentModel
+	cli := db.Get()
+	err = cli.Raw("SELECT * FROM pass_card_lesson WHERE uid = ? ORDER BY create_ts DESC Limit ?", uid, limit).Scan(&vecPassCardAppointmentModel).Error
+	return vecPassCardAppointmentModel, err
+}
