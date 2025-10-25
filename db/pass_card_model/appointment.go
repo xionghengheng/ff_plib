@@ -34,9 +34,9 @@ func GetBookedUids(strBookedUids string) ([]UserID, error) {
 	var vecBookedUserID []UserID
 	if len(strBookedUids) > 0 {
 		var err error
-		err = json.Unmarshal([]byte(strBookedUids), vecBookedUserID)
+		err = json.Unmarshal([]byte(strBookedUids), &vecBookedUserID)
 		if err != nil {
-			comm.Printf("json Marshal booked_uids err, strBookedUids:%s\n", strBookedUids)
+			comm.Printf("json Marshal booked_uids err, err:%+v strBookedUids:%s\n", err, strBookedUids)
 			return vecBookedUserID, err
 		}
 	}
