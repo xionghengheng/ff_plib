@@ -46,7 +46,16 @@ type PassCardLessonInterface interface {
 	GetSingleLessonById(uid int64, lessonId string) (pass_card_model.LessonModel, error)
 
 	// 根据uid拉取课程列表，根据创建时间降序拉取
-	GetLessonListByUid(uid int64, limit int) ([]pass_card_model.PassCardAppointmentModel, error)
+	GetLessonListByUid(uid int64, ceateTs int64, status int) ([]pass_card_model.LessonModel, error)
+
+	//// 根据uid拉取预约中的课程列表
+	//GetScheduledLessonListByUid(uid int64, ceateTs int64) ([]pass_card_model.LessonModel, error)
+	//
+	//// 根据uid拉取已完成的课程列表
+	//GetCompletedLessonListByUid(uid int64, ceateTs int64) ([]pass_card_model.LessonModel, error)
+	//
+	//// 根据uid拉取已取消的课程列表
+	//GetCancelLessonListByUid(uid int64, ceateTs int64) ([]pass_card_model.LessonModel, error)
 
 	// 创建课程
 	AddLesson(lesson *pass_card_model.LessonModel) error

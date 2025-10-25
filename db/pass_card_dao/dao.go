@@ -195,10 +195,22 @@ func (imp *PassCardLessonInterfaceImp) UpdateLesson(uid int64, lessonId string, 
 		Where("uid = ? AND lesson_id = ?", uid, lessonId).Updates(mapUpdates).Error
 }
 
-func (imp *PassCardLessonInterfaceImp) GetLessonListByUid(uid int64, limit int) ([]pass_card_model.PassCardAppointmentModel, error) {
+func (imp *PassCardLessonInterfaceImp) GetLessonListByUid(uid int64, ceateTs int64, status int) ([]pass_card_model.LessonModel, error) {
 	var err error
-	var vecPassCardAppointmentModel []pass_card_model.PassCardAppointmentModel
+	var vecLessonModel []pass_card_model.LessonModel
 	cli := db.Get()
-	err = cli.Raw("SELECT * FROM pass_card_lesson WHERE uid = ? ORDER BY create_ts DESC Limit ?", uid, limit).Scan(&vecPassCardAppointmentModel).Error
-	return vecPassCardAppointmentModel, err
+	if status == 0 {
+		if ceateTs == 0 {
+			err = cli.Raw("SELECT * FROM pass_card_lesson WHERE uid = ? ORDER BY create_ts DESC Limit 50", uid).Scan(&vecLessonModel).Error
+		} else {
+			err = cli.Raw("SELECT * FROM pass_card_lesson WHERE uid = ? AND ceateTs > ? ORDER BY create_ts DESC Limit 50", uid, ceateTs).Scan(&vecLessonModel).Error
+		}
+	} else {
+		if ceateTs == 0 {
+			err = cli.Raw("SELECT * FROM pass_card_lesson WHERE uid = ? AND status = ? ORDER BY create_ts DESC Limit 50", uid, status).Scan(&vecLessonModel).Error
+		} else {
+			err = cli.Raw("SELECT * FROM pass_card_lesson WHERE uid = ? AND status = ? AND ceateTs > ? ORDER BY create_ts DESC Limit 50", uid, status, ceateTs).Scan(&vecLessonModel).Error
+		}
+	}
+	return vecLessonModel, err
 }
