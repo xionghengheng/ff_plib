@@ -158,7 +158,7 @@ func (imp *PassCardAppointmentInterfaceImp) CancelAppointmentBooked(uid int64, l
 
 		mapUpdates := map[string]interface{}{}
 		mapUpdates["status"] = model.Enum_Appointment_Status_Available
-		mapUpdates["booked_uids"] = appointmentModel.BookedUids
+		mapUpdates["booked_uids"] = bookedUidsJSON
 		mapUpdates["update_ts"] = time.Now().Unix()
 		appointmentModel.Status = model.Enum_Appointment_Status_Available
 		appointmentModel.BookedUids = string(bookedUidsJSON)
