@@ -1,6 +1,7 @@
 package pass_card_dao
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/jinzhu/gorm"
@@ -81,7 +82,12 @@ func (imp *PassCardAppointmentInterfaceImp) SetAppointmentBooked(uid int64, appo
 		if uint32(len(appointmentModel.BookedUids)) >= appointmentModel.MaxBookCnt {
 			mapUpdates["status"] = pass_card_model.Enum_PassCardAppointment_Status_UnAvailable
 		}
-		mapUpdates["booked_uids"] = appointmentModel.BookedUids
+
+		bookedUidsJSON, err := json.Marshal(appointmentModel.BookedUids)
+		if err != nil {
+			return errors.New(fmt.Sprintf("json marshal booked_uids err, uid:%d appointmentID:%d\n", uid, appointmentID))
+		}
+		mapUpdates["booked_uids"] = bookedUidsJSON
 		mapUpdates["update_ts"] = time.Now().Unix()
 
 		if uint32(len(appointmentModel.BookedUids)) >= appointmentModel.MaxBookCnt {
