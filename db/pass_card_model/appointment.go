@@ -1,5 +1,10 @@
 package pass_card_model
 
+import (
+	"encoding/json"
+	"github.com/xionghengheng/ff_plib/comm"
+)
+
 // UserID 对应 JSON 中的 {"uid": 123}
 type UserID struct {
 	Uid int64 `json:"uid"`
@@ -24,3 +29,15 @@ const (
 	Enum_PassCardAppointment_Status_Available              // 1 - 可预约
 	Enum_PassCardAppointment_Status_UnAvailable            // 2 - 不可预约
 )
+
+func GetBookedUids(strBookedUids string) []UserID {
+	var vecBookedUserID []UserID
+	if len(strBookedUids) > 0 {
+		var err error
+		err = json.Unmarshal([]byte(strBookedUids), vecBookedUserID)
+		if err != nil {
+			comm.Printf("json Marshal booked_uids err, strBookedUids:%s\n", strBookedUids)
+		}
+	}
+	return vecBookedUserID
+}
