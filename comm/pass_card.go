@@ -10,9 +10,9 @@ func IsPassCardVip(user *model.UserInfoModel) bool {
 		return false
 	}
 	nowTs := time.Now().Unix()
-	if user.VipExpiredTs <= nowTs &&
+	if user.VipExpiredTs >= nowTs &&
 		(user.VipPassCardType == model.Enum_VipPassCardType_Trial || user.VipPassCardType == model.Enum_VipPassCardType_PaidMonth) {
-		return false
+		return true
 	}
 	return false
 }
