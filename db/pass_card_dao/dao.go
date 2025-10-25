@@ -69,9 +69,11 @@ func (imp *PassCardAppointmentInterfaceImp) SetAppointmentBooked(uid int64, appo
 		}
 
 		var vecBookedUserID []pass_card_model.UserID
-		err := json.Unmarshal([]byte(appointmentModel.BookedUids), vecBookedUserID)
-		if err != nil {
-			return errors.New(fmt.Sprintf("json Unmarshal booked_uids err, uid:%d appointmentID:%d BookedUids:%+v\n", uid, appointmentID, appointmentModel.BookedUids))
+		if len(appointmentModel.BookedUids) > 0 {
+			err := json.Unmarshal([]byte(appointmentModel.BookedUids), &vecBookedUserID)
+			if err != nil {
+				return errors.New(fmt.Sprintf("json Unmarshal booked_uids err, uid:%d appointmentID:%d BookedUids:%+v\n", uid, appointmentID, appointmentModel.BookedUids))
+			}
 		}
 
 		if uint32(len(vecBookedUserID)) >= appointmentModel.MaxBookCnt {
@@ -130,9 +132,11 @@ func (imp *PassCardAppointmentInterfaceImp) CancelAppointmentBooked(uid int64, l
 		}
 
 		var vecBookedUserID []pass_card_model.UserID
-		err := json.Unmarshal([]byte(appointmentModel.BookedUids), vecBookedUserID)
-		if err != nil {
-			return errors.New(fmt.Sprintf("json Unmarshal booked_uids err, uid:%d appointmentID:%d BookedUids:%+v\n", uid, appointmentID, appointmentModel.BookedUids))
+		if len(appointmentModel.BookedUids) > 0 {
+			err := json.Unmarshal([]byte(appointmentModel.BookedUids), &vecBookedUserID)
+			if err != nil {
+				return errors.New(fmt.Sprintf("json Unmarshal booked_uids err, uid:%d appointmentID:%d BookedUids:%+v\n", uid, appointmentID, appointmentModel.BookedUids))
+			}
 		}
 
 		findIdx := -1
