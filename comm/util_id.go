@@ -50,7 +50,7 @@ func GetUidFromCoursePackageSingleLessonID(strLessonId string) int64 {
 }
 
 func GenPassCardLessonID(uid int64, gymid int, cardType int, ts int64) string {
-	return fmt.Sprintf("pcl_%d_%d_%d_%d_%d", uid, gymid, cardType, ts)
+	return fmt.Sprintf("pcl_%d_%d_%d_%d", uid, gymid, cardType, ts)
 }
 
 func ParsePassCardLessonID(strLessonId string) (int64, int, int, int64) {
