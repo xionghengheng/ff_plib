@@ -67,33 +67,40 @@ func (imp *PassCardAppointmentInterfaceImp) SetAppointmentBooked(uid int64, appo
 		if appointmentModel.Status == pass_card_model.Enum_PassCardAppointment_Status_UnAvailable {
 			return errors.New("book status unavailable")
 		}
-		if uint32(len(appointmentModel.BookedUids)) >= appointmentModel.MaxBookCnt {
+
+		var vecBookedUserID []pass_card_model.UserID
+		err := json.Unmarshal([]byte(appointmentModel.BookedUids), vecBookedUserID)
+		if err != nil {
+			return errors.New(fmt.Sprintf("json Unmarshal booked_uids err, uid:%d appointmentID:%d BookedUids:%+v\n", uid, appointmentID, appointmentModel.BookedUids))
+		}
+
+		if uint32(len(vecBookedUserID)) >= appointmentModel.MaxBookCnt {
 			return errors.New("book maxcnt reaclimit")
 		}
-		for _, v := range appointmentModel.BookedUids {
+		for _, v := range vecBookedUserID {
 			if v.Uid == uid {
 				return errors.New("user already book")
 			}
 		}
-		appointmentModel.BookedUids = append(appointmentModel.BookedUids, pass_card_model.UserID{Uid: uid})
+		vecBookedUserID = append(vecBookedUserID, pass_card_model.UserID{Uid: uid})
 
 		// 更新用户记录
 		mapUpdates := map[string]interface{}{}
-		if uint32(len(appointmentModel.BookedUids)) >= appointmentModel.MaxBookCnt {
+		if uint32(len(vecBookedUserID)) >= appointmentModel.MaxBookCnt {
 			mapUpdates["status"] = pass_card_model.Enum_PassCardAppointment_Status_UnAvailable
 		}
 
-		bookedUidsJSON, err := json.Marshal(appointmentModel.BookedUids)
+		bookedUidsJSON, err := json.Marshal(vecBookedUserID)
 		if err != nil {
 			return errors.New(fmt.Sprintf("json marshal booked_uids err, uid:%d appointmentID:%d\n", uid, appointmentID))
 		}
 		mapUpdates["booked_uids"] = string(bookedUidsJSON)
 		mapUpdates["update_ts"] = time.Now().Unix()
 
-		if uint32(len(appointmentModel.BookedUids)) >= appointmentModel.MaxBookCnt {
+		if uint32(len(vecBookedUserID)) >= appointmentModel.MaxBookCnt {
 			appointmentModel.Status = pass_card_model.Enum_PassCardAppointment_Status_UnAvailable
 		}
-		appointmentModel.BookedUids = appointmentModel.BookedUids
+		appointmentModel.BookedUids = string(bookedUidsJSON)
 		appointmentModel.UpdateTs = time.Now().Unix()
 
 		// 更新用户数据，使用 Update 方法
@@ -122,8 +129,14 @@ func (imp *PassCardAppointmentInterfaceImp) CancelAppointmentBooked(uid int64, l
 			return err
 		}
 
+		var vecBookedUserID []pass_card_model.UserID
+		err := json.Unmarshal([]byte(appointmentModel.BookedUids), vecBookedUserID)
+		if err != nil {
+			return errors.New(fmt.Sprintf("json Unmarshal booked_uids err, uid:%d appointmentID:%d BookedUids:%+v\n", uid, appointmentID, appointmentModel.BookedUids))
+		}
+
 		findIdx := -1
-		for idx, v := range appointmentModel.BookedUids {
+		for idx, v := range vecBookedUserID {
 			if v.Uid == uid {
 				findIdx = idx
 			}
@@ -131,15 +144,20 @@ func (imp *PassCardAppointmentInterfaceImp) CancelAppointmentBooked(uid int64, l
 		if findIdx == -1 {
 			return errors.New("user already cancel")
 		}
-		appointmentModel.BookedUids = append(appointmentModel.BookedUids[:findIdx], appointmentModel.BookedUids[findIdx+1:]...)
+		vecBookedUserID = append(vecBookedUserID[:findIdx], vecBookedUserID[findIdx+1:]...)
 
 		// 更新用户记录
+		bookedUidsJSON, err := json.Marshal(vecBookedUserID)
+		if err != nil {
+			return errors.New(fmt.Sprintf("json marshal booked_uids err, uid:%d appointmentID:%d\n", uid, appointmentID))
+		}
+
 		mapUpdates := map[string]interface{}{}
 		mapUpdates["status"] = model.Enum_Appointment_Status_Available
 		mapUpdates["booked_uids"] = appointmentModel.BookedUids
 		mapUpdates["update_ts"] = time.Now().Unix()
 		appointmentModel.Status = model.Enum_Appointment_Status_Available
-		appointmentModel.BookedUids = appointmentModel.BookedUids
+		appointmentModel.BookedUids = string(bookedUidsJSON)
 		appointmentModel.UpdateTs = time.Now().Unix()
 
 		// 更新用户数据，使用 Update 方法
