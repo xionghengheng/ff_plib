@@ -87,7 +87,7 @@ func (imp *PassCardAppointmentInterfaceImp) SetAppointmentBooked(uid int64, appo
 		if err != nil {
 			return errors.New(fmt.Sprintf("json marshal booked_uids err, uid:%d appointmentID:%d\n", uid, appointmentID))
 		}
-		mapUpdates["booked_uids"] = bookedUidsJSON
+		mapUpdates["booked_uids"] = string(bookedUidsJSON)
 		mapUpdates["update_ts"] = time.Now().Unix()
 
 		if uint32(len(appointmentModel.BookedUids)) >= appointmentModel.MaxBookCnt {
@@ -98,10 +98,11 @@ func (imp *PassCardAppointmentInterfaceImp) SetAppointmentBooked(uid int64, appo
 
 		// 更新用户数据，使用 Update 方法
 		if err := tx.Model(&pass_card_model.PassCardAppointmentModel{}).Where("appointment_id = ?", appointmentID).Updates(mapUpdates).Error; err != nil {
-			fmt.Printf("update err, uid:%d appointmentID:%d mapUpdates:%+v\n", uid, appointmentID, mapUpdates)
+			fmt.Printf("update err, err:%+v uid:%d appointmentID:%d mapUpdates:%+v\n", err, uid, appointmentID, mapUpdates)
 			tx.Rollback()
 			return err
 		}
+		fmt.Printf("update succ, uid:%d appointmentID:%d mapUpdates:%+v\n", uid, appointmentID, mapUpdates)
 		return nil
 	})
 	return appointmentModel, err
