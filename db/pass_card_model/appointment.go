@@ -30,14 +30,15 @@ const (
 	Enum_PassCardAppointment_Status_UnAvailable            // 2 - 不可预约
 )
 
-func GetBookedUids(strBookedUids string) []UserID {
+func GetBookedUids(strBookedUids string) ([]UserID, error) {
 	var vecBookedUserID []UserID
 	if len(strBookedUids) > 0 {
 		var err error
 		err = json.Unmarshal([]byte(strBookedUids), vecBookedUserID)
 		if err != nil {
 			comm.Printf("json Marshal booked_uids err, strBookedUids:%s\n", strBookedUids)
+			return vecBookedUserID, err
 		}
 	}
-	return vecBookedUserID
+	return vecBookedUserID, nil
 }
