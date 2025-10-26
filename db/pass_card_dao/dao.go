@@ -51,6 +51,14 @@ func (imp *PassCardAppointmentInterfaceImp) GetAppointmentById(appointmentID int
 	return appointment, err
 }
 
+func (imp *PassCardAppointmentInterfaceImp) GetAppointmentScheduleFromBegTs(gymId int, dayBegTs int64) ([]pass_card_model.PassCardAppointmentModel, error) {
+	var err error
+	var rsp []pass_card_model.PassCardAppointmentModel
+	cli := db.Get()
+	err = cli.Table(pass_card_gym_appointments_tableName).Where("gym_id = ? AND appointment_date >= ?", gymId, dayBegTs).Order("start_time ASC").Find(&rsp).Error
+	return rsp, err
+}
+
 func (imp *PassCardAppointmentInterfaceImp) SetAppointmentBooked(uid int64, appointmentID int, gymId int) (pass_card_model.PassCardAppointmentModel, error) {
 	var err error
 	cli := db.Get().Table(pass_card_gym_appointments_tableName)
