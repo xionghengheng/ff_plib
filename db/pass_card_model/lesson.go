@@ -4,6 +4,7 @@ package pass_card_model
 type LessonModel struct {
 	LessonID      string `json:"lesson_id"`       // 单节课的唯一标识符（用户id_场地id_课程id_教练id_发起预约的时间戳）
 	CreateTs      int64  `json:"create_ts"`       // 记录生成时间，发起预约的时间
+	UpdateTs      int64  `json:"update_ts"`       // 更新时间
 	ScheduleBegTs int64  `json:"schedule_beg_ts"` // 单节课的安排上课时间
 	ScheduleEndTs int64  `json:"schedule_end_ts"` // 单节课的安排上课时间
 	Status        int    `json:"status"`          // 单次课状态(已预约、已完成、已取消)
