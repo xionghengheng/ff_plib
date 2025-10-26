@@ -214,3 +214,17 @@ func (imp *PassCardLessonInterfaceImp) GetLessonListByUid(uid int64, ceateTs int
 	}
 	return vecLessonModel, err
 }
+
+// 根据uid，查询某一天的所有课程
+func (imp *PassCardLessonInterfaceImp) GetLessonsOneDay(uid int64, dayBegTs int64) ([]pass_card_model.LessonModel, error) {
+	dayEndTs := dayBegTs + 24*3600
+
+	var lessons []pass_card_model.LessonModel
+	cli := db.Get()
+
+	sql := "SELECT * FROM  pass_card_lesson WHERE uid = ? AND schedule_beg_ts >= ? AND schedule_beg_ts < ? ORDER BY schedule_beg_ts ASC"
+
+	err := cli.Raw(sql, uid, dayBegTs, dayEndTs).Scan(&lessons).Error
+
+	return lessons, err
+}
