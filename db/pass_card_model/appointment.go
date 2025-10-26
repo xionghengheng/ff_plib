@@ -2,7 +2,6 @@ package pass_card_model
 
 import (
 	"encoding/json"
-	"github.com/xionghengheng/ff_plib/comm"
 )
 
 // UserID 对应 JSON 中的 {"uid": 123}
@@ -36,7 +35,6 @@ func GetBookedUids(strBookedUids string) ([]UserID, error) {
 		var err error
 		err = json.Unmarshal([]byte(strBookedUids), &vecBookedUserID)
 		if err != nil {
-			comm.Printf("json Marshal booked_uids err, err:%+v strBookedUids:%s\n", err, strBookedUids)
 			return vecBookedUserID, err
 		}
 	}
