@@ -1,6 +1,7 @@
 package comm
 
 import (
+	"github.com/xionghengheng/ff_plib/db/dao"
 	"github.com/xionghengheng/ff_plib/db/model"
 	"github.com/xionghengheng/ff_plib/db/pass_card_dao"
 	"github.com/xionghengheng/ff_plib/db/pass_card_model"
@@ -29,4 +30,12 @@ func GetAllPassCardGym() (map[int]pass_card_model.PassCardGymInfoModel, error) {
 		mapGym[v.GymID] = v
 	}
 	return mapGym, nil
+}
+
+func GetBindPassCardGymIdByOpenId(openId string) (int, error) {
+	user, err := dao.ImpUser.GetUserByOpenId(openId)
+	if err != nil || user == nil {
+		return 0, err
+	}
+	return user.BindPassCardGymId, nil
 }
