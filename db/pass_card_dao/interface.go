@@ -69,6 +69,9 @@ type PassCardLessonInterface interface {
 
 	// 更新课程
 	UpdateLesson(uid int64, lessonId string, mapUpdates map[string]interface{}) error
+
+	// 获取
+	GetLessonListNotFinish(nowTs int64, limit int) ([]pass_card_model.LessonModel, error)
 }
 
 type PassCardLessonInterfaceImp struct{}
