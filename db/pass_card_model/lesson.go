@@ -21,6 +21,6 @@ type LessonModel struct {
 // 如果教练忘记核销或者用户没去：已预约->已旷课
 const (
 	En_LessonStatus_Scheduled int = iota + 1 // 已预约
-	En_LessonStatusCompleted                 // 已完成
-	En_LessonStatusCanceled                  // 已取消
+	En_LessonStatus_Completed                // 已完成
+	En_LessonStatus_Canceled                 // 已取消
 )
