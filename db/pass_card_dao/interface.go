@@ -52,6 +52,9 @@ type PassCardLessonInterface interface {
 	// 根据uid拉取课程列表，根据创建时间降序拉取
 	GetLessonListByUid(uid int64, ceateTs int64, status int) ([]pass_card_model.LessonModel, error)
 
+	// 根据门店id拉取课程列表，根据创建时间降序拉取
+	GetLessonListByGymId(gymId int, ceateTs int64, status int) ([]pass_card_model.LessonModel, error)
+
 	//// 根据uid拉取预约中的课程列表
 	//GetScheduledLessonListByUid(uid int64, ceateTs int64) ([]pass_card_model.LessonModel, error)
 	//

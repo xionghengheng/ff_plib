@@ -240,3 +240,23 @@ func (imp *PassCardLessonInterfaceImp) GetLessonListNotFinish(nowTs int64, limit
 	err = cli.Table(pass_card_lesson_tableName).Where("status = ? AND schedule_end_ts < ? ", model.En_LessonStatus_Scheduled, nowTs).Find(&vecLessonModel).Limit(limit).Error
 	return vecLessonModel, err
 }
+
+func (imp *PassCardLessonInterfaceImp) GetLessonListByGymId(gymId int, ceateTs int64, status int) ([]pass_card_model.LessonModel, error) {
+	var err error
+	var vecLessonModel []pass_card_model.LessonModel
+	cli := db.Get()
+	if status == 0 {
+		if ceateTs == 0 {
+			err = cli.Raw("SELECT * FROM pass_card_lesson WHERE gym_id = ? ORDER BY create_ts DESC Limit 50", gymId).Scan(&vecLessonModel).Error
+		} else {
+			err = cli.Raw("SELECT * FROM pass_card_lesson WHERE gym_id = ? AND ceateTs > ? ORDER BY create_ts DESC Limit 50", gymId, ceateTs).Scan(&vecLessonModel).Error
+		}
+	} else {
+		if ceateTs == 0 {
+			err = cli.Raw("SELECT * FROM pass_card_lesson WHERE gym_id = ? AND status = ? ORDER BY create_ts DESC Limit 50", gymId, status).Scan(&vecLessonModel).Error
+		} else {
+			err = cli.Raw("SELECT * FROM pass_card_lesson WHERE gym_id = ? AND status = ? AND ceateTs > ? ORDER BY create_ts DESC Limit 50", gymId, status, ceateTs).Scan(&vecLessonModel).Error
+		}
+	}
+	return vecLessonModel, err
+}
