@@ -55,11 +55,11 @@ func GenPassCardLessonID(uid int64, gymid int, cardType int, ts int64) string {
 
 func ParsePassCardLessonID(strLessonId string) (int64, int, int, int64) {
 	vecPackageId := strings.Split(strLessonId, "_")
-	if len(vecPackageId) >= 6 {
+	if len(vecPackageId) >= 5 {
 		uid, _ := strconv.ParseInt(vecPackageId[1], 10, 64)
 		gymid, _ := strconv.ParseInt(vecPackageId[2], 10, 64)
 		cardType, _ := strconv.ParseInt(vecPackageId[3], 10, 64)
-		ts, _ := strconv.ParseInt(vecPackageId[5], 10, 64)
+		ts, _ := strconv.ParseInt(vecPackageId[4], 10, 64)
 		return uid, int(gymid), int(cardType), ts
 	}
 	return 0, 0, 0, 0
