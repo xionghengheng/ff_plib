@@ -16,4 +16,5 @@ type PassCardGymInfoModel struct {
 	GymDiscount         string  `json:"gym_discount"`    //场馆优惠信息
 	LocSimpleName       string  `json:"loc_simple_name"` //健身房场地简单地址（用户短信）
 	CanShow             int     `json:"can_show"`        //是否可以在平台展示，0=不可展示 1=可展示
+	Phone               string  `json:"phone"`           //电话号码
 }
