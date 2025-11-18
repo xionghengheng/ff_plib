@@ -261,13 +261,3 @@ func (imp *PassCardLessonInterfaceImp) GetLessonListByGymId(gymId int, ceateTs i
 	}
 	return vecLessonModel, err
 }
-
-func (imp *PassCardLessonInterfaceImp) GetSingleLessonListNotFinish(nowTs int64, limit int) ([]pass_card_model.LessonModel, error) {
-	var err error
-	var vecLessonModel []pass_card_model.LessonModel
-	cli := db.Get()
-
-	//如果当前时间已经超过了课程终止时间，则需要自动转为已完成状态
-	err = cli.Table(pass_card_lesson_tableName).Where("status = ? AND schedule_end_ts < ? ", pass_card_model.En_LessonStatus_Scheduled, nowTs).Find(&vecLessonModel).Limit(limit).Error
-	return vecLessonModel, err
-}
