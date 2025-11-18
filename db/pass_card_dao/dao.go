@@ -4,11 +4,12 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"time"
+
 	"github.com/jinzhu/gorm"
 	"github.com/xionghengheng/ff_plib/db"
 	"github.com/xionghengheng/ff_plib/db/model"
 	"github.com/xionghengheng/ff_plib/db/pass_card_model"
-	"time"
 )
 
 const pass_card_gym_tableName = "pass_card_gym_info"
@@ -258,5 +259,15 @@ func (imp *PassCardLessonInterfaceImp) GetLessonListByGymId(gymId int, ceateTs i
 			err = cli.Raw("SELECT * FROM pass_card_lesson WHERE gym_id = ? AND status = ? AND ceateTs > ? ORDER BY create_ts DESC Limit 50", gymId, status, ceateTs).Scan(&vecLessonModel).Error
 		}
 	}
+	return vecLessonModel, err
+}
+
+func (imp *PassCardLessonInterfaceImp) GetSingleLessonListNotFinish(nowTs int64, limit int) ([]pass_card_model.LessonModel, error) {
+	var err error
+	var vecLessonModel []pass_card_model.LessonModel
+	cli := db.Get()
+
+	//如果当前时间已经超过了课程终止时间，则需要自动转为已完成状态
+	err = cli.Table(pass_card_lesson_tableName).Where("status = ? AND schedule_end_ts < ? ", pass_card_model.En_LessonStatus_Scheduled, nowTs).Find(&vecLessonModel).Limit(limit).Error
 	return vecLessonModel, err
 }

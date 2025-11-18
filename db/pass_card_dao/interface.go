@@ -75,6 +75,8 @@ type PassCardLessonInterface interface {
 
 	// 获取
 	GetLessonListNotFinish(nowTs int64, limit int) ([]pass_card_model.LessonModel, error)
+
+	GetSingleLessonListNotFinish(nowTs int64, limit int) ([]pass_card_model.LessonModel, error)
 }
 
 type PassCardLessonInterfaceImp struct{}
