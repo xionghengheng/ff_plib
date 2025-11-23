@@ -37,6 +37,8 @@ type UserInfoModel struct {
 	BeVipPassCardTs         int64   `json:"be_vip_pass_card_ts"`              //成为通卡订阅会员的时间
 	BindPassCardGymId       int     `json:"bind_pass_card_gym_id"`            //通卡场地端，用户
 	RecPassCardGymId        int     `json:"rec_pass_card_gym_id"`             //通卡主页推荐的场地
+	IsOfficialAssistant     bool    `json:"is_official_assistant"`            //是否官方小助理，展示特定的运营操作入口
+	IsFirstTrailBlock       bool    `json:"is_first_trail_block"`             //是否需要展示，首次约课加小助理微信的阻断
 }
 
 const (
