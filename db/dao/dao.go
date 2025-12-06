@@ -3,13 +3,14 @@ package dao
 import (
 	"errors"
 	"fmt"
-	"github.com/jinzhu/gorm"
-	"github.com/xionghengheng/ff_plib/db"
-	"github.com/xionghengheng/ff_plib/db/model"
 	"path"
 	"runtime"
 	"strings"
 	"time"
+
+	"github.com/jinzhu/gorm"
+	"github.com/xionghengheng/ff_plib/db"
+	"github.com/xionghengheng/ff_plib/db/model"
 )
 
 const user_tableName = "user_info"
@@ -80,6 +81,14 @@ func (imp *UserInterfaceImp) GetUserByCoachId(coachId int) (*model.UserInfoModel
 	var user = new(model.UserInfoModel)
 	cli := db.Get()
 	err = cli.Table(user_tableName).Where("coach_id = ?", coachId).First(user).Error
+	return user, err
+}
+
+func (imp *UserInterfaceImp) GetUserListByBindPassCardGymId(bindPassCardGymId int) (*model.UserInfoModel, error) {
+	var err error
+	var user = new(model.UserInfoModel)
+	cli := db.Get()
+	err = cli.Table(user_tableName).Where("bind_pass_card_gym_id = ?", bindPassCardGymId).First(user).Error
 	return user, err
 }
 

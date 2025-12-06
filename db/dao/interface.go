@@ -35,6 +35,9 @@ type UserInterface interface {
 
 	//通过教练id获取用户信息
 	GetUserByCoachId(coachId int) (*model.UserInfoModel, error)
+
+	// 通过通卡绑定门店id获取用户信息
+	GetUserListByBindPassCardGymId(bindPassCardGymId int) (*model.UserInfoModel, error)
 }
 
 // UserInterfaceImp 用户数据模型实现
