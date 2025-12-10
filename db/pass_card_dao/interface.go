@@ -75,6 +75,7 @@ type PassCardLessonInterface interface {
 
 	// 获取已经过了结束时间但没有完成的课程，后台需要扫描设置为完成
 	GetLessonListNotFinish(nowTs int64, limit int) ([]pass_card_model.LessonModel, error)
+	GetLessonListNotFinishAndNotSendGoMsg(nowTs int64, limit int) ([]pass_card_model.LessonModel, error)
 }
 
 type PassCardLessonInterfaceImp struct{}

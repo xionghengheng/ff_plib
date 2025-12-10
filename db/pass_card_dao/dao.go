@@ -242,6 +242,14 @@ func (imp *PassCardLessonInterfaceImp) GetLessonListNotFinish(nowTs int64, limit
 	return vecLessonModel, err
 }
 
+func (imp *PassCardLessonInterfaceImp) GetLessonListNotFinishAndNotSendGoMsg(nowTs int64, limit int) ([]pass_card_model.LessonModel, error) {
+	var err error
+	var vecLessonModel []pass_card_model.LessonModel
+	cli := db.Get()
+	err = cli.Table(pass_card_lesson_tableName).Where("status = ? AND send_msg_go_lesson = false AND schedule_end_ts < ? ", model.En_LessonStatus_Scheduled, nowTs).Find(&vecLessonModel).Limit(limit).Error
+	return vecLessonModel, err
+}
+
 func (imp *PassCardLessonInterfaceImp) GetLessonListByGymId(gymId int, ceateTs int64, status int) ([]pass_card_model.LessonModel, error) {
 	var err error
 	var vecLessonModel []pass_card_model.LessonModel
