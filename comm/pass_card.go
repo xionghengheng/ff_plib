@@ -1,11 +1,12 @@
 package comm
 
 import (
+	"time"
+
 	"github.com/xionghengheng/ff_plib/db/dao"
 	"github.com/xionghengheng/ff_plib/db/model"
 	"github.com/xionghengheng/ff_plib/db/pass_card_dao"
 	"github.com/xionghengheng/ff_plib/db/pass_card_model"
-	"time"
 )
 
 func IsPassCardVip(user *model.UserInfoModel) bool {
@@ -13,7 +14,7 @@ func IsPassCardVip(user *model.UserInfoModel) bool {
 		return false
 	}
 	nowTs := time.Now().Unix()
-	if user.VipExpiredTs >= nowTs &&
+	if user.VipPassCardExpiredTs >= nowTs &&
 		(user.VipPassCardType == model.Enum_VipPassCardType_Trial || user.VipPassCardType == model.Enum_VipPassCardType_PaidMonth) {
 		return true
 	}
