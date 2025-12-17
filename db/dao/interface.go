@@ -96,6 +96,9 @@ type CoachInterface interface {
 
 	//设置不可约时间是否同步到下周
 	SetCoachCloneLessonUnAvaliableSwitch(coach_id int, value int) error
+
+	//更新教练信息
+	UpdateCoachInfo(coach_id int64, mapUpdates map[string]interface{}) error
 }
 
 // CoachInterfaceImp 教练数据模型实现
