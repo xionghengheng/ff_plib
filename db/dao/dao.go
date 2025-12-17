@@ -199,7 +199,7 @@ func (imp *CoachInterfaceImp) SetCoachCloneLessonUnAvaliableSwitch(coach_id int,
 	return nil
 }
 
-func (imp *CoachInterfaceImp) UpdateCoachInfo(coach_id int64, mapUpdates map[string]interface{}) error {
+func (imp *CoachInterfaceImp) UpdateCoachInfo(coach_id int, mapUpdates map[string]interface{}) error {
 	cli := db.Get()
 	return cli.Table(coach_tableName).Model(&model.CoachModel{}).Where("coach_id = ?", coach_id).Updates(mapUpdates).Error
 }

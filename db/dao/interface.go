@@ -98,7 +98,7 @@ type CoachInterface interface {
 	SetCoachCloneLessonUnAvaliableSwitch(coach_id int, value int) error
 
 	//更新教练信息
-	UpdateCoachInfo(coach_id int64, mapUpdates map[string]interface{}) error
+	UpdateCoachInfo(coach_id int, mapUpdates map[string]interface{}) error
 }
 
 // CoachInterfaceImp 教练数据模型实现
