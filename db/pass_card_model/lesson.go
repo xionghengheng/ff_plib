@@ -20,9 +20,10 @@ type LessonModel struct {
 
 // 正常流程：已预约->已完成
 // 用户上课前主动取消：已预约->已取消
-// 如果教练忘记核销或者用户没去：已预约->已旷课
+// 如果场地忘记核销或者用户没去：已预约->已迟到
 const (
 	En_LessonStatus_Scheduled int = iota + 1 // 已预约
 	En_LessonStatus_Completed                // 已完成
 	En_LessonStatus_Canceled                 // 已取消
+	En_LessonStatus_Missed                   // 已迟到
 )
