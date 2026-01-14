@@ -2,8 +2,6 @@ package comm
 
 import (
 	"fmt"
-	"github.com/xionghengheng/ff_plib/db/dao"
-	"github.com/xionghengheng/ff_plib/db/model"
 	"os"
 	"path"
 	"runtime"
@@ -11,6 +9,9 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/xionghengheng/ff_plib/db/dao"
+	"github.com/xionghengheng/ff_plib/db/model"
 )
 
 func genOrderId(productType int, ts int64) string {
@@ -44,6 +45,19 @@ func GetTodayBegTs() int64 {
 	t := time.Now()
 	addTime := time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, t.Location())
 	return addTime.Unix()
+}
+
+func GetMonthBegTsByTs(givenTimestamp int64) int64 {
+	// 将时间戳转换为time.Time对象
+	givenTime := time.Unix(givenTimestamp, 0)
+
+	// 获取该月第一天的零点时间
+	firstDayOfMonth := time.Date(givenTime.Year(), givenTime.Month(), 1, 0, 0, 0, 0, givenTime.Location())
+
+	// 将零点时间转换为时间戳
+	firstDayTimestamp := firstDayOfMonth.Unix()
+
+	return firstDayTimestamp
 }
 
 func GetTodayBegTsByTs(givenTimestamp int64) int64 {
