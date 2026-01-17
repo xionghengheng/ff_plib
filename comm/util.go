@@ -264,3 +264,44 @@ func GetCoachListByGymIdNew(reqGymId int) ([]model.CoachModel, error) {
 
 	return mapCoach[reqGymId], nil
 }
+
+// convertCloudUrlToHttps 将腾讯云cloud://格式的URL转换为https://格式
+// 例如: cloud://prod-8gl9g7u4ad06b98e.7072-prod-8gl9g7u4ad06b98e-1326535808/coach/new/250X200/吴建宏的副本.png
+// 转换为: https://7072-prod-8gl9g7u4ad06b98e-1326535808.tcb.qcloud.la/coach/new/250X200/吴建宏的副本.png
+func convertCloudUrlToHttps(cloudUrl string) string {
+	if cloudUrl == "" {
+		return ""
+	}
+
+	// 如果不是cloud://开头，直接返回原URL
+	if !strings.HasPrefix(cloudUrl, "cloud://") {
+		return cloudUrl
+	}
+
+	// 去掉 cloud:// 前缀
+	urlWithoutPrefix := strings.TrimPrefix(cloudUrl, "cloud://")
+
+	// 分割字符串，格式为: prod-8gl9g7u4ad06b98e.7072-prod-8gl9g7u4ad06b98e-1326535808/path/to/file
+	parts := strings.SplitN(urlWithoutPrefix, "/", 2)
+	if len(parts) != 2 {
+		// 格式不正确，返回原URL
+		return cloudUrl
+	}
+
+	// parts[0] 是环境信息，格式为: prod-8gl9g7u4ad06b98e.7072-prod-8gl9g7u4ad06b98e-1326535808
+	// 需要提取出 7072-prod-8gl9g7u4ad06b98e-1326535808 部分
+	envInfo := parts[0]
+	dotIndex := strings.Index(envInfo, ".")
+	if dotIndex == -1 {
+		// 格式不正确，返回原URL
+		return cloudUrl
+	}
+
+	bucketId := envInfo[dotIndex+1:] // 7072-prod-8gl9g7u4ad06b98e-1326535808
+	filePath := parts[1]             // coach/new/250X200/吴建宏的副本.png
+
+	// 构建https URL
+	httpsUrl := fmt.Sprintf("https://%s.tcb.qcloud.la/%s", bucketId, filePath)
+
+	return httpsUrl
+}
