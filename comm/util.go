@@ -265,10 +265,10 @@ func GetCoachListByGymIdNew(reqGymId int) ([]model.CoachModel, error) {
 	return mapCoach[reqGymId], nil
 }
 
-// convertCloudUrlToHttps 将腾讯云cloud://格式的URL转换为https://格式
+// 将腾讯云cloud://格式的URL转换为https://格式
 // 例如: cloud://prod-8gl9g7u4ad06b98e.7072-prod-8gl9g7u4ad06b98e-1326535808/coach/new/250X200/吴建宏的副本.png
 // 转换为: https://7072-prod-8gl9g7u4ad06b98e-1326535808.tcb.qcloud.la/coach/new/250X200/吴建宏的副本.png
-func convertCloudUrlToHttps(cloudUrl string) string {
+func ConvertCloudUrlToHttps(cloudUrl string) string {
 	if cloudUrl == "" {
 		return ""
 	}
