@@ -14,7 +14,8 @@ type PreTrailManageModel struct {
 	LessonTimeBeg int64  `json:"lesson_time_beg"` // 体验课开始时间
 	LessonTimeEnd int64  `json:"lesson_time_end"` // 体验课结束时间
 	Price         int    `json:"price"`           // 体验课价格（单位：元）
-	H5LinkToken   string `json:"h5_link_token"`   // 生成的H5链接token
+	LinkToken     string `json:"link_token"`      // 生成的链接token
+	LinkStatus    int    `json:"link_status"`     // 生成的链接状态
 	PackageId     string `json:"package_id"`      // 关联的课包id
 	Remark        string `json:"remark"`          // 备注
 	CreatedBy     string `json:"created_by"`      // 创建人（顾问）
