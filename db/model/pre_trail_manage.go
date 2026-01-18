@@ -18,6 +18,6 @@ type PreTrailManageModel struct {
 	PackageId     string `json:"package_id"`      // 关联的课包id
 	Remark        string `json:"remark"`          // 备注
 	CreatedBy     string `json:"created_by"`      // 创建人（顾问）
-	CreatedAt     int64  `json:"created_at"`      // 创建时间
-	UpdatedAt     int64  `json:"updated_at"`      // 更新时间
+	CreatedTs     int64  `json:"created_ts"`      // 创建时间
+	UpdatedTs     int64  `json:"updated_ts"`      // 更新时间
 }
