@@ -1,8 +1,8 @@
 package model
 
-// TrailManageModel 体验课管理模型
+// 体验课预生成管理模型
 // 用于匹配 trail_manage 表的字段
-type TrailManageModel struct {
+type PreTrailManageModel struct {
 	ID            int64  `json:"id"`              // 主键ID
 	UserPhone     string `json:"user_phone"`      // 用户手机号（微信绑定）
 	TrainingNeed  string `json:"training_need"`   // 训练需求（增肌/减脂/塑形/普拉提/拳击/体态/康复/上门/其他）
