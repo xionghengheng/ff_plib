@@ -341,3 +341,39 @@ type UserFeedBackInterfaceInterfaceImp struct{}
 
 // Imp 实现实例
 var ImpUserFeedBack UserFeedBackInterface = &UserFeedBackInterfaceInterfaceImp{}
+
+// TrailManageInterface 体验课管理数据模型接口
+type TrailManageInterface interface {
+	// 添加体验课记录
+	AddTrailManage(trail *model.TrailManageModel) error
+
+	// 根据ID获取体验课记录
+	GetTrailManageById(id int64) (*model.TrailManageModel, error)
+
+	// 根据手机号获取体验课记录
+	GetTrailManageByPhone(userPhone string) (*model.TrailManageModel, error)
+
+	// 根据H5链接token获取体验课记录
+	GetTrailManageByToken(h5LinkToken string) (*model.TrailManageModel, error)
+
+	// 更新体验课记录
+	UpdateTrailManage(id int64, mapUpdates map[string]interface{}) error
+
+	// 分页获取体验课列表（按创建时间降序）
+	GetTrailManageList(page, pageSize int) ([]model.TrailManageModel, error)
+
+	// 根据教练ID获取体验课列表
+	GetTrailManageListByCoachId(coachId int, page, pageSize int) ([]model.TrailManageModel, error)
+
+	// 根据门店ID获取体验课列表
+	GetTrailManageListByGymId(gymId int, page, pageSize int) ([]model.TrailManageModel, error)
+
+	// 根据课程日期获取体验课列表
+	GetTrailManageListByLessonDate(lessonDate int64, page, pageSize int) ([]model.TrailManageModel, error)
+}
+
+// TrailManageInterfaceImp 体验课管理数据模型实现
+type TrailManageInterfaceImp struct{}
+
+// Imp 实现实例
+var ImpTrailManage TrailManageInterface = &TrailManageInterfaceImp{}

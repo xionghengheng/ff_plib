@@ -1071,3 +1071,84 @@ func getCallerInfo(skip int) (string, string) {
 	}
 	return path.Base(file), fn.Name()
 }
+
+const trail_manage_tableName = "trail_manage"
+
+// AddTrailManage 添加体验课记录
+func (imp *TrailManageInterfaceImp) AddTrailManage(trail *model.TrailManageModel) error {
+	cli := db.Get()
+	return cli.Table(trail_manage_tableName).Save(trail).Error
+}
+
+// GetTrailManageById 根据ID获取体验课记录
+func (imp *TrailManageInterfaceImp) GetTrailManageById(id int64) (*model.TrailManageModel, error) {
+	var err error
+	var trail = new(model.TrailManageModel)
+	cli := db.Get()
+	err = cli.Table(trail_manage_tableName).Where("id = ?", id).First(trail).Error
+	return trail, err
+}
+
+// GetTrailManageByPhone 根据手机号获取体验课记录
+func (imp *TrailManageInterfaceImp) GetTrailManageByPhone(userPhone string) (*model.TrailManageModel, error) {
+	var err error
+	var trail = new(model.TrailManageModel)
+	cli := db.Get()
+	err = cli.Table(trail_manage_tableName).Where("user_phone = ?", userPhone).First(trail).Error
+	return trail, err
+}
+
+// GetTrailManageByToken 根据H5链接token获取体验课记录
+func (imp *TrailManageInterfaceImp) GetTrailManageByToken(h5LinkToken string) (*model.TrailManageModel, error) {
+	var err error
+	var trail = new(model.TrailManageModel)
+	cli := db.Get()
+	err = cli.Table(trail_manage_tableName).Where("h5_link_token = ?", h5LinkToken).First(trail).Error
+	return trail, err
+}
+
+// UpdateTrailManage 更新体验课记录
+func (imp *TrailManageInterfaceImp) UpdateTrailManage(id int64, mapUpdates map[string]interface{}) error {
+	cli := db.Get()
+	return cli.Table(trail_manage_tableName).Model(&model.TrailManageModel{}).Where("id = ?", id).Updates(mapUpdates).Error
+}
+
+// GetTrailManageList 分页获取体验课列表（按创建时间降序）
+func (imp *TrailManageInterfaceImp) GetTrailManageList(page, pageSize int) ([]model.TrailManageModel, error) {
+	var err error
+	var vecTrailManage []model.TrailManageModel
+	cli := db.Get()
+	offset := (page - 1) * pageSize
+	err = cli.Table(trail_manage_tableName).Order("created_at DESC").Offset(offset).Limit(pageSize).Find(&vecTrailManage).Error
+	return vecTrailManage, err
+}
+
+// GetTrailManageListByCoachId 根据教练ID获取体验课列表
+func (imp *TrailManageInterfaceImp) GetTrailManageListByCoachId(coachId int, page, pageSize int) ([]model.TrailManageModel, error) {
+	var err error
+	var vecTrailManage []model.TrailManageModel
+	cli := db.Get()
+	offset := (page - 1) * pageSize
+	err = cli.Table(trail_manage_tableName).Where("coach_id = ?", coachId).Order("created_at DESC").Offset(offset).Limit(pageSize).Find(&vecTrailManage).Error
+	return vecTrailManage, err
+}
+
+// GetTrailManageListByGymId 根据门店ID获取体验课列表
+func (imp *TrailManageInterfaceImp) GetTrailManageListByGymId(gymId int, page, pageSize int) ([]model.TrailManageModel, error) {
+	var err error
+	var vecTrailManage []model.TrailManageModel
+	cli := db.Get()
+	offset := (page - 1) * pageSize
+	err = cli.Table(trail_manage_tableName).Where("gym_id = ?", gymId).Order("created_at DESC").Offset(offset).Limit(pageSize).Find(&vecTrailManage).Error
+	return vecTrailManage, err
+}
+
+// GetTrailManageListByLessonDate 根据课程日期获取体验课列表
+func (imp *TrailManageInterfaceImp) GetTrailManageListByLessonDate(lessonDate int64, page, pageSize int) ([]model.TrailManageModel, error) {
+	var err error
+	var vecTrailManage []model.TrailManageModel
+	cli := db.Get()
+	offset := (page - 1) * pageSize
+	err = cli.Table(trail_manage_tableName).Where("lesson_date = ?", lessonDate).Order("created_at DESC").Offset(offset).Limit(pageSize).Find(&vecTrailManage).Error
+	return vecTrailManage, err
+}
