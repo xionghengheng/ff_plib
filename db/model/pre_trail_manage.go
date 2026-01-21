@@ -13,10 +13,17 @@ type PreTrailManageModel struct {
 	LessonTimeEnd int64  `json:"lesson_time_end"` // 体验课结束时间
 	Price         int    `json:"price"`           // 体验课价格（单位：元）
 	LinkToken     string `json:"link_token"`      // 生成的链接token
-	LinkStatus    int    `json:"link_status"`     // 生成的链接状态
+	LinkStatus    int    `json:"link_status"`     // 生成的链接状态，链接状态：0-待使用，1-已使用，2-已过期
 	PackageId     string `json:"package_id"`      // 关联的课包id
 	Remark        string `json:"remark"`          // 备注
 	CreatedBy     string `json:"created_by"`      // 创建人（顾问）
 	CreatedTs     int64  `json:"created_ts"`      // 创建时间
 	UpdatedTs     int64  `json:"updated_ts"`      // 更新时间
 }
+
+// LinkStatus 枚举类型
+const (
+	Enum_Link_Status_Pending int = iota // 0 - 待使用
+	Enum_Link_Status_Used               // 1 - 已使用
+	Enum_Link_Status_Expired            // 2 - 已过期
+)
