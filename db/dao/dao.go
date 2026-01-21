@@ -1119,7 +1119,7 @@ func (imp *PreTrailManageInterfaceImp) GetTrailManageList(page, pageSize int) ([
 	var vecTrailManage []model.PreTrailManageModel
 	cli := db.Get()
 	offset := (page - 1) * pageSize
-	err = cli.Table(pre_trail_manage_tableName).Order("created_at DESC").Offset(offset).Limit(pageSize).Find(&vecTrailManage).Error
+	err = cli.Table(pre_trail_manage_tableName).Order("created_ts DESC").Offset(offset).Limit(pageSize).Find(&vecTrailManage).Error
 	return vecTrailManage, err
 }
 
@@ -1129,7 +1129,7 @@ func (imp *PreTrailManageInterfaceImp) GetTrailManageListByCoachId(coachId int, 
 	var vecTrailManage []model.PreTrailManageModel
 	cli := db.Get()
 	offset := (page - 1) * pageSize
-	err = cli.Table(pre_trail_manage_tableName).Where("coach_id = ?", coachId).Order("created_at DESC").Offset(offset).Limit(pageSize).Find(&vecTrailManage).Error
+	err = cli.Table(pre_trail_manage_tableName).Where("coach_id = ?", coachId).Order("created_ts DESC").Offset(offset).Limit(pageSize).Find(&vecTrailManage).Error
 	return vecTrailManage, err
 }
 
@@ -1139,7 +1139,7 @@ func (imp *PreTrailManageInterfaceImp) GetTrailManageListByGymId(gymId int, page
 	var vecTrailManage []model.PreTrailManageModel
 	cli := db.Get()
 	offset := (page - 1) * pageSize
-	err = cli.Table(pre_trail_manage_tableName).Where("gym_id = ?", gymId).Order("created_at DESC").Offset(offset).Limit(pageSize).Find(&vecTrailManage).Error
+	err = cli.Table(pre_trail_manage_tableName).Where("gym_id = ?", gymId).Order("created_ts DESC").Offset(offset).Limit(pageSize).Find(&vecTrailManage).Error
 	return vecTrailManage, err
 }
 
@@ -1149,6 +1149,6 @@ func (imp *PreTrailManageInterfaceImp) GetTrailManageListByLessonDate(lessonDate
 	var vecTrailManage []model.PreTrailManageModel
 	cli := db.Get()
 	offset := (page - 1) * pageSize
-	err = cli.Table(pre_trail_manage_tableName).Where("lesson_date = ?", lessonDate).Order("created_at DESC").Offset(offset).Limit(pageSize).Find(&vecTrailManage).Error
+	err = cli.Table(pre_trail_manage_tableName).Where("lesson_date = ?", lessonDate).Order("created_ts DESC").Offset(offset).Limit(pageSize).Find(&vecTrailManage).Error
 	return vecTrailManage, err
 }
