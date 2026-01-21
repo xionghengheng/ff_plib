@@ -25,5 +25,6 @@ type PreTrailManageModel struct {
 const (
 	Enum_Link_Status_Pending int = iota // 0 - 待使用
 	Enum_Link_Status_Used               // 1 - 已使用
-	Enum_Link_Status_Expired            // 2 - 已过期
+	Enum_Link_Status_Cancel             // 2 - 已取消
+	Enum_Link_Status_Expired            // 3 - 已过期
 )
