@@ -233,6 +233,9 @@ type PaymentOrderInterface interface {
 
 	//通过课包id获取订单信息
 	GetOrderByPackageId(uid int64, packageId string) ([]model.PaymentOrderModel, error)
+
+	//获取所有订单，通过下单时间来分页
+	GetAllOrderList(ts int64) ([]model.PaymentOrderModel, error)
 }
 
 // PaymentOrderInterfaceImp

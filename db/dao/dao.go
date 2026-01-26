@@ -657,6 +657,18 @@ func (imp *PaymentOrderInterfaceImp) GetOrderByPackageId(uid int64, packageId st
 	return vecPaymentOrderModel, err
 }
 
+func (imp *PaymentOrderInterfaceImp) GetAllOrderList(ts int64) ([]model.PaymentOrderModel, error) {
+	cli := db.Get()
+	var vecPaymentOrderModel []model.PaymentOrderModel
+	var err error
+	if ts != 0 {
+		err = cli.Raw("SELECT * FROM "+payment_order_tableName+" WHERE order_time < ? ORDER BY order_time DESC Limit 500", ts).Scan(&vecPaymentOrderModel).Error
+	} else {
+		err = cli.Raw("SELECT * FROM " + payment_order_tableName + " ORDER BY order_time DESC Limit 500").Scan(&vecPaymentOrderModel).Error
+	}
+	return vecPaymentOrderModel, err
+}
+
 const coach_appointments_tableName = "coach_appointments"
 
 func (imp *AppointmentInterfaceImp) SetAppointmentSchedule(stCoachAppointmentModel model.CoachAppointmentModel) error {
