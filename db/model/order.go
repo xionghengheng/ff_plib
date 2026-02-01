@@ -23,12 +23,13 @@ type PaymentOrderModel struct {
 	PaySign   string `json:"pay_sign"`
 
 	//购买课包时下单的参数
-	GymId      int   `json:"gym_id"`       // 场地id
-	CoachId    int   `json:"coach_id"`     // 教练id
-	CourseId   int   `json:"course_id"`    // 课程id
-	Price      int   `json:"price"`        // 总付款价格（业务侧保存的）
-	CourseCnt  int   `json:"course_cnt"`   // 购买课程的次数
-	RecFromUid int64 `json:"rec_from_uid"` // 是否来自分享购买，如果是，该值填分享者的uid，如果购买者非会员，通过分享购买会自动成为会员
+	GymId       int   `json:"gym_id"`       // 场地id
+	CoachId     int   `json:"coach_id"`     // 教练id
+	CourseId    int   `json:"course_id"`    // 课程id
+	Price       int   `json:"price"`        // 总付款价格（业务侧保存的）
+	CourseCnt   int   `json:"course_cnt"`   // 购买课程的次数
+	CoursePrice int   `json:"course_price"` // 购买课程时，当时下单时，单次课的价格
+	RecFromUid  int64 `json:"rec_from_uid"` // 是否来自分享购买，如果是，该值填分享者的uid，如果购买者非会员，通过分享购买会自动成为会员
 
 	//退款相关参数
 	RefundTime      int64 `json:"refund_time"`       // 发生退款的时间
