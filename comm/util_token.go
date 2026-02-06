@@ -40,9 +40,9 @@ func DecryptH5LinkToken(token string) (recordId int64, createTs int64, err error
 		return 0, 0, fmt.Errorf("AES解密失败: %v", err)
 	}
 
-	// 解析原始数据: recordId_coachId_createTs
+	// 解析原始数据: recordId_createTs
 	var rId, ts int64
-	_, err = fmt.Sscanf(string(plainText), "%d_%d_%d", &rId, &ts)
+	_, err = fmt.Sscanf(string(plainText), "%d_%d", &rId, &ts)
 	if err != nil {
 		return 0, 0, fmt.Errorf("解析数据失败: %v", err)
 	}
