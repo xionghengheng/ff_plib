@@ -5,6 +5,9 @@ import (
 	"crypto/cipher"
 	"encoding/base64"
 	"fmt"
+	"time"
+
+	"github.com/xionghengheng/ff_plib/db/model"
 )
 
 // 固定密钥（16字节，用于AES-128加密）
@@ -106,4 +109,25 @@ func aesDecrypt(cipherText, key []byte) ([]byte, error) {
 	}
 
 	return decrypted[:len(decrypted)-padding], nil
+}
+
+const (
+	// LinkExpireSeconds 预体验课链接过期时间（秒），默认24小时
+	LinkExpireSeconds = 24 * 60 * 60
+)
+
+// GetRealLinkStatus 获取预体验课的实际链接状态
+// 如果是待使用状态且已超过过期时间，则返回已过期状态
+// linkStatus: 数据库中存储的链接状态
+// createdTs: 记录创建时间戳
+// 返回: 实际的链接状态
+func GetRealLinkStatus(linkStatus int, createdTs int64) int {
+	if linkStatus == model.Enum_Link_Status_Pending {
+		// 检查是否已过期（创建时间超过24小时）
+		expireTime := createdTs + LinkExpireSeconds
+		if time.Now().Unix() > expireTime {
+			return model.Enum_Link_Status_Expired
+		}
+	}
+	return linkStatus
 }
