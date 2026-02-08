@@ -9,7 +9,7 @@ type CourseModel struct {
 	Image        string `json:"image"`        //课程图片-方行
 	ImageCircle  string `json:"image_circle"` //课程图片-圆形
 	MarketPrice  int    `json:"market_price"` //课程市场价格，单位元
-	ChargeType   int    `json:"charge_type"`  //1=付费，2=免费体验课
+	ChargeType   int    `json:"charge_type"`  //付费类型，1=付费，2=免费体验课
 	Type         int    `json:"type"`         //课程类型
 }
 
@@ -24,4 +24,5 @@ const (
 	Enum_Course_Type_Advanced            // 2=高级
 	Enum_Course_Type_Senior              // 3=资深
 	Enum_Course_Type_Specialty           // 4=特色
+	Enum_Course_Type_PaidPreTrial        // 5=付费的预体验课
 )
