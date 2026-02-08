@@ -8,6 +8,7 @@ type PreTrailManageModel struct {
 	TrainingNeed  string `json:"training_need"`   // 训练需求（增肌/减脂/塑形/普拉提/拳击/体态/康复/上门/其他）
 	GymID         int    `json:"gym_id"`          // 门店ID
 	CoachID       int    `json:"coach_id"`        // 教练ID
+	CourseID      int    `json:"course_id"`       // 课程ID
 	LessonDate    int64  `json:"lesson_date"`     // 体验课日期
 	LessonTimeBeg int64  `json:"lesson_time_beg"` // 体验课开始时间
 	LessonTimeEnd int64  `json:"lesson_time_end"` // 体验课结束时间
