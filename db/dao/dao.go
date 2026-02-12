@@ -1164,3 +1164,12 @@ func (imp *PreTrailManageInterfaceImp) GetTrailManageListByLessonDate(lessonDate
 	err = cli.Table(pre_trail_manage_tableName).Where("lesson_date = ?", lessonDate).Order("created_ts DESC").Offset(offset).Limit(pageSize).Find(&vecTrailManage).Error
 	return vecTrailManage, err
 }
+
+// GetTrailManageListByPhone 根据手机号获取体验课列表
+func (imp *PreTrailManageInterfaceImp) GetTrailManageListByPhone(userPhone string) ([]model.PreTrailManageModel, error) {
+	var err error
+	var vecTrailManage []model.PreTrailManageModel
+	cli := db.Get()
+	err = cli.Table(pre_trail_manage_tableName).Where("user_phone = ?", userPhone).Order("created_ts DESC").Find(&vecTrailManage).Error
+	return vecTrailManage, err
+}
