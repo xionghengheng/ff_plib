@@ -199,6 +199,8 @@ type CoursePackageSingleLessonInterface interface {
 
 	//获取所有次课信息，通过创建时间来分页
 	GetAllSingleLessonList(createTs int64) ([]model.CoursePackageSingleLessonModel, error)
+
+	GetSingleLessonListByCreateTsDesc(uid int64, packageId string) ([]model.CoursePackageSingleLessonModel, error)
 }
 
 // CoursePackageSingleLessonInterfaceImp 课包单次课数据模型实现

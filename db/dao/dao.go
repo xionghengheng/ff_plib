@@ -507,6 +507,14 @@ func (imp *CoursePackageSingleLessonInterfaceImp) GetSingleLessonListByPackageId
 	return vecCoursePackageSingleLessonModel, err
 }
 
+func (imp *CoursePackageSingleLessonInterfaceImp) GetSingleLessonListByCreateTsDesc(uid int64, packageId string) ([]model.CoursePackageSingleLessonModel, error) {
+	var err error
+	var vecCoursePackageSingleLessonModel []model.CoursePackageSingleLessonModel
+	cli := db.Get()
+	err = cli.Table(course_package_single_lesson_tableName).Where("uid = ? AND package_id = ?", uid, packageId).Order("create_ts DESC").Find(&vecCoursePackageSingleLessonModel).Error
+	return vecCoursePackageSingleLessonModel, err
+}
+
 func (imp *CoursePackageSingleLessonInterfaceImp) GetSingleLessonByAppointmentId(uid int64, appointmentID int) ([]model.CoursePackageSingleLessonModel, error) {
 	var err error
 	var lessons []model.CoursePackageSingleLessonModel
