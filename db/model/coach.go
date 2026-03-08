@@ -24,6 +24,7 @@ type CoachModel struct {
 	TotalCompleteLesson    string `json:"total_complete_lesson"`     //累计上课节数
 	CanShow                int    `json:"can_show"`                  //是否可以在平台展示，0=不可展示 1=可展示
 	CloneLessonUnavaSwitch int    `json:"clone_lesson_unava_switch"` //是否把可约状态同步到下周 0=默认同步
+	Remark                 string `json:"remark"`                    //教练备注信息，顾问备注教练的数据
 }
 
 const (
