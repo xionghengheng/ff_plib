@@ -1181,3 +1181,47 @@ func (imp *PreTrailManageInterfaceImp) GetTrailManageListByPhone(userPhone strin
 	err = cli.Table(pre_trail_manage_tableName).Where("user_phone = ?", userPhone).Order("created_ts DESC").Find(&vecTrailManage).Error
 	return vecTrailManage, err
 }
+
+const coach_metrics_snapshot_tableName = "coach_metrics_snapshot"
+
+// AddSnapshot 添加教练指标快照
+func (imp *CoachMetricsSnapshotInterfaceImp) AddSnapshot(snapshot *model.CoachMetricsSnapshotModel) error {
+	cli := db.Get()
+	return cli.Table(coach_metrics_snapshot_tableName).Save(snapshot).Error
+}
+
+// GetSnapshotByCoachAndDate 根据教练ID和数据口径日期获取快照
+func (imp *CoachMetricsSnapshotInterfaceImp) GetSnapshotByCoachAndDate(coachId int, metricsAsOfDate int) (*model.CoachMetricsSnapshotModel, error) {
+	var err error
+	var snapshot = new(model.CoachMetricsSnapshotModel)
+	cli := db.Get()
+	err = cli.Table(coach_metrics_snapshot_tableName).Where("coach_id = ? AND metrics_as_of_date = ?", coachId, metricsAsOfDate).First(snapshot).Error
+	return snapshot, err
+}
+
+// GetAllSnapshots 获取所有教练指标快照
+func (imp *CoachMetricsSnapshotInterfaceImp) GetAllSnapshots() ([]model.CoachMetricsSnapshotModel, error) {
+	var err error
+	var snapshots []model.CoachMetricsSnapshotModel
+	cli := db.Get()
+	err = cli.Table(coach_metrics_snapshot_tableName).Order("metrics_as_of_date DESC").Find(&snapshots).Error
+	return snapshots, err
+}
+
+// GetSnapshotsByCoachId 根据教练ID获取快照列表
+func (imp *CoachMetricsSnapshotInterfaceImp) GetSnapshotsByCoachId(coachId int) ([]model.CoachMetricsSnapshotModel, error) {
+	var err error
+	var snapshots []model.CoachMetricsSnapshotModel
+	cli := db.Get()
+	err = cli.Table(coach_metrics_snapshot_tableName).Where("coach_id = ?", coachId).Order("metrics_as_of_date DESC").Find(&snapshots).Error
+	return snapshots, err
+}
+
+// GetSnapshotsByDate 根据日期获取快照列表
+func (imp *CoachMetricsSnapshotInterfaceImp) GetSnapshotsByDate(metricsAsOfDate int) ([]model.CoachMetricsSnapshotModel, error) {
+	var err error
+	var snapshots []model.CoachMetricsSnapshotModel
+	cli := db.Get()
+	err = cli.Table(coach_metrics_snapshot_tableName).Where("metrics_as_of_date = ?", metricsAsOfDate).Order("coach_id ASC").Find(&snapshots).Error
+	return snapshots, err
+}

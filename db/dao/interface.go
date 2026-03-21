@@ -385,3 +385,27 @@ type PreTrailManageInterfaceImp struct{}
 
 // Imp 实现实例
 var ImpPreTrailManage PreTrailManageInterface = &PreTrailManageInterfaceImp{}
+
+// CoachMetricsSnapshotInterface 教练指标快照数据模型接口
+type CoachMetricsSnapshotInterface interface {
+	// 添加教练指标快照
+	AddSnapshot(snapshot *model.CoachMetricsSnapshotModel) error
+	
+	// 根据教练ID和数据口径日期获取快照
+	GetSnapshotByCoachAndDate(coachId int, metricsAsOfDate int) (*model.CoachMetricsSnapshotModel, error)
+	
+	// 获取所有教练指标快照
+	GetAllSnapshots() ([]model.CoachMetricsSnapshotModel, error)
+	
+	// 根据教练ID获取快照列表
+	GetSnapshotsByCoachId(coachId int) ([]model.CoachMetricsSnapshotModel, error)
+	
+	// 根据日期获取快照列表
+	GetSnapshotsByDate(metricsAsOfDate int) ([]model.CoachMetricsSnapshotModel, error)
+}
+
+// CoachMetricsSnapshotInterfaceImp 教练指标快照数据模型实现
+type CoachMetricsSnapshotInterfaceImp struct{}
+
+// Imp 实现实例
+var ImpCoachMetricsSnapshot CoachMetricsSnapshotInterface = &CoachMetricsSnapshotInterfaceImp{}
