@@ -134,6 +134,12 @@ func (imp *GymInterfaceImp) GetGymInfoByGymId(gymId int) (model.GymInfoModel, er
 	return stGym, err
 }
 
+// UpdateGymInfo 更新场馆信息
+func (imp *GymInterfaceImp) UpdateGymInfo(gymId int, mapUpdates map[string]interface{}) error {
+	cli := db.Get()
+	return cli.Table(gym_tableName).Model(&model.GymInfoModel{}).Where("gym_id = ?", gymId).Updates(mapUpdates).Error
+}
+
 const course_tableName = "courses"
 
 func (imp *CourseInterfaceImp) GetCourseList() ([]model.CourseModel, error) {

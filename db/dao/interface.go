@@ -63,6 +63,8 @@ var ImpSms SmsInterface = &SmsInterfaceImp{}
 type GymInterface interface {
 	GetGymList() ([]model.GymInfoModel, error)
 	GetGymInfoByGymId(gymId int) (model.GymInfoModel, error)
+	// 更新场馆信息
+	UpdateGymInfo(gymId int, mapUpdates map[string]interface{}) error
 }
 
 // GymInterfaceImp 用户数据模型实现
