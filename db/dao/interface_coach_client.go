@@ -29,6 +29,8 @@ var ImpCoachClientTraineeReddot CoachClientTraineeReddotInterface = &CoachClient
 type CoachClientTraineeCommentInterface interface {
 	GetTraineeCommentList(coachId int, limit int) ([]model.CoachClientTraineeCommentModel, error)
 	AddTraineeComment(stTraineeReddotModel *model.CoachClientTraineeCommentModel) error
+	// 更新评价
+	UpdateTraineeComment(lessonID string, mapUpdates map[string]interface{}) error
 }
 
 // CoachClientTraineeReddotInterfaceImp

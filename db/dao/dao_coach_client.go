@@ -47,6 +47,12 @@ func (imp *CoachClientTraineeCommentInterfaceImp) AddTraineeComment(stCoachClien
 	return cli.Table(coach_client_trainee_comment_table_name).Save(stCoachClientTraineeCommentModel).Error
 }
 
+// UpdateTraineeComment 更新评价
+func (imp *CoachClientTraineeCommentInterfaceImp) UpdateTraineeComment(lessonID string, mapUpdates map[string]interface{}) error {
+	cli := db.Get()
+	return cli.Table(coach_client_trainee_comment_table_name).Where("lesson_id = ?", lessonID).Updates(mapUpdates).Error
+}
+
 
 const coach_client_monthly_statistics_table_name = "coach_client_monthly_statistics"
 
