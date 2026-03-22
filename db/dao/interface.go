@@ -390,16 +390,16 @@ var ImpPreTrailManage PreTrailManageInterface = &PreTrailManageInterfaceImp{}
 type CoachMetricsSnapshotInterface interface {
 	// 添加教练指标快照
 	AddSnapshot(snapshot *model.CoachMetricsSnapshotModel) error
-	
+
 	// 根据教练ID和数据口径日期获取快照
 	GetSnapshotByCoachAndDate(coachId int, metricsAsOfDate int) (*model.CoachMetricsSnapshotModel, error)
-	
+
 	// 获取所有教练指标快照
 	GetAllSnapshots() ([]model.CoachMetricsSnapshotModel, error)
-	
+
 	// 根据教练ID获取快照列表
 	GetSnapshotsByCoachId(coachId int) ([]model.CoachMetricsSnapshotModel, error)
-	
+
 	// 根据日期获取快照列表
 	GetSnapshotsByDate(metricsAsOfDate int) ([]model.CoachMetricsSnapshotModel, error)
 }
@@ -409,3 +409,19 @@ type CoachMetricsSnapshotInterfaceImp struct{}
 
 // Imp 实现实例
 var ImpCoachMetricsSnapshot CoachMetricsSnapshotInterface = &CoachMetricsSnapshotInterfaceImp{}
+
+// CoursePackageRenewalInterface 课包续费记录接口
+type CoursePackageRenewalInterface interface {
+	// 添加续费记录
+	AddRenewalRecord(renewalRecord *model.CoursePackageRenewalModel) error
+	// 根据课包ID获取续费记录列表
+	GetRenewalRecordsByPackageID(packageID string) ([]*model.CoursePackageRenewalModel, error)
+	// 扫描全表，通过创建时间分页
+	ScanAllRenewalRecords(lastId int64, limit int) ([]*model.CoursePackageRenewalModel, error)
+}
+
+// CoursePackageRenewalInterfaceImp 教练指标快照数据模型实现
+type CoursePackageRenewalInterfaceImp struct{}
+
+// Imp 实现实例
+var ImpCoursePackageRenewal CoursePackageRenewalInterface = &CoursePackageRenewalInterfaceImp{}

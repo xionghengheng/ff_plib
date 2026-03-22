@@ -1225,3 +1225,35 @@ func (imp *CoachMetricsSnapshotInterfaceImp) GetSnapshotsByDate(metricsAsOfDate 
 	err = cli.Table(coach_metrics_snapshot_tableName).Where("metrics_as_of_date = ?", metricsAsOfDate).Order("coach_id ASC").Find(&snapshots).Error
 	return snapshots, err
 }
+
+// CoursePackageRenewalInterfaceImp 课包续费记录接口实现
+
+const course_package_renewal_tableName = "course_package_renewal"
+
+// AddRenewalRecord 添加续费记录
+func (imp *CoursePackageRenewalInterfaceImp) AddRenewalRecord(renewalRecord *model.CoursePackageRenewalModel) error {
+	cli := db.Get()
+	return cli.Table(course_package_renewal_tableName).Create(renewalRecord).Error
+}
+
+// GetRenewalRecordsByPackageID 根据课包ID获取续费记录列表
+func (imp *CoursePackageRenewalInterfaceImp) GetRenewalRecordsByPackageID(packageID string) ([]*model.CoursePackageRenewalModel, error) {
+	var err error
+	var records []*model.CoursePackageRenewalModel
+	cli := db.Get()
+	err = cli.Table(course_package_renewal_tableName).Where("package_id = ?", packageID).Order("renewal_time DESC").Find(&records).Error
+	return records, err
+}
+
+// ScanAllRenewalRecords 扫描全表，通过主键ID游标分页
+func (imp *CoursePackageRenewalInterfaceImp) ScanAllRenewalRecords(lastId int64, limit int) ([]*model.CoursePackageRenewalModel, error) {
+	cli := db.Get()
+	var records []*model.CoursePackageRenewalModel
+	var err error
+	if lastId != 0 {
+		err = cli.Raw("SELECT * FROM "+course_package_renewal_tableName+" WHERE id > ? ORDER BY id ASC LIMIT ?", lastId, limit).Scan(&records).Error
+	} else {
+		err = cli.Raw("SELECT * FROM "+course_package_renewal_tableName+" ORDER BY id ASC LIMIT ?", limit).Scan(&records).Error
+	}
+	return records, err
+}
