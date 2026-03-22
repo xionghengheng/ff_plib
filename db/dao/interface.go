@@ -340,6 +340,8 @@ type UserFeedBackInterface interface {
 	GetFeedbackList(userID int64, page, pageSize int) ([]model.UserFeedbackModel, error)
 	GetFeedbackByID(id int64) (*model.UserFeedbackModel, error)
 	UpdateFeedbackStatus(id int64, status int, reply string) error
+	// 更新评价
+	UpdateFeedback(id int64, mapUpdates map[string]interface{}) error
 }
 
 type UserFeedBackInterfaceInterfaceImp struct{}

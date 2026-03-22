@@ -1,9 +1,10 @@
 package dao
 
 import (
+	"time"
+
 	"github.com/xionghengheng/ff_plib/db"
 	"github.com/xionghengheng/ff_plib/db/model"
-	"time"
 )
 
 const user_feedback_tableName = "user_feedback"
@@ -48,4 +49,10 @@ func (d *UserFeedBackInterfaceInterfaceImp) UpdateFeedbackStatus(id int64, statu
 	}
 	cli := db.Get()
 	return cli.Table(user_feedback_tableName).Model(&model.UserFeedbackModel{}).Where("id = ?", id).Updates(updates).Error
+}
+
+// UpdateFeedback 更新评价
+func (d *UserFeedBackInterfaceInterfaceImp) UpdateFeedback(id int64, mapUpdates map[string]interface{}) error {
+	cli := db.Get()
+	return cli.Table(user_feedback_tableName).Model(&model.UserFeedbackModel{}).Where("id = ?", id).Updates(mapUpdates).Error
 }
