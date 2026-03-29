@@ -1140,11 +1140,10 @@ func (imp *PreTrailManageInterfaceImp) UpdateTrailManage(id int64, mapUpdates ma
 }
 
 // GetTrailManageList 分页获取体验课列表（按创建时间降序）
-func (imp *PreTrailManageInterfaceImp) GetTrailManageList(page, pageSize int) ([]model.PreTrailManageModel, error) {
+func (imp *PreTrailManageInterfaceImp) GetTrailManageList(offset, pageSize int) ([]model.PreTrailManageModel, error) {
 	var err error
 	var vecTrailManage []model.PreTrailManageModel
 	cli := db.Get()
-	offset := (page - 1) * pageSize
 	err = cli.Table(pre_trail_manage_tableName).Order("created_ts DESC").Offset(offset).Limit(pageSize).Find(&vecTrailManage).Error
 	return vecTrailManage, err
 }
