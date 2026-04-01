@@ -7,7 +7,7 @@ type CoachMetricsSnapshotModel struct {
 	FirstConversionCount      int   `json:"first_conversion_count"`       // 购课人数（实际首次转化数）
 	TrialTotal                int   `json:"trial_total"`                  // 实际试课总数
 	SecondConversionCount     int   `json:"second_conversion_count"`      // 二次转化数
-	Redeem30dCount            int   `json:"redeem_30d_count"`             // 近30天核销课程数
+	Redeem30dCount            int   `json:"redeem30d_count"`              // 近30天核销课程数
 	TimeoutRedeemCount        int   `json:"timeout_redeem_count"`         // 超时核销课程数
 	CourseTotalCount          int   `json:"course_total_count"`           // 课程总数
 	RescheduleCount           int   `json:"reschedule_count"`             // 改课次数
