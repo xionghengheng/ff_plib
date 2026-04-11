@@ -14,6 +14,11 @@ import (
 	"github.com/xionghengheng/ff_plib/db/model"
 )
 
+// 判断用户是否游客态（存在且绑定了手机号）
+func IsUserGuest(u *model.UserInfoModel) bool {
+	return u == nil || u.PhoneNumber == nil || len(*u.PhoneNumber) == 0
+}
+
 func genOrderId(productType int, ts int64) string {
 	return fmt.Sprintf("%dFUNFIT%d", productType, ts)
 }
