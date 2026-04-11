@@ -16,6 +16,10 @@ import (
 
 // 判断用户是否游客态（存在且绑定了手机号）
 func IsUserGuest(u *model.UserInfoModel) bool {
+	//. TODO 到时候发版要放开
+	if IsProd() {
+		return false
+	}
 	return u == nil || u.PhoneNumber == nil || len(*u.PhoneNumber) == 0
 }
 
