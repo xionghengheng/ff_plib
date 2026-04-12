@@ -14,24 +14,43 @@ import (
 	"github.com/xionghengheng/ff_plib/db/model"
 )
 
-// 判断用户是否游客态（存在且绑定了手机号）
-func IsUserGuest(u *model.UserInfoModel) bool {
-	//. TODO 到时候发版要放开
-	if IsProd() {
-		return false
+// 用户状态枚举
+const (
+	UserStatusGuest                    = 1 // 纯游客态（未注册/未绑定手机号）
+	UserStatusRegisteredNotActivated   = 2 // 已注册，但未激活
+	UserStatusRegisteredActivated      = 3 // 已注册，已激活
+	UserStatusRegisteredActivateExpired = 4 // 已注册，激活已过期
+)
+
+// GetUserStatus 获取用户状态
+// 返回值: 1=纯游客态 2=已注册但未激活 3=已注册已激活 4=已注册激活已过期
+func GetUserStatus(u *model.UserInfoModel) int {
+	// 未注册或未绑定手机号 -> 游客态
+	if u == nil || u.PhoneNumber == nil || len(*u.PhoneNumber) == 0 {
+		return UserStatusGuest
 	}
-	return u == nil || u.PhoneNumber == nil || len(*u.PhoneNumber) == 0
+
+	// 已注册但从未激活过
+	if u.BeVipTs == 0 {
+		return UserStatusRegisteredNotActivated
+	}
+
+	// 已激活，判断是否过期
+	if u.VipExpiredTs > 0 && time.Now().Unix() > u.VipExpiredTs {
+		return UserStatusRegisteredActivateExpired
+	}
+
+	return UserStatusRegisteredActivated
 }
 
-// 已注册（绑定了手机号）但还没激活过
+// IsUserGuest 判断用户是否游客态（未绑定手机号）
+func IsUserGuest(u *model.UserInfoModel) bool {
+	return GetUserStatus(u) == UserStatusGuest
+}
+
+// IsUserRegisteredButNotActivated 已注册（绑定了手机号）但还没激活过
 func IsUserRegisteredButNotActivated(u *model.UserInfoModel) bool {
-	if IsProd() {
-		return false
-	}
-	if u == nil || u.PhoneNumber == nil || len(*u.PhoneNumber) == 0 {
-		return false // 没注册的不算
-	}
-	return u.BeVipTs == 0
+	return GetUserStatus(u) == UserStatusRegisteredNotActivated
 }
 
 func genOrderId(productType int, ts int64) string {
