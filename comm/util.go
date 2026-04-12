@@ -23,13 +23,15 @@ func IsUserGuest(u *model.UserInfoModel) bool {
 	return u == nil || u.PhoneNumber == nil || len(*u.PhoneNumber) == 0
 }
 
-// 判断用户是否订阅过
-func IsUserNotVip(u *model.UserInfoModel) bool {
-	//. TODO 到时候发版要放开
+// 已注册（绑定了手机号）但还没激活过
+func IsUserRegisteredButNotActivated(u *model.UserInfoModel) bool {
 	if IsProd() {
 		return false
 	}
-	return u == nil || u.PhoneNumber == nil || (*u).BeVipTs == 0
+	if u == nil || u.PhoneNumber == nil || len(*u.PhoneNumber) == 0 {
+		return false // 没注册的不算
+	}
+	return u.BeVipTs == 0
 }
 
 func genOrderId(productType int, ts int64) string {
