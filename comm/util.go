@@ -23,6 +23,15 @@ func IsUserGuest(u *model.UserInfoModel) bool {
 	return u == nil || u.PhoneNumber == nil || len(*u.PhoneNumber) == 0
 }
 
+// 判断用户是否订阅过
+func IsUserNotVip(u *model.UserInfoModel) bool {
+	//. TODO 到时候发版要放开
+	if IsProd() {
+		return false
+	}
+	return u == nil || u.PhoneNumber == nil || (*u).BeVipTs == 0
+}
+
 func genOrderId(productType int, ts int64) string {
 	return fmt.Sprintf("%dFUNFIT%d", productType, ts)
 }
