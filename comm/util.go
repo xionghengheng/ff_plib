@@ -23,7 +23,7 @@ const (
 )
 
 // 游客态下最大展示门店个数
-const GuestMaxShowGymCnt = 3
+const GuestMaxShowGymCnt = 4
 
 // GetUserStatus 获取用户状态
 // 返回值: 1=纯游客态 2=已注册但未激活 3=已注册已激活 4=已注册激活已过期
