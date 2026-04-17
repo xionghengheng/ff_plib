@@ -16,11 +16,14 @@ import (
 
 // 用户状态枚举
 const (
-	UserStatusGuest                    = 1 // 纯游客态（未注册/未绑定手机号）
-	UserStatusRegisteredNotActivated   = 2 // 已注册，但未激活
-	UserStatusRegisteredActivated      = 3 // 已注册，已激活
+	UserStatusGuest                     = 1 // 纯游客态（未注册/未绑定手机号）
+	UserStatusRegisteredNotActivated    = 2 // 已注册，但未激活
+	UserStatusRegisteredActivated       = 3 // 已注册，已激活
 	UserStatusRegisteredActivateExpired = 4 // 已注册，激活已过期
 )
+
+// 游客态下最大展示门店个数
+const GuestMaxShowGymCnt = 3
 
 // GetUserStatus 获取用户状态
 // 返回值: 1=纯游客态 2=已注册但未激活 3=已注册已激活 4=已注册激活已过期
