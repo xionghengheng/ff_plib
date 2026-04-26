@@ -907,6 +907,83 @@ func (imp *AppointmentInterfaceImp) SetAppointmentBookedNew(uid int64, appointme
 	return err, stCoachAppointmentModel
 }
 
+// 半小时槽位方案下，原子地把 2 条相邻 30min Available slot 一起占住为 Booked。
+// 流程：单事务 + SELECT ... FOR UPDATE 行锁，按 ID 升序加锁防死锁；
+// 任一条非 Available 则整体回滚；都满足则一次 UPDATE WHERE IN 写入 2 条。
+func (imp *AppointmentInterfaceImp) SetAppointmentBookedTwoNew(uid int64, firstAppointmentID int, secondAppointmentID int, courseId int, gymId int) (error, model.CoachAppointmentModel, model.CoachAppointmentModel) {
+	var firstOut, secondOut model.CoachAppointmentModel
+	if firstAppointmentID == secondAppointmentID || firstAppointmentID <= 0 || secondAppointmentID <= 0 {
+		return errors.New("invalid appointment id pair"), firstOut, secondOut
+	}
+
+	// 按 ID 升序加锁防死锁；记录调用方语义上的 first / second 顺序，最终再还原回去
+	lockLowID, lockHighID := firstAppointmentID, secondAppointmentID
+	swapped := false
+	if lockLowID > lockHighID {
+		lockLowID, lockHighID = lockHighID, lockLowID
+		swapped = true
+	}
+
+	cli := db.Get().Table(coach_appointments_tableName)
+	var slotLow, slotHigh model.CoachAppointmentModel
+	err := cli.Transaction(func(tx *gorm.DB) error {
+		// SELECT FOR UPDATE 锁住 ID 较小的一条
+		if err := tx.Set("gorm:query_option", "FOR UPDATE").First(&slotLow, "appointment_id = ?", lockLowID).Error; err != nil {
+			fmt.Printf("get low err, uid:%d lockLowID:%d err:%+v\n", uid, lockLowID, err)
+			return err
+		}
+		// 锁住 ID 较大的一条
+		if err := tx.Set("gorm:query_option", "FOR UPDATE").First(&slotHigh, "appointment_id = ?", lockHighID).Error; err != nil {
+			fmt.Printf("get high err, uid:%d lockHighID:%d err:%+v\n", uid, lockHighID, err)
+			return err
+		}
+
+		if slotLow.Status != model.Enum_Appointment_Status_Available {
+			return errors.New("book status unavailable")
+		}
+		if slotHigh.Status != model.Enum_Appointment_Status_Available {
+			return errors.New("book status unavailable")
+		}
+
+		nowTs := time.Now().Unix()
+		mapUpdates := map[string]interface{}{
+			"status":         model.Enum_Appointment_Status_UnAvailable,
+			"user_id":        uid,
+			"user_course_id": courseId,
+			"update_ts":      nowTs,
+		}
+		mapUpdates["gym_id"] = gymId
+
+		if err := tx.Model(&model.CoachAppointmentModel{}).Where("appointment_id IN (?, ?)", lockLowID, lockHighID).Updates(mapUpdates).Error; err != nil {
+			fmt.Printf("update err, uid:%d firstID:%d secondID:%d mapUpdates:%+v err:%+v\n", uid, lockLowID, lockHighID, mapUpdates, err)
+			return err
+		}
+
+		// 同步内存模型，让调用方拿到最新字段
+		applyBookedFields := func(m *model.CoachAppointmentModel) {
+			m.Status = model.Enum_Appointment_Status_UnAvailable
+			m.UserID = uid
+			m.UserCourseID = courseId
+			m.UpdateTs = nowTs
+			m.GymId = gymId
+		}
+		applyBookedFields(&slotLow)
+		applyBookedFields(&slotHigh)
+		return nil
+	})
+	if err != nil {
+		return err, firstOut, secondOut
+	}
+
+	// 还原成调用方传入的 first / second 顺序
+	if swapped {
+		firstOut, secondOut = slotHigh, slotLow
+	} else {
+		firstOut, secondOut = slotLow, slotHigh
+	}
+	return nil, firstOut, secondOut
+}
+
 func (imp *AppointmentInterfaceImp) SetAppointmentUnAvailable(coachid int, appointmentID int, unavailableReason int) (error, model.CoachAppointmentModel) {
 	var err error
 	cli := db.Get().Table(coach_appointments_tableName)
@@ -985,6 +1062,52 @@ func (imp *AppointmentInterfaceImp) CancelAppointmentBooked(uid int64, lessonID 
 		return nil
 	})
 	return err
+}
+
+// CancelAppointmentBookedTwo 半小时槽位方案下，一次原子取消 2 条 30min record。
+// 流程：单事务 + FOR UPDATE 行锁（ID 升序），任一条仍处于 Booked 即重置 2 条为 Available；
+// 2 条都已 Available 视为「重复取消」，返回 "book already been cancel"。
+func (imp *AppointmentInterfaceImp) CancelAppointmentBookedTwo(uid int64, lessonID string, firstAppointmentID int, secondAppointmentID int) error {
+	if firstAppointmentID == secondAppointmentID || firstAppointmentID <= 0 || secondAppointmentID <= 0 {
+		return errors.New("invalid appointment id pair")
+	}
+
+	lockLowID, lockHighID := firstAppointmentID, secondAppointmentID
+	if lockLowID > lockHighID {
+		lockLowID, lockHighID = lockHighID, lockLowID
+	}
+
+	cli := db.Get().Table(coach_appointments_tableName)
+	return cli.Transaction(func(tx *gorm.DB) error {
+		var slotLow, slotHigh model.CoachAppointmentModel
+		if err := tx.Set("gorm:query_option", "FOR UPDATE").First(&slotLow, "appointment_id = ?", lockLowID).Error; err != nil {
+			fmt.Printf("get low err, uid:%d lockLowID:%d err:%+v\n", uid, lockLowID, err)
+			return err
+		}
+		if err := tx.Set("gorm:query_option", "FOR UPDATE").First(&slotHigh, "appointment_id = ?", lockHighID).Error; err != nil {
+			fmt.Printf("get high err, uid:%d lockHighID:%d err:%+v\n", uid, lockHighID, err)
+			return err
+		}
+
+		// 2 条都已 Available → 已经取消过了
+		if slotLow.Status == model.Enum_Appointment_Status_Available &&
+			slotHigh.Status == model.Enum_Appointment_Status_Available {
+			return errors.New("book already been cancel")
+		}
+
+		mapUpdates := map[string]interface{}{
+			"status":          model.Enum_Appointment_Status_Available,
+			"user_id":         0,
+			"user_course_id":  0,
+			"canceled_course": lessonID,
+			"update_ts":       time.Now().Unix(),
+		}
+		if err := tx.Model(&model.CoachAppointmentModel{}).Where("appointment_id IN (?, ?)", lockLowID, lockHighID).Updates(mapUpdates).Error; err != nil {
+			fmt.Printf("update err, uid:%d firstID:%d secondID:%d mapUpdates:%+v err:%+v\n", uid, lockLowID, lockHighID, mapUpdates, err)
+			return err
+		}
+		return nil
+	})
 }
 
 const invitation_code_tableName = "invitation_code"

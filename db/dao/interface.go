@@ -290,6 +290,14 @@ type AppointmentInterface interface {
 	//用户取消约课
 	CancelAppointmentBooked(uid int64, lessonID string, appointmentID int) error
 
+	// 半小时槽位方案
+	//一节 60min 课 = 2 条相邻 30min slot。
+	//在同一事务内 SELECT ... FOR UPDATE 锁住两条 record，校验都为 Available 后一起置 Booked，
+	//任一条不满足则整体回滚。两个 ID 必须不同；DAO 不校验时间相邻，调用方需自行保证。
+	SetAppointmentBookedTwoNew(uid int64, firstAppointmentID int, secondAppointmentID int, courseId int, gymId int) (error, model.CoachAppointmentModel, model.CoachAppointmentModel)
+	// 一次原子取消 2 条 30min record（同事务内全部置回 Available）
+	CancelAppointmentBookedTwo(uid int64, lessonID string, firstAppointmentID int, secondAppointmentID int) error
+
 	//教练端，设置可预约时间
 	SetAppointmentSchedule(stCoachAppointmentModel model.CoachAppointmentModel) error
 
