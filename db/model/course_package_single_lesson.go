@@ -15,7 +15,7 @@ type CoursePackageSingleLessonModel struct {
 	GymId                   int    `json:"gym_id"`                      // 场地id
 	CourseID                int    `json:"course_id"`                   // 课程id
 	AppointmentID           int    `json:"appointment_id"`              // 预约ID
-	AppointmentID2          int    `json:"appointment_id_2"`            // 预约ID2 半小时槽位方案
+	AppointmentID2          int    `json:"appointment_id2"`             // 预约ID2 半小时槽位方案
 	QrCodePic               []byte `json:"qr_code_pic"`                 // 核销小程序码
 	CancelByCoach           bool   `json:"cancel_by_coach"`             // 是否是教练取消
 	CancelByCoachDelCard    bool   `json:"cancel_by_coach_del_card"`    // 教练取消的情况，是否被叉掉课程卡，叉掉后卡片不常驻
