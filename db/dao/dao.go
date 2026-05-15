@@ -196,13 +196,6 @@ func (imp *CoachInterfaceImp) SetCoachCloneLessonUnAvaliableSwitch(coach_id int,
 	mapUpdates := map[string]interface{}{}
 	mapUpdates["clone_lesson_unava_switch"] = value
 	return cli.Table(coach_tableName).Model(&model.CoachModel{}).Where("coach_id = ?", coach_id).Updates(mapUpdates).Error
-
-	result := cli.Raw("UPDATE coaches SET clone_lesson_unava_switch = ? WHERE coach_id = ?", value, coach_id)
-	if result.Error != nil {
-		return result.Error
-	}
-	Printf("coach_id:%d RowsAffected:%d", coach_id, result.RowsAffected)
-	return nil
 }
 
 func (imp *CoachInterfaceImp) UpdateCoachInfo(coach_id int, mapUpdates map[string]interface{}) error {
@@ -1384,4 +1377,54 @@ func (imp *CoursePackageRenewalInterfaceImp) ScanAllRenewalRecords(lastId int64,
 		err = cli.Raw("SELECT * FROM "+course_package_renewal_tableName+" ORDER BY id ASC LIMIT ?", limit).Scan(&records).Error
 	}
 	return records, err
+}
+
+// CoreOpDailyStatInterfaceImp 核心操作按天统计接口实现
+
+const core_op_daily_stat_tableName = "core_op_daily_stat"
+
+// incrCoreOpDailyStatCol 通过 INSERT ... ON DUPLICATE KEY UPDATE 对指定列原子 +1
+// 依赖 stat_date 上的 UNIQUE 索引
+func incrCoreOpDailyStatCol(statDate int, col string) error {
+	cli := db.Get()
+	now := time.Now().Unix()
+	sql := fmt.Sprintf(
+		"INSERT INTO %s (stat_date, %s, created_at, updated_at) VALUES (?, 1, ?, ?) "+
+			"ON DUPLICATE KEY UPDATE %s = %s + 1, updated_at = ?",
+		core_op_daily_stat_tableName, col, col, col,
+	)
+	return cli.Exec(sql, statDate, now, now, now).Error
+}
+
+// IncrUserBookCount 用户主动约课 +1
+func (imp *CoreOpDailyStatInterfaceImp) IncrUserBookCount(statDate int) error {
+	return incrCoreOpDailyStatCol(statDate, "user_book_count")
+}
+
+// IncrCoachScheduleCount 教练排课 +1
+func (imp *CoreOpDailyStatInterfaceImp) IncrCoachScheduleCount(statDate int) error {
+	return incrCoreOpDailyStatCol(statDate, "coach_schedule_count")
+}
+
+// IncrCoachSetUnavailableCount 教练设置不可用时间 +1
+func (imp *CoreOpDailyStatInterfaceImp) IncrCoachSetUnavailableCount(statDate int) error {
+	return incrCoreOpDailyStatCol(statDate, "coach_set_unavailable_count")
+}
+
+// GetByDate 获取指定日期统计
+func (imp *CoreOpDailyStatInterfaceImp) GetByDate(statDate int) (*model.CoreOpDailyStatModel, error) {
+	var err error
+	var stat = new(model.CoreOpDailyStatModel)
+	cli := db.Get()
+	err = cli.Table(core_op_daily_stat_tableName).Where("stat_date = ?", statDate).First(stat).Error
+	return stat, err
+}
+
+// GetByDateRange 获取日期区间统计，按日期升序
+func (imp *CoreOpDailyStatInterfaceImp) GetByDateRange(begDate int, endDate int) ([]model.CoreOpDailyStatModel, error) {
+	var err error
+	var stats []model.CoreOpDailyStatModel
+	cli := db.Get()
+	err = cli.Table(core_op_daily_stat_tableName).Where("stat_date >= ? AND stat_date <= ?", begDate, endDate).Order("stat_date ASC").Find(&stats).Error
+	return stats, err
 }

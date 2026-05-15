@@ -422,6 +422,30 @@ type CoachMetricsSnapshotInterfaceImp struct{}
 // Imp 实现实例
 var ImpCoachMetricsSnapshot CoachMetricsSnapshotInterface = &CoachMetricsSnapshotInterfaceImp{}
 
+// CoreOpDailyStatInterface 核心操作按天统计接口
+type CoreOpDailyStatInterface interface {
+	// 用户主动约课 +1
+	IncrUserBookCount(statDate int) error
+
+	// 教练排课 +1
+	IncrCoachScheduleCount(statDate int) error
+
+	// 教练设置不可用时间 +1
+	IncrCoachSetUnavailableCount(statDate int) error
+
+	// 获取指定日期统计
+	GetByDate(statDate int) (*model.CoreOpDailyStatModel, error)
+
+	// 获取日期区间统计，按日期升序
+	GetByDateRange(begDate int, endDate int) ([]model.CoreOpDailyStatModel, error)
+}
+
+// CoreOpDailyStatInterfaceImp 核心操作按天统计实现
+type CoreOpDailyStatInterfaceImp struct{}
+
+// Imp 实现实例
+var ImpCoreOpDailyStat CoreOpDailyStatInterface = &CoreOpDailyStatInterfaceImp{}
+
 // CoursePackageRenewalInterface 课包续费记录接口
 type CoursePackageRenewalInterface interface {
 	// 添加续费记录
