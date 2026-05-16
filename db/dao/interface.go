@@ -433,6 +433,21 @@ type CoreOpDailyStatInterface interface {
 	// 教练设置不可用时间 +1
 	IncrCoachSetUnavailableCount(statDate int) error
 
+	// 课包下单 +1
+	IncrCoursePackageOrderCount(statDate int) error
+
+	// 课包支付成功 +1
+	IncrCoursePackagePaySuccessCount(statDate int) error
+
+	// 用户主动取消预约 +1
+	IncrUserCancelBookCount(statDate int) error
+
+	// 教练取消预约 +1
+	IncrCoachCancelBookCount(statDate int) error
+
+	// 课程完成核销 +1
+	IncrCourseCompleteWriteOffCount(statDate int) error
+
 	// 获取指定日期统计
 	GetByDate(statDate int) (*model.CoreOpDailyStatModel, error)
 

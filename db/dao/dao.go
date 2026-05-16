@@ -1411,6 +1411,31 @@ func (imp *CoreOpDailyStatInterfaceImp) IncrCoachSetUnavailableCount(statDate in
 	return incrCoreOpDailyStatCol(statDate, "coach_set_unavailable_count")
 }
 
+// IncrCoursePackageOrderCount 课包下单 +1
+func (imp *CoreOpDailyStatInterfaceImp) IncrCoursePackageOrderCount(statDate int) error {
+	return incrCoreOpDailyStatCol(statDate, "course_package_order_count")
+}
+
+// IncrCoursePackagePaySuccessCount 课包支付成功 +1
+func (imp *CoreOpDailyStatInterfaceImp) IncrCoursePackagePaySuccessCount(statDate int) error {
+	return incrCoreOpDailyStatCol(statDate, "course_package_pay_success_count")
+}
+
+// IncrUserCancelBookCount 用户主动取消预约 +1
+func (imp *CoreOpDailyStatInterfaceImp) IncrUserCancelBookCount(statDate int) error {
+	return incrCoreOpDailyStatCol(statDate, "user_cancel_book_count")
+}
+
+// IncrCoachCancelBookCount 教练取消预约 +1
+func (imp *CoreOpDailyStatInterfaceImp) IncrCoachCancelBookCount(statDate int) error {
+	return incrCoreOpDailyStatCol(statDate, "coach_cancel_book_count")
+}
+
+// IncrCourseCompleteWriteOffCount 课程完成核销 +1
+func (imp *CoreOpDailyStatInterfaceImp) IncrCourseCompleteWriteOffCount(statDate int) error {
+	return incrCoreOpDailyStatCol(statDate, "course_complete_write_off_count")
+}
+
 // GetByDate 获取指定日期统计
 func (imp *CoreOpDailyStatInterfaceImp) GetByDate(statDate int) (*model.CoreOpDailyStatModel, error) {
 	var err error
