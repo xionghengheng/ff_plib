@@ -15,12 +15,15 @@ func (d *UserFeedBackInterfaceInterfaceImp) CreateFeedback(feedback *model.UserF
 	return cli.Table(user_feedback_tableName).Save(feedback).Error
 }
 
-// GetFeedbackList 获取用户反馈列表
+// GetFeedbackList 获取用户反馈列表；userID > 0 时按 uid 筛选，userID == 0 时返回全量（管理端）
 func (d *UserFeedBackInterfaceInterfaceImp) GetFeedbackList(userID int64, page, pageSize int) ([]model.UserFeedbackModel, error) {
 	var feedbacks []model.UserFeedbackModel
 	cli := db.Get()
-	err := cli.Table(user_feedback_tableName).Where("user_id = ?", userID).
-		Order("create_ts desc").
+	query := cli.Table(user_feedback_tableName)
+	if userID > 0 {
+		query = query.Where("uid = ?", userID)
+	}
+	err := query.Order("create_ts desc").
 		Offset((page - 1) * pageSize).
 		Limit(pageSize).
 		Find(&feedbacks).Error
