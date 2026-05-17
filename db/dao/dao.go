@@ -518,7 +518,7 @@ func (imp *CoursePackageSingleLessonInterfaceImp) GetSingleLessonByAppointmentId
 	var err error
 	var lessons []model.CoursePackageSingleLessonModel
 	cli := db.Get()
-	err = cli.Table(course_package_single_lesson_tableName).Select("lesson_id, package_id, appointment_id, scheduled_by_coach, status, create_ts, is_confirm").
+	err = cli.Table(course_package_single_lesson_tableName).Select("lesson_id, package_id, appointment_id, appointment_id2, scheduled_by_coach, status, create_ts, is_confirm").
 		Where("uid = ? AND appointment_id = ?", uid, appointmentID).Find(&lessons).Error
 	return lessons, err
 }
