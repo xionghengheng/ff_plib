@@ -51,3 +51,16 @@ type CoachClientMonthlyStatisticInterfaceImp struct{}
 
 // Imp 实现实例
 var ImpCoachClientMonthlyStatistic CoachClientMonthlyStatisticInterface = &CoachClientMonthlyStatisticInterfaceImp{}
+
+// CoachClientTraineeNicknameInterface 教练对用户自定义昵称
+type CoachClientTraineeNicknameInterface interface {
+	GetTraineeNickname(coachId int, uid int64) (*model.CoachClientTraineeNicknameModel, error)
+	// 不存在则新增，已存在则更新（每个教练对每个用户只有一条记录）
+	UpsertTraineeNickname(coachId int, uid int64, nickname string) error
+}
+
+// CoachClientTraineeNicknameInterfaceImp
+type CoachClientTraineeNicknameInterfaceImp struct{}
+
+// Imp 实现实例
+var ImpCoachClientTraineeNickname CoachClientTraineeNicknameInterface = &CoachClientTraineeNicknameInterfaceImp{}

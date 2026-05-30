@@ -1,6 +1,9 @@
 package dao
 
 import (
+	"time"
+
+	"github.com/jinzhu/gorm"
 	"github.com/xionghengheng/ff_plib/db"
 	"github.com/xionghengheng/ff_plib/db/model"
 )
@@ -76,4 +79,46 @@ func (imp *CoachClientMonthlyStatisticInterfaceImp) GetAllItem() ([]model.CoachM
 func (imp *CoachClientMonthlyStatisticInterfaceImp) AddItem(stCoachMonthlyStatisticModel *model.CoachMonthlyStatisticModel) error {
 	cli := db.Get()
 	return cli.Table(coach_client_monthly_statistics_table_name).Save(stCoachMonthlyStatisticModel).Error
+}
+
+const coach_client_trainee_nickname_table_name = "coach_client_trainee_nickname"
+
+// GetTraineeNickname 查询某教练对某用户的自定义昵称，无记录返回 gorm.ErrRecordNotFound
+func (imp *CoachClientTraineeNicknameInterfaceImp) GetTraineeNickname(coachId int, uid int64) (*model.CoachClientTraineeNicknameModel, error) {
+	var err error
+	var stNickname = new(model.CoachClientTraineeNicknameModel)
+	cli := db.Get()
+	err = cli.Table(coach_client_trainee_nickname_table_name).Where("coach_id = ? AND trainee_uid = ?", coachId, uid).First(stNickname).Error
+	return stNickname, err
+}
+
+// UpsertTraineeNickname 每个教练对每个用户只有一条记录：已存在则更新昵称，不存在则新增
+func (imp *CoachClientTraineeNicknameInterfaceImp) UpsertTraineeNickname(coachId int, uid int64, nickname string) error {
+	cli := db.Get()
+	nowTs := time.Now().Unix()
+
+	var stExist model.CoachClientTraineeNicknameModel
+	err := cli.Table(coach_client_trainee_nickname_table_name).Where("coach_id = ? AND trainee_uid = ?", coachId, uid).First(&stExist).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return err
+	}
+
+	// 已存在 -> 更新
+	if err == nil {
+		mapUpdates := map[string]interface{}{}
+		mapUpdates["nickname"] = nickname
+		mapUpdates["update_ts"] = nowTs
+		return cli.Table(coach_client_trainee_nickname_table_name).
+			Where("coach_id = ? AND trainee_uid = ?", coachId, uid).Updates(mapUpdates).Error
+	}
+
+	// 不存在 -> 新增
+	stNew := &model.CoachClientTraineeNicknameModel{
+		CoachId:    coachId,
+		TraineeUid: uid,
+		Nickname:   nickname,
+		CreateTs:   nowTs,
+		UpdateTs:   nowTs,
+	}
+	return cli.Table(coach_client_trainee_nickname_table_name).Create(stNew).Error
 }
