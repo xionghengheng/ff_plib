@@ -55,6 +55,10 @@ var ImpCoachClientMonthlyStatistic CoachClientMonthlyStatisticInterface = &Coach
 // CoachClientTraineeNicknameInterface 教练对用户自定义昵称
 type CoachClientTraineeNicknameInterface interface {
 	GetTraineeNickname(coachId int, uid int64) (*model.CoachClientTraineeNicknameModel, error)
+	// 某教练对所有用户的自定义昵称列表
+	GetTraineeNicknameListByCoachId(coachId int) ([]model.CoachClientTraineeNicknameModel, error)
+	// 全量自定义昵称
+	GetAllTraineeNickname() ([]model.CoachClientTraineeNicknameModel, error)
 	// 不存在则新增，已存在则更新（每个教练对每个用户只有一条记录）
 	UpsertTraineeNickname(coachId int, uid int64, nickname string) error
 }

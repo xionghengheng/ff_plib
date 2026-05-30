@@ -91,6 +91,22 @@ func GetAllUser() (map[int64]model.UserInfoModel, error) {
 	return mapUser, nil
 }
 
+// GetAllCoachTraineeNickname 拉取全量的教练自定义用户昵称，返回 coach_id -> (trainee_uid -> nickname)
+func GetAllCoachTraineeNickname() (map[int]map[int64]string, error) {
+	mapNickname := make(map[int]map[int64]string)
+	vecNicknameModel, err := dao.ImpCoachClientTraineeNickname.GetAllTraineeNickname()
+	if err != nil {
+		return mapNickname, err
+	}
+	for _, v := range vecNicknameModel {
+		if mapNickname[v.CoachId] == nil {
+			mapNickname[v.CoachId] = make(map[int64]string)
+		}
+		mapNickname[v.CoachId][v.TraineeUid] = v.Nickname
+	}
+	return mapNickname, nil
+}
+
 func GetAllCourse() (map[int]model.CourseModel, error) {
 	mapCourse := make(map[int]model.CourseModel)
 	vecCourseInfoModel, err := dao.ImpCourse.GetCourseList()

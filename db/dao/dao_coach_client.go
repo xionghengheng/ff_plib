@@ -92,6 +92,24 @@ func (imp *CoachClientTraineeNicknameInterfaceImp) GetTraineeNickname(coachId in
 	return stNickname, err
 }
 
+// GetTraineeNicknameListByCoachId 查询某教练对所有用户的自定义昵称
+func (imp *CoachClientTraineeNicknameInterfaceImp) GetTraineeNicknameListByCoachId(coachId int) ([]model.CoachClientTraineeNicknameModel, error) {
+	var err error
+	var vecNickname []model.CoachClientTraineeNicknameModel
+	cli := db.Get()
+	err = cli.Table(coach_client_trainee_nickname_table_name).Where("coach_id = ?", coachId).Find(&vecNickname).Error
+	return vecNickname, err
+}
+
+// GetAllTraineeNickname 查询全量的教练自定义用户昵称
+func (imp *CoachClientTraineeNicknameInterfaceImp) GetAllTraineeNickname() ([]model.CoachClientTraineeNicknameModel, error) {
+	var err error
+	var vecNickname []model.CoachClientTraineeNicknameModel
+	cli := db.Get()
+	err = cli.Table(coach_client_trainee_nickname_table_name).Find(&vecNickname).Error
+	return vecNickname, err
+}
+
 // UpsertTraineeNickname 每个教练对每个用户只有一条记录：已存在则更新昵称，不存在则新增
 func (imp *CoachClientTraineeNicknameInterfaceImp) UpsertTraineeNickname(coachId int, uid int64, nickname string) error {
 	cli := db.Get()
