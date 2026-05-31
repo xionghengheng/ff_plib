@@ -26,7 +26,8 @@ type CoursePackageSingleLessonModel struct {
 	WriteOffTs              int64  `json:"write_off_ts"`                // 核销时间
 	IsConfirm               bool   `json:"is_confirm"`                  // 是否已被教练确认
 	SendMsgWriteComment     bool   `json:"send_msg_write_comment"`      // 是否已发送消息提醒用户写评论
-	IsReWriteOff            bool   `json:"is_re_write_off"`             // 是否补核销
+	IsReWriteOff            bool   `json:"is_re_write_off"`             // 是否补核销（顾问在管理系统补核销）
+	IsReCancelOff           bool   `json:"is_re_cancel_off"`            // 是否补取消（顾问在管理系统补核销）
 
 	//评论相关内容
 	Overall              int    `json:"overall"`                // 整体
