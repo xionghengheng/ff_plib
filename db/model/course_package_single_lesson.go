@@ -27,7 +27,9 @@ type CoursePackageSingleLessonModel struct {
 	IsConfirm               bool   `json:"is_confirm"`                  // 是否已被教练确认
 	SendMsgWriteComment     bool   `json:"send_msg_write_comment"`      // 是否已发送消息提醒用户写评论
 	IsReWriteOff            bool   `json:"is_re_write_off"`             // 是否补核销（顾问在管理系统补核销）
-	IsReCancelOff           bool   `json:"is_re_cancel_off"`            // 是否补取消（顾问在管理系统补核销）
+	IsReCancelOff           bool   `json:"is_re_cancel_off"`            // 是否补取消（顾问在管理系统补取消）
+	ReCancelTs              int64  `json:"re_cancel_ts"`                // 补取消时间（顾问在管理系统补取消）
+	MarkMissedTagTs         int64  `json:"mark_missed_tag_ts"`          // 课程标记为旷课的时间
 
 	//评论相关内容
 	Overall              int    `json:"overall"`                // 整体
