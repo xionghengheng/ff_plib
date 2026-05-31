@@ -602,6 +602,25 @@ func (imp *CoursePackageSingleLessonInterfaceImp) GetAllSingleLessonList(createT
 	return vecRes, err
 }
 
+// GetSingleLessonListByGymId 基于门店id分页获取单次课列表，按月（schedule_beg_ts落在[monthBegTs, monthEndTs)区间内）获取
+// status>0时按状态过滤，status<=0则获取全部状态
+// 游标翻页：首页传lastScheduleBegTs=0，后续传上一页最后一条的schedule_beg_ts
+func (imp *CoursePackageSingleLessonInterfaceImp) GetSingleLessonListByGymId(gymId int, monthBegTs int64, monthEndTs int64, status int, lastScheduleBegTs int64, limit int) ([]model.CoursePackageSingleLessonModel, error) {
+	var err error
+	var vecCoursePackageSingleLessonModel []model.CoursePackageSingleLessonModel
+	cli := db.Get()
+	tx := cli.Table(course_package_single_lesson_tableName).
+		Where("gym_id = ? AND schedule_beg_ts >= ? AND schedule_beg_ts < ?", gymId, monthBegTs, monthEndTs)
+	if status > 0 {
+		tx = tx.Where("status = ?", status)
+	}
+	if lastScheduleBegTs > 0 {
+		tx = tx.Where("schedule_beg_ts < ?", lastScheduleBegTs)
+	}
+	err = tx.Order("schedule_beg_ts DESC, create_ts DESC").Limit(limit).Find(&vecCoursePackageSingleLessonModel).Error
+	return vecCoursePackageSingleLessonModel, err
+}
+
 const payment_order_tableName = "payment_orders"
 
 func (imp *PaymentOrderInterfaceImp) UpdateOrderSucc(orderId string, uid int64, mapUpdates map[string]interface{}) error {

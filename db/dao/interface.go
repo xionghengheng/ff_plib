@@ -203,6 +203,11 @@ type CoursePackageSingleLessonInterface interface {
 	GetAllSingleLessonList(createTs int64) ([]model.CoursePackageSingleLessonModel, error)
 
 	GetSingleLessonListByCreateTsDesc(uid int64, packageId string) ([]model.CoursePackageSingleLessonModel, error)
+
+	//基于门店id分页获取单次课列表，按月（schedule_beg_ts落在[monthBegTs, monthEndTs)区间内）获取
+	//status>0时按状态过滤，status<=0则获取全部状态
+	//游标翻页：首页传lastScheduleBegTs=0，后续传上一页最后一条的schedule_beg_ts
+	GetSingleLessonListByGymId(gymId int, monthBegTs int64, monthEndTs int64, status int, lastScheduleBegTs int64, limit int) ([]model.CoursePackageSingleLessonModel, error)
 }
 
 // CoursePackageSingleLessonInterfaceImp 课包单次课数据模型实现
