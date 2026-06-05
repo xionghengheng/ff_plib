@@ -202,6 +202,9 @@ type CoursePackageSingleLessonInterface interface {
 	//获取所有次课信息，通过创建时间来分页
 	GetAllSingleLessonList(createTs int64) ([]model.CoursePackageSingleLessonModel, error)
 
+	//获取所有旷课的课程，通过创建时间来分页
+	GetAllMissedSingleLessonList(createTs int64) ([]model.CoursePackageSingleLessonModel, error)
+
 	GetSingleLessonListByCreateTsDesc(uid int64, packageId string) ([]model.CoursePackageSingleLessonModel, error)
 
 	//基于门店id分页获取单次课列表，按月（schedule_beg_ts落在[monthBegTs, monthEndTs)区间内）获取

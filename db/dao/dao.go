@@ -602,6 +602,18 @@ func (imp *CoursePackageSingleLessonInterfaceImp) GetAllSingleLessonList(createT
 	return vecRes, err
 }
 
+func (imp *CoursePackageSingleLessonInterfaceImp) GetAllMissedSingleLessonList(createTs int64) ([]model.CoursePackageSingleLessonModel, error) {
+	cli := db.Get()
+	var vecRes []model.CoursePackageSingleLessonModel
+	var err error
+	if createTs != 0 {
+		err = cli.Raw("SELECT * FROM course_package_single_lessons WHERE status = ? AND create_ts < ? ORDER BY create_ts DESC Limit 500", model.En_LessonStatusMissed, createTs).Scan(&vecRes).Error
+	} else {
+		err = cli.Raw("SELECT * FROM course_package_single_lessons WHERE status = ? ORDER BY create_ts DESC Limit 500", model.En_LessonStatusMissed).Scan(&vecRes).Error
+	}
+	return vecRes, err
+}
+
 // GetSingleLessonListByGymId 基于门店id分页获取单次课列表，按月（schedule_beg_ts落在[monthBegTs, monthEndTs)区间内）获取
 // status>0时按状态过滤，status<=0则获取全部状态
 // 游标翻页：首页传lastScheduleBegTs=0，后续传上一页最后一条的schedule_beg_ts
