@@ -22,9 +22,8 @@ type MissedLessonOpRecordModel struct {
 	OrigStatus int `json:"orig_status"` // 原状态（补核销/补取消前，固定为已旷课）
 	NewStatus  int `json:"new_status"`  // 新状态（补核销→已完成，补取消→已取消）
 
-	AffectUserPackage     bool `json:"affect_user_package"`     // 是否影响用户课包（本次是否真的增减了课时）
-	AffectCoachSettlement bool `json:"affect_coach_settlement"` // 是否影响教练结算
-	AffectGymSettlement   bool `json:"affect_gym_settlement"`   // 是否影响门店结算
+	AffectUserPackage bool `json:"affect_user_package"` // 是否影响用户课包（本次是否真的增减了课时）
+	AffectSettlement  bool `json:"affect_settlement"`   // 是否影响结算
 
 	Reason   string `json:"reason"`    // 补核销/补取消原因
 	Remark   string `json:"remark"`    // 备注
