@@ -406,6 +406,22 @@ type PreTrailManageInterfaceImp struct{}
 // Imp 实现实例
 var ImpPreTrailManage PreTrailManageInterface = &PreTrailManageInterfaceImp{}
 
+// MissedLessonOpRecordInterface 异常课程补核销/补取消操作历史数据模型接口
+type MissedLessonOpRecordInterface interface {
+	// 新增一条补核销/补取消操作记录
+	AddMissedLessonOpRecord(record *model.MissedLessonOpRecordModel) error
+	// 游标分页获取操作记录列表（按id降序，lastId<=0取第一页）
+	GetMissedLessonOpRecordList(lastId int64, limit int) ([]model.MissedLessonOpRecordModel, error)
+	// 按手机号游标分页获取操作记录列表（按id降序，lastId<=0取第一页）
+	GetMissedLessonOpRecordListByPhone(phoneNumber string, lastId int64, limit int) ([]model.MissedLessonOpRecordModel, error)
+}
+
+// 异常课程操作历史数据模型实现
+type MissedLessonOpRecordInterfaceImp struct{}
+
+// Imp 实现实例
+var ImpMissedLessonOpRecord MissedLessonOpRecordInterface = &MissedLessonOpRecordInterfaceImp{}
+
 // CoachMetricsSnapshotInterface 教练指标快照数据模型接口
 type CoachMetricsSnapshotInterface interface {
 	// 添加教练指标快照

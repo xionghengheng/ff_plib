@@ -1484,3 +1484,35 @@ func (imp *CoreOpDailyStatInterfaceImp) GetByDateRange(begDate int, endDate int)
 	err = cli.Table(core_op_daily_stat_tableName).Where("stat_date >= ? AND stat_date <= ?", begDate, endDate).Order("stat_date ASC").Find(&stats).Error
 	return stats, err
 }
+
+const missed_lesson_op_record_tableName = "missed_lesson_op_record"
+
+// AddMissedLessonOpRecord 新增一条补核销/补取消操作记录
+func (imp *MissedLessonOpRecordInterfaceImp) AddMissedLessonOpRecord(record *model.MissedLessonOpRecordModel) error {
+	cli := db.Get()
+	return cli.Table(missed_lesson_op_record_tableName).Create(record).Error
+}
+
+// GetMissedLessonOpRecordList 游标分页获取操作记录列表（按id降序，lastId<=0取第一页）
+func (imp *MissedLessonOpRecordInterfaceImp) GetMissedLessonOpRecordList(lastId int64, limit int) ([]model.MissedLessonOpRecordModel, error) {
+	var vec []model.MissedLessonOpRecordModel
+	cli := db.Get()
+	tx := cli.Table(missed_lesson_op_record_tableName)
+	if lastId > 0 {
+		tx = tx.Where("id < ?", lastId)
+	}
+	err := tx.Order("id DESC").Limit(limit).Find(&vec).Error
+	return vec, err
+}
+
+// GetMissedLessonOpRecordListByPhone 按手机号游标分页获取操作记录列表（按id降序，lastId<=0取第一页）
+func (imp *MissedLessonOpRecordInterfaceImp) GetMissedLessonOpRecordListByPhone(phoneNumber string, lastId int64, limit int) ([]model.MissedLessonOpRecordModel, error) {
+	var vec []model.MissedLessonOpRecordModel
+	cli := db.Get()
+	tx := cli.Table(missed_lesson_op_record_tableName).Where("phone_number = ?", phoneNumber)
+	if lastId > 0 {
+		tx = tx.Where("id < ?", lastId)
+	}
+	err := tx.Order("id DESC").Limit(limit).Find(&vec).Error
+	return vec, err
+}
