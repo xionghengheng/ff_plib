@@ -251,14 +251,17 @@ func (imp *PassCardLessonInterfaceImp) GetLessonListNotFinishAndNotSendGoMsg(now
 }
 
 // GetLessonListByGymIdInMonth 按门店id获取某月(schedule_beg_ts落在[monthBegTs, monthEndTs))的自训单次课
-// 单门店单月课量有限，单次大limit全量拉取
-func (imp *PassCardLessonInterfaceImp) GetLessonListByGymIdInMonth(gymId int, monthBegTs int64, monthEndTs int64, limit int) ([]pass_card_model.LessonModel, error) {
+// 游标翻页：首页传lastScheduleBegTs=0，后续传上一页最后一条的schedule_beg_ts
+func (imp *PassCardLessonInterfaceImp) GetLessonListByGymIdInMonth(gymId int, monthBegTs int64, monthEndTs int64, lastScheduleBegTs int64, limit int) ([]pass_card_model.LessonModel, error) {
 	var err error
 	var vecLessonModel []pass_card_model.LessonModel
 	cli := db.Get()
-	err = cli.Table(pass_card_lesson_tableName).
-		Where("gym_id = ? AND schedule_beg_ts >= ? AND schedule_beg_ts < ?", gymId, monthBegTs, monthEndTs).
-		Order("schedule_beg_ts DESC").Limit(limit).Find(&vecLessonModel).Error
+	tx := cli.Table(pass_card_lesson_tableName).
+		Where("gym_id = ? AND schedule_beg_ts >= ? AND schedule_beg_ts < ?", gymId, monthBegTs, monthEndTs)
+	if lastScheduleBegTs > 0 {
+		tx = tx.Where("schedule_beg_ts < ?", lastScheduleBegTs)
+	}
+	err = tx.Order("schedule_beg_ts DESC").Limit(limit).Find(&vecLessonModel).Error
 	return vecLessonModel, err
 }
 

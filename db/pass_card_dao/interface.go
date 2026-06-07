@@ -56,7 +56,8 @@ type PassCardLessonInterface interface {
 	GetLessonListByGymId(gymId int, ceateTs int64, status int) ([]pass_card_model.LessonModel, error)
 
 	// 根据门店id拉取某月(schedule_beg_ts落在[monthBegTs, monthEndTs))的课程列表
-	GetLessonListByGymIdInMonth(gymId int, monthBegTs int64, monthEndTs int64, limit int) ([]pass_card_model.LessonModel, error)
+	// 游标翻页：首页传lastScheduleBegTs=0，后续传上一页最后一条的schedule_beg_ts
+	GetLessonListByGymIdInMonth(gymId int, monthBegTs int64, monthEndTs int64, lastScheduleBegTs int64, limit int) ([]pass_card_model.LessonModel, error)
 
 	//// 根据uid拉取预约中的课程列表
 	//GetScheduledLessonListByUid(uid int64, ceateTs int64) ([]pass_card_model.LessonModel, error)
