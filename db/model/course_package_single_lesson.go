@@ -31,6 +31,10 @@ type CoursePackageSingleLessonModel struct {
 	ReCancelTs              int64  `json:"re_cancel_ts"`                // 补取消时间（顾问在管理系统补取消）
 	MarkMissedTagTs         int64  `json:"mark_missed_tag_ts"`          // 课程标记为旷课的时间
 
+	// 管理后台相关字段
+	ManualOpReason string `json:"manual_op_reason"` // 补核销或补取消的理由说明
+	Remark         string `json:"remark"`           // 备注说明 补取消或补核销的数据，需要更新到单次课程的数据内
+
 	//评论相关内容
 	Overall              int    `json:"overall"`                // 整体
 	Professional         int    `json:"professional"`           // 专业
