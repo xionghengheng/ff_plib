@@ -23,13 +23,15 @@ type CoursePackageSingleLessonModel struct {
 	SendMsgGoLesson         bool   `json:"send_msg_go_lesson"`          // 是否已发送上课前的提醒
 	TrainContent            string `json:"train_content"`               // 训练内容（教练端设置）
 	ScheduledByCoach        bool   `json:"scheduled_by_coach"`          // 是否为教练排课
-	WriteOffTs              int64  `json:"write_off_ts"`                // 核销时间
 	IsConfirm               bool   `json:"is_confirm"`                  // 是否已被教练确认
 	SendMsgWriteComment     bool   `json:"send_msg_write_comment"`      // 是否已发送消息提醒用户写评论
-	IsReWriteOff            bool   `json:"is_re_write_off"`             // 是否补核销（顾问在管理系统补核销）
-	IsReCancelOff           bool   `json:"is_re_cancel_off"`            // 是否补取消（顾问在管理系统补取消）
-	ReCancelTs              int64  `json:"re_cancel_ts"`                // 补取消时间（顾问在管理系统补取消）
-	MarkMissedTagTs         int64  `json:"mark_missed_tag_ts"`          // 课程标记为旷课的时间
+
+	// 旷课、取消相关
+	IsReWriteOff    bool  `json:"is_re_write_off"`    // 是否补核销（顾问在管理系统补核销）
+	WriteOffTs      int64 `json:"write_off_ts"`       // 1、用户核销时间；2、顾问补核销时间（顾问在管理系统补核销）
+	IsReCancelOff   bool  `json:"is_re_cancel_off"`   // 是否补取消（顾问在管理系统补取消）
+	ReCancelTs      int64 `json:"re_cancel_ts"`       // 1、用户取消 2、顾问补取消时间（顾问在管理系统补取消）
+	MarkMissedTagTs int64 `json:"mark_missed_tag_ts"` // 课程标记为旷课的时间
 
 	// 管理后台相关字段
 	ManualOpReason string `json:"manual_op_reason"` // 补核销或补取消的理由说明
