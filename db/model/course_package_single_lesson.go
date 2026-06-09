@@ -27,10 +27,10 @@ type CoursePackageSingleLessonModel struct {
 	SendMsgWriteComment     bool   `json:"send_msg_write_comment"`      // 是否已发送消息提醒用户写评论
 
 	// 旷课、取消相关
-	IsReWriteOff    bool  `json:"is_re_write_off"`    // 是否补核销（顾问在管理系统补核销）
 	WriteOffTs      int64 `json:"write_off_ts"`       // 1、用户核销时间；2、顾问补核销时间（顾问在管理系统补核销）
+	CancelTs        int64 `json:"cancel_ts"`          // 1、用户取消 2、顾问补取消时间（顾问在管理系统补取消）
+	IsReWriteOff    bool  `json:"is_re_write_off"`    // 是否补核销（顾问在管理系统补核销）
 	IsReCancelOff   bool  `json:"is_re_cancel_off"`   // 是否补取消（顾问在管理系统补取消）
-	ReCancelTs      int64 `json:"re_cancel_ts"`       // 1、用户取消 2、顾问补取消时间（顾问在管理系统补取消）
 	MarkMissedTagTs int64 `json:"mark_missed_tag_ts"` // 课程标记为旷课的时间
 
 	// 管理后台相关字段
