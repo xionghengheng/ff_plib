@@ -25,4 +25,5 @@ const (
 	Enum_Course_Type_Senior              // 3=资深
 	Enum_Course_Type_Specialty           // 4=特色
 	Enum_Course_Type_PaidPreTrial        // 5=付费的预体验课
+	Enum_Course_Type_FreeGift            // 5=免费私教赠课
 )
