@@ -22,6 +22,7 @@ type CoursePackageModel struct {
 	RefundLessonCnt    int    `json:"refund_lesson_cnt"`     // 退款课程数
 	SendMsgTrailExpire bool   `json:"send_msg_trail_expire"` // 是否已发送消息提醒用户体验课快过期
 	FirstTrialCoachId  int    `json:"first_trial_coach_id"`  // 第一次生成体验课包时候的教练id (分词要以下划线隔开。。。Error 1054: Unknown column 'first_trial_coach_id' in 'field list')
+	IsGiftPackage      bool   `json:"is_gift_package"`       // 是否赠课课包标记
 }
 
 const (
