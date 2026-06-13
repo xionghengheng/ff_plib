@@ -422,6 +422,24 @@ type MissedLessonOpRecordInterfaceImp struct{}
 // Imp 实现实例
 var ImpMissedLessonOpRecord MissedLessonOpRecordInterface = &MissedLessonOpRecordInterfaceImp{}
 
+// GiftCourseRecordInterface 赠课记录数据模型接口
+type GiftCourseRecordInterface interface {
+	// 新增一条赠课记录（写入后 record.ID 会被回填）
+	AddGiftCourseRecord(record *model.GiftCourseRecordModel) error
+	// 回填赠课生成的课包id
+	UpdateGiftCourseRecordPackageId(id int64, packageId string) error
+	// 游标分页获取赠课记录列表（按id降序，lastId<=0取第一页）
+	GetGiftCourseRecordList(lastId int64, limit int) ([]model.GiftCourseRecordModel, error)
+	// 按手机号游标分页获取赠课记录列表（按id降序，lastId<=0取第一页）
+	GetGiftCourseRecordListByPhone(phoneNumber string, lastId int64, limit int) ([]model.GiftCourseRecordModel, error)
+}
+
+// 赠课记录数据模型实现
+type GiftCourseRecordInterfaceImp struct{}
+
+// Imp 实现实例
+var ImpGiftCourseRecord GiftCourseRecordInterface = &GiftCourseRecordInterfaceImp{}
+
 // CoachMetricsSnapshotInterface 教练指标快照数据模型接口
 type CoachMetricsSnapshotInterface interface {
 	// 添加教练指标快照

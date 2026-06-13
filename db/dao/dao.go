@@ -1516,3 +1516,41 @@ func (imp *MissedLessonOpRecordInterfaceImp) GetMissedLessonOpRecordListByPhone(
 	err := tx.Order("id DESC").Limit(limit).Find(&vec).Error
 	return vec, err
 }
+
+const gift_course_record_tableName = "gift_course_record"
+
+// AddGiftCourseRecord 新增一条赠课记录（写入后 record.ID 会被回填）
+func (imp *GiftCourseRecordInterfaceImp) AddGiftCourseRecord(record *model.GiftCourseRecordModel) error {
+	cli := db.Get()
+	return cli.Table(gift_course_record_tableName).Create(record).Error
+}
+
+// UpdateGiftCourseRecordPackageId 回填赠课生成的课包id
+func (imp *GiftCourseRecordInterfaceImp) UpdateGiftCourseRecordPackageId(id int64, packageId string) error {
+	cli := db.Get()
+	return cli.Table(gift_course_record_tableName).Where("id = ?", id).Update("package_id", packageId).Error
+}
+
+// GetGiftCourseRecordList 游标分页获取赠课记录列表（按id降序，lastId<=0取第一页）
+func (imp *GiftCourseRecordInterfaceImp) GetGiftCourseRecordList(lastId int64, limit int) ([]model.GiftCourseRecordModel, error) {
+	var vec []model.GiftCourseRecordModel
+	cli := db.Get()
+	tx := cli.Table(gift_course_record_tableName)
+	if lastId > 0 {
+		tx = tx.Where("id < ?", lastId)
+	}
+	err := tx.Order("id DESC").Limit(limit).Find(&vec).Error
+	return vec, err
+}
+
+// GetGiftCourseRecordListByPhone 按手机号游标分页获取赠课记录列表（按id降序，lastId<=0取第一页）
+func (imp *GiftCourseRecordInterfaceImp) GetGiftCourseRecordListByPhone(phoneNumber string, lastId int64, limit int) ([]model.GiftCourseRecordModel, error) {
+	var vec []model.GiftCourseRecordModel
+	cli := db.Get()
+	tx := cli.Table(gift_course_record_tableName).Where("phone_number = ?", phoneNumber)
+	if lastId > 0 {
+		tx = tx.Where("id < ?", lastId)
+	}
+	err := tx.Order("id DESC").Limit(limit).Find(&vec).Error
+	return vec, err
+}
