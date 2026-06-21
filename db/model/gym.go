@@ -17,4 +17,5 @@ type GymInfoModel struct {
 	LocSimpleName       string  `json:"loc_simple_name"` //健身房场地简单地址（用户短信）
 	CanShow             int     `json:"can_show"`        //是否可以在平台展示，0=不可展示 1=可展示
 	Remark              string  `json:"remark"`          //场地备注信息，顾问备注场地的数据
+	BTestGym            bool    `json:"b_test_gym"`      //是否测试门店，外网白名单测试专用
 }
