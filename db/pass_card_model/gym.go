@@ -18,4 +18,5 @@ type PassCardGymInfoModel struct {
 	CanShow             int     `json:"can_show"`        //是否可以在平台展示，0=不可展示 1=可展示
 	Phone               string  `json:"phone"`           //电话号码
 	RelatedGymId        int     `json:"related_gym_id"`  //如果和私教是同一家店，这里要填关联的私教场地id
+	BTestGym            bool    `json:"b_test_gym"`      //是否测试门店，外网白名单测试专用
 }
