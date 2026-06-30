@@ -96,6 +96,9 @@ type CoachInterface interface {
 	//根据场地id+优先级 获取教练列表
 	GetCoachListByGymId(gymId int) ([]model.CoachModel, error)
 
+	//新建教练
+	CreateCoach(coach *model.CoachModel) error
+
 	//设置不可约时间是否同步到下周
 	SetCoachCloneLessonUnAvaliableSwitch(coach_id int, value int) error
 

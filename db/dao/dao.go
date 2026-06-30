@@ -191,6 +191,11 @@ func (imp *CoachInterfaceImp) GetCoachAll() ([]model.CoachModel, error) {
 	return vecCoachModel, err
 }
 
+func (imp *CoachInterfaceImp) CreateCoach(coach *model.CoachModel) error {
+	cli := db.Get()
+	return cli.Table(coach_tableName).Create(coach).Error
+}
+
 func (imp *CoachInterfaceImp) SetCoachCloneLessonUnAvaliableSwitch(coach_id int, value int) error {
 	cli := db.Get()
 	mapUpdates := map[string]interface{}{}
