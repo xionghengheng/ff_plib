@@ -134,6 +134,12 @@ func (imp *GymInterfaceImp) GetGymInfoByGymId(gymId int) (model.GymInfoModel, er
 	return stGym, err
 }
 
+// CreateGym 添加门店
+func (imp *GymInterfaceImp) CreateGym(gym *model.GymInfoModel) error {
+	cli := db.Get()
+	return cli.Table(gym_tableName).Create(gym).Error
+}
+
 // UpdateGymInfo 更新场馆信息
 func (imp *GymInterfaceImp) UpdateGymInfo(gymId int, mapUpdates map[string]interface{}) error {
 	cli := db.Get()
