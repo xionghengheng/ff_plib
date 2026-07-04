@@ -10,7 +10,7 @@
               <option name="sessionId" value="019f2d0b-df6e-77a1-a43e-b48277263d1a" />
               <option name="cwd" value="$PROJECT_DIR$" />
               <option name="model" value="gpt-5.5" />
-              <option name="permissionMode" value="acceptEdits" />
+              <option name="permissionMode" value="bypassPermissions" />
             </TabSessionState>
           </value>
         </entry>

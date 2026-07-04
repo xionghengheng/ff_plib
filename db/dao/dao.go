@@ -242,6 +242,18 @@ func (imp *CoachTaskRecordInterfaceImp) GetCoachTaskRecordListByCoachId(coachId 
 	return vec, err
 }
 
+// GetAllCoachTaskRecordList 游标分页获取全量教练任务完成记录（按id降序，lastId<=0取第一页）
+func (imp *CoachTaskRecordInterfaceImp) GetAllCoachTaskRecordList(lastId int64, limit int) ([]model.CoachTaskRecordModel, error) {
+	var vec []model.CoachTaskRecordModel
+	cli := db.Get()
+	tx := cli.Table(coach_task_record_tableName)
+	if lastId > 0 {
+		tx = tx.Where("id < ?", lastId)
+	}
+	err := tx.Order("id DESC").Limit(limit).Find(&vec).Error
+	return vec, err
+}
+
 // UpdateCoachTaskRecord 更新教练任务完成记录
 func (imp *CoachTaskRecordInterfaceImp) UpdateCoachTaskRecord(coachId int, taskId int, mapUpdates map[string]interface{}) error {
 	cli := db.Get()

@@ -114,6 +114,8 @@ type CoachTaskRecordInterface interface {
 	GetCoachTaskRecord(coachId int, taskId int) (*model.CoachTaskRecordModel, error)
 	// 按教练id游标分页获取任务完成记录（按id降序，lastId<=0取第一页）
 	GetCoachTaskRecordListByCoachId(coachId int, lastId int64, limit int) ([]model.CoachTaskRecordModel, error)
+	// 游标分页获取全量教练任务完成记录（按id降序，lastId<=0取第一页）
+	GetAllCoachTaskRecordList(lastId int64, limit int) ([]model.CoachTaskRecordModel, error)
 	// 更新教练任务完成记录
 	UpdateCoachTaskRecord(coachId int, taskId int, mapUpdates map[string]interface{}) error
 }
