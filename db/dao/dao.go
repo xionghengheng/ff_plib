@@ -169,21 +169,27 @@ func (imp *CourseInterfaceImp) GetCourseById(id int) (*model.CourseModel, error)
 
 const task_tableName = "task_info"
 
-func (imp *TaskInterfaceImp) GetTaskList() ([]model.TaskModel, error) {
-	var err error
+func (imp *TaskInterfaceImp) GetTaskList(lastTaskId int, limit int) ([]model.TaskModel, error) {
 	var vecTaskModel []model.TaskModel
 
 	cli := db.Get()
-	err = cli.Table(task_tableName).Order("display_order ASC").Find(&vecTaskModel).Error
+	tx := cli.Table(task_tableName)
+	if lastTaskId > 0 {
+		tx = tx.Where("task_id < ?", lastTaskId)
+	}
+	err := tx.Order("task_id DESC").Limit(limit).Find(&vecTaskModel).Error
 	return vecTaskModel, err
 }
 
-func (imp *TaskInterfaceImp) GetOnlineTaskList() ([]model.TaskModel, error) {
-	var err error
+func (imp *TaskInterfaceImp) GetOnlineTaskList(lastTaskId int, limit int) ([]model.TaskModel, error) {
 	var vecTaskModel []model.TaskModel
 
 	cli := db.Get()
-	err = cli.Table(task_tableName).Where("task_status = ?", model.Enum_Task_Status_Online).Order("display_order ASC").Find(&vecTaskModel).Error
+	tx := cli.Table(task_tableName).Where("task_status = ?", model.Enum_Task_Status_Online)
+	if lastTaskId > 0 {
+		tx = tx.Where("task_id < ?", lastTaskId)
+	}
+	err := tx.Order("task_id DESC").Limit(limit).Find(&vecTaskModel).Error
 	return vecTaskModel, err
 }
 
