@@ -2,7 +2,7 @@ package model
 
 type TaskModel struct {
 	TaskID          int    `json:"task_id,omitempty"`
-	DisplayOrder    int    `json:"display_order"`    // 展示排序
+	DisplayOrder    int    `json:"display_order"`    // 展示排序（值越大，排序越靠前）
 	TaskName        string `json:"task_name"`        // 任务标题名称（任务描述）
 	TaskSubName     string `json:"task_sub_name"`    // 任务副标题名称（任务描述）
 	TaskLevel       string `json:"task_level"`       // 任务等级，P0-P3

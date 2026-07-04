@@ -91,7 +91,7 @@ var ImpCourse CourseInterface = &CourseInterfaceImp{}
 type TaskInterface interface {
 	// 游标分页获取任务列表（按task_id降序，lastTaskId<=0取第一页）
 	GetTaskList(lastTaskId int, limit int) ([]model.TaskModel, error)
-	// 游标分页获取所有上架任务（按task_id降序，lastTaskId<=0取第一页）
+	// 游标分页获取所有上架任务（按display_order升序、task_id降序，lastTaskId<=0取第一页）
 	GetOnlineTaskList(lastTaskId int, limit int) ([]model.TaskModel, error)
 	GetTaskById(taskId int) (*model.TaskModel, error)
 	// 添加任务

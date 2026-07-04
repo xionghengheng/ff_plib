@@ -187,9 +187,14 @@ func (imp *TaskInterfaceImp) GetOnlineTaskList(lastTaskId int, limit int) ([]mod
 	cli := db.Get()
 	tx := cli.Table(task_tableName).Where("task_status = ?", model.Enum_Task_Status_Online)
 	if lastTaskId > 0 {
-		tx = tx.Where("task_id < ?", lastTaskId)
+		var lastTask model.TaskModel
+		err := cli.Table(task_tableName).Select("task_id, display_order").Where("task_id = ?", lastTaskId).First(&lastTask).Error
+		if err != nil {
+			return vecTaskModel, err
+		}
+		tx = tx.Where("(display_order > ? OR (display_order = ? AND task_id < ?))", lastTask.DisplayOrder, lastTask.DisplayOrder, lastTaskId)
 	}
-	err := tx.Order("task_id DESC").Limit(limit).Find(&vecTaskModel).Error
+	err := tx.Order("display_order ASC, task_id DESC").Limit(limit).Find(&vecTaskModel).Error
 	return vecTaskModel, err
 }
 
