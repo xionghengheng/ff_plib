@@ -25,6 +25,7 @@ type CoursePackageSingleLessonModel struct {
 	ScheduledByCoach        bool   `json:"scheduled_by_coach"`          // 是否为教练排课
 	IsConfirm               bool   `json:"is_confirm"`                  // 是否已被教练确认
 	SendMsgWriteComment     bool   `json:"send_msg_write_comment"`      // 是否已发送消息提醒用户写评论
+	IsGiftLesson            bool   `json:"is_gift_lesson"`              // 是否赠课（来自赠课课包）
 
 	// 旷课、取消相关
 	WriteOffTs      int64 `json:"write_off_ts"`       // 1、用户核销时间；2、顾问补核销时间（顾问在管理系统补核销）
