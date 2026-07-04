@@ -7,10 +7,10 @@
           <value>
             <TabSessionState>
               <option name="provider" value="codex" />
-              <option name="sessionId" value="019f18fe-563a-7ca3-b5b1-c4adfba13f59" />
+              <option name="sessionId" value="019f2d0b-df6e-77a1-a43e-b48277263d1a" />
               <option name="cwd" value="$PROJECT_DIR$" />
-              <option name="model" value="gpt-5.3-codex-spark" />
-              <option name="permissionMode" value="bypassPermissions" />
+              <option name="model" value="gpt-5.5" />
+              <option name="permissionMode" value="acceptEdits" />
             </TabSessionState>
           </value>
         </entry>

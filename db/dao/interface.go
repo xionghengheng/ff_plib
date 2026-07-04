@@ -87,6 +87,41 @@ type CourseInterfaceImp struct{}
 // Imp 实现实例
 var ImpCourse CourseInterface = &CourseInterfaceImp{}
 
+// TaskInterface 任务数据模型接口
+type TaskInterface interface {
+	GetTaskList() ([]model.TaskModel, error)
+	GetOnlineTaskList() ([]model.TaskModel, error)
+	GetTaskById(taskId int) (*model.TaskModel, error)
+	// 添加任务
+	CreateTask(task *model.TaskModel) error
+	// 更新任务信息
+	UpdateTaskInfo(taskId int, mapUpdates map[string]interface{}) error
+}
+
+// TaskInterfaceImp 任务数据模型实现
+type TaskInterfaceImp struct{}
+
+// Imp 实现实例
+var ImpTask TaskInterface = &TaskInterfaceImp{}
+
+// CoachTaskRecordInterface 教练任务完成记录接口
+type CoachTaskRecordInterface interface {
+	// 新增教练任务完成记录
+	AddCoachTaskRecord(record *model.CoachTaskRecordModel) error
+	// 根据教练id和任务id获取任务完成记录
+	GetCoachTaskRecord(coachId int, taskId int) (*model.CoachTaskRecordModel, error)
+	// 按教练id游标分页获取任务完成记录（按id降序，lastId<=0取第一页）
+	GetCoachTaskRecordListByCoachId(coachId int, lastId int64, limit int) ([]model.CoachTaskRecordModel, error)
+	// 更新教练任务完成记录
+	UpdateCoachTaskRecord(coachId int, taskId int, mapUpdates map[string]interface{}) error
+}
+
+// CoachTaskRecordInterfaceImp 教练任务完成记录实现
+type CoachTaskRecordInterfaceImp struct{}
+
+// Imp 实现实例
+var ImpCoachTaskRecord CoachTaskRecordInterface = &CoachTaskRecordInterfaceImp{}
+
 // CoachInterface 教练数据模型接口
 type CoachInterface interface {
 

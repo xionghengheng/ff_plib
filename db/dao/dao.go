@@ -167,6 +167,81 @@ func (imp *CourseInterfaceImp) GetCourseById(id int) (*model.CourseModel, error)
 	return couse, err
 }
 
+const task_tableName = "task_info"
+
+func (imp *TaskInterfaceImp) GetTaskList() ([]model.TaskModel, error) {
+	var err error
+	var vecTaskModel []model.TaskModel
+
+	cli := db.Get()
+	err = cli.Table(task_tableName).Order("display_order ASC").Find(&vecTaskModel).Error
+	return vecTaskModel, err
+}
+
+func (imp *TaskInterfaceImp) GetOnlineTaskList() ([]model.TaskModel, error) {
+	var err error
+	var vecTaskModel []model.TaskModel
+
+	cli := db.Get()
+	err = cli.Table(task_tableName).Where("task_status = ?", model.Enum_Task_Status_Online).Order("display_order ASC").Find(&vecTaskModel).Error
+	return vecTaskModel, err
+}
+
+func (imp *TaskInterfaceImp) GetTaskById(taskId int) (*model.TaskModel, error) {
+	var err error
+	var task = new(model.TaskModel)
+
+	cli := db.Get()
+	err = cli.Table(task_tableName).Where("task_id = ?", taskId).First(task).Error
+	return task, err
+}
+
+func (imp *TaskInterfaceImp) CreateTask(task *model.TaskModel) error {
+	cli := db.Get()
+	return cli.Table(task_tableName).Create(task).Error
+}
+
+func (imp *TaskInterfaceImp) UpdateTaskInfo(taskId int, mapUpdates map[string]interface{}) error {
+	cli := db.Get()
+	return cli.Table(task_tableName).Model(&model.TaskModel{}).Where("task_id = ?", taskId).Updates(mapUpdates).Error
+}
+
+const coach_task_record_tableName = "coach_task_record"
+
+// AddCoachTaskRecord 新增教练任务完成记录
+func (imp *CoachTaskRecordInterfaceImp) AddCoachTaskRecord(record *model.CoachTaskRecordModel) error {
+	cli := db.Get()
+	return cli.Table(coach_task_record_tableName).Create(record).Error
+}
+
+// GetCoachTaskRecord 根据教练id和任务id获取任务完成记录
+func (imp *CoachTaskRecordInterfaceImp) GetCoachTaskRecord(coachId int, taskId int) (*model.CoachTaskRecordModel, error) {
+	var err error
+	var record = new(model.CoachTaskRecordModel)
+
+	cli := db.Get()
+	err = cli.Table(coach_task_record_tableName).Where("coach_id = ? AND task_id = ?", coachId, taskId).First(record).Error
+	return record, err
+}
+
+// GetCoachTaskRecordListByCoachId 按教练id游标分页获取任务完成记录（按id降序，lastId<=0取第一页）
+func (imp *CoachTaskRecordInterfaceImp) GetCoachTaskRecordListByCoachId(coachId int, lastId int64, limit int) ([]model.CoachTaskRecordModel, error) {
+	var vec []model.CoachTaskRecordModel
+	cli := db.Get()
+	tx := cli.Table(coach_task_record_tableName).Where("coach_id = ?", coachId)
+	if lastId > 0 {
+		tx = tx.Where("id < ?", lastId)
+	}
+	err := tx.Order("id DESC").Limit(limit).Find(&vec).Error
+	return vec, err
+}
+
+// UpdateCoachTaskRecord 更新教练任务完成记录
+func (imp *CoachTaskRecordInterfaceImp) UpdateCoachTaskRecord(coachId int, taskId int, mapUpdates map[string]interface{}) error {
+	cli := db.Get()
+	return cli.Table(coach_task_record_tableName).Model(&model.CoachTaskRecordModel{}).Where("coach_id = ? AND task_id = ?", coachId, taskId).Updates(mapUpdates).Error
+}
+
 const coach_tableName = "coaches"
 
 func (imp *CoachInterfaceImp) GetCoachListByGymId(gymId int) ([]model.CoachModel, error) {
