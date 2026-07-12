@@ -192,9 +192,9 @@ func (imp *TaskInterfaceImp) GetOnlineTaskList(lastTaskId int, limit int) ([]mod
 		if err != nil {
 			return vecTaskModel, err
 		}
-		tx = tx.Where("(display_order > ? OR (display_order = ? AND task_id < ?))", lastTask.DisplayOrder, lastTask.DisplayOrder, lastTaskId)
+		tx = tx.Where("(display_order < ? OR (display_order = ? AND task_id < ?))", lastTask.DisplayOrder, lastTask.DisplayOrder, lastTaskId)
 	}
-	err := tx.Order("display_order ASC, task_id DESC").Limit(limit).Find(&vecTaskModel).Error
+	err := tx.Order("display_order DESC, task_id DESC").Limit(limit).Find(&vecTaskModel).Error
 	return vecTaskModel, err
 }
 
