@@ -46,6 +46,7 @@ const (
 	Enum_VipType_Non      int = iota // 0 = 非会员
 	Enum_VipType_Trial               // 1 = 体验会员
 	Enum_VipType_PaidYear            // 2 = 付费年费会员
+	Enum_VipType_Paid                // 3 = 付费会员
 )
 
 const (
