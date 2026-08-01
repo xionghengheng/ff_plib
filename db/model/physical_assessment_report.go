@@ -30,12 +30,6 @@ type PhysicalAssessmentReportModel struct {
 	CourseID int   `json:"course_id"`
 	CoachID  int   `json:"coach_id"`
 
-	// 提交时记录展示快照，避免资料变更影响历史报告。
-	UserName   string `json:"user_name"`
-	CoachName  string `json:"coach_name"`
-	CourseName string `json:"course_name"`
-	GymName    string `json:"gym_name"`
-
 	UnlockTs int64 `json:"unlock_ts"` // 首次满足解锁条件的时间
 	SubmitTs int64 `json:"submit_ts"` // 提交时间，未提交时为 0
 	CreateTs int64 `json:"create_ts"`
