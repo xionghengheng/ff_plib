@@ -47,9 +47,9 @@ type PhysicalAssessmentReportModel struct {
 
 	// 统一使用整数存储，避免浮点精度问题。
 	WeightGram           int `json:"weight_gram"`            // 体重，单位kg
-	BodyFatPercentX100   int `json:"body_fat_percent_x100"`  // 体脂率，单位百分比
-	HeightMM             int `json:"height_mm"`              // 身高，单位cm
-	BMIX100              int `json:"bmi_x100"`               // BMI，单位百分比
+	BodyFatPercent       int `json:"body_fat_percent"`       // 体脂率，单位百分比
+	Height               int `json:"height"`                 // 身高，单位cm
+	BMI                  int `json:"bmi"`                    // BMI，单位百分比
 	ChestCircumferenceMM int `json:"chest_circumference_mm"` // 胸围
 	WaistCircumferenceMM int `json:"waist_circumference_mm"` // 腰围
 	LegCircumferenceMM   int `json:"leg_circumference_mm"`   // 腿围
