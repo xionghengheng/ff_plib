@@ -46,14 +46,14 @@ type PhysicalAssessmentReportModel struct {
 	MeasureTs    int64  `json:"measure_ts"`   // 测试时间 Unix 时间戳（秒）
 
 	// 统一使用整数存储，避免浮点精度问题。
-	WeightGram           int `json:"weight_gram"`            // 体重，单位kg
-	BodyFatPercent       int `json:"body_fat_percent"`       // 体脂率，单位百分比
-	Height               int `json:"height"`                 // 身高，单位cm
-	BMI                  int `json:"bmi"`                    // BMI，单位百分比
-	ChestCircumferenceMM int `json:"chest_circumference_mm"` // 胸围
-	WaistCircumferenceMM int `json:"waist_circumference_mm"` // 腰围
-	LegCircumferenceMM   int `json:"leg_circumference_mm"`   // 腿围
-	ThighCircumferenceMM int `json:"thigh_circumference_mm"` // 大腿围
+	WeightGram         int `json:"weight_gram"`         // 体重，单位kg
+	BodyFatPercent     int `json:"body_fat_percent"`    // 体脂率，单位百分比
+	Height             int `json:"height"`              // 身高，单位cm
+	BMI                int `json:"bmi"`                 // BMI，单位百分比
+	ChestCircumference int `json:"chest_circumference"` // 胸围，单位cm
+	WaistCircumference int `json:"waist_circumference"` // 腰围，单位cm
+	LegCircumference   int `json:"leg_circumference"`   // 腿围，单位cm
+	ThighCircumference int `json:"thigh_circumference"` // 大腿围，单位cm
 
 	// 图片 JSON 数组字符串，最多 6 张，例如：[{"url":"https://example.com/front.jpg"}]。
 	PhotoURLs   string `json:"photo_urls"`
