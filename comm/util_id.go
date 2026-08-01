@@ -23,6 +23,46 @@ func ParseCoursePackageId(strPackageId string) (int64, int64, int) {
 	return 0, 0, 0
 }
 
+// GenPhysicalAssessmentReportID 生成体测报告唯一标识符。
+// 格式：par_{package_id}_{report_type}_{ts}，例如 par_cp_10001_1722470400_2_1_1722470400。
+func GenPhysicalAssessmentReportID(packageID string, reportType int, ts int64) string {
+	return fmt.Sprintf("pay_%s_%d_%d", packageID, reportType, ts)
+}
+
+// ParsePhysicalAssessmentReportID 解析体测报告唯一标识符。
+// 因 package_id 本身包含下划线，报告阶段和时间戳从最后两个下划线后解析。
+// 返回 false 表示 ID 格式不合法。
+func ParsePhysicalAssessmentReportID(reportID string) (packageID string, reportType int, ts int64, ok bool) {
+	const reportIDPrefix = "pay_"
+	if !strings.HasPrefix(reportID, reportIDPrefix) {
+		return "", 0, 0, false
+	}
+
+	payload := strings.TrimPrefix(reportID, reportIDPrefix)
+	tsSeparator := strings.LastIndex(payload, "_")
+	if tsSeparator <= 0 || tsSeparator == len(payload)-1 {
+		return "", 0, 0, false
+	}
+
+	reportTypePayload := payload[:tsSeparator]
+	reportTypeSeparator := strings.LastIndex(reportTypePayload, "_")
+	if reportTypeSeparator <= 0 || reportTypeSeparator == len(reportTypePayload)-1 {
+		return "", 0, 0, false
+	}
+
+	reportType64, err := strconv.ParseInt(reportTypePayload[reportTypeSeparator+1:], 10, 0)
+	if err != nil || reportType64 <= 0 {
+		return "", 0, 0, false
+	}
+
+	ts, err = strconv.ParseInt(payload[tsSeparator+1:], 10, 64)
+	if err != nil || ts <= 0 {
+		return "", 0, 0, false
+	}
+
+	return reportTypePayload[:reportTypeSeparator], int(reportType64), ts, true
+}
+
 func GenCoursePackageSingleLessonID(uid int64, gymid int, courseId int, coachid int, ts int64) string {
 	return fmt.Sprintf("sl_%d_%d_%d_%d_%d", uid, gymid, courseId, coachid, ts)
 }
