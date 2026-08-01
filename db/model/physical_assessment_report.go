@@ -1,5 +1,7 @@
 package model
 
+import "encoding/json"
+
 const (
 	// 报告阶段：每个课包每个阶段只保留一份报告。
 	Enum_PhysicalReportType_Initial int = iota + 1 // 初期：发起第一节课预约后解锁
@@ -53,7 +55,7 @@ type PhysicalAssessmentReportModel struct {
 	LegCircumferenceMM   int `json:"leg_circumference_mm"`   // 腿围
 	ThighCircumferenceMM int `json:"thigh_circumference_mm"` // 大腿围
 
-	// JSON 字符串，最多 6 张，例如：["https://example.com/front.jpg"]。
+	// 图片 JSON 数组字符串，最多 6 张，例如：[{"url":"https://example.com/front.jpg"}]。
 	PhotoURLs   string `json:"photo_urls"`
 	CoachAdvice string `json:"coach_advice"` // 教练建议，提交时至少 10 个字符
 
@@ -61,4 +63,20 @@ type PhysicalAssessmentReportModel struct {
 	TrainingPerformanceEvaluation string `json:"training_performance_evaluation"` // 训练表现评价，提交时至少 20 个字符
 	NextStageSuggestion           string `json:"next_stage_suggestion"`           // 下一阶段建议，提交时至少 20 个字符
 	FollowUpPrecautions           string `json:"follow_up_precautions"`           // 后续注意事项；可选，填写时至少 20 个字符
+}
+
+// PhysicalAssessmentReportPhoto 对应图片 JSON 数组中的 {"url": "https://..."}。
+type PhysicalAssessmentReportPhoto struct {
+	URL string `json:"url"`
+}
+
+// GetPhysicalAssessmentReportPhotos 将图片 URL 的 JSON 数组字符串解析为图片列表。
+func GetPhysicalAssessmentReportPhotos(strPhotoURLs string) ([]PhysicalAssessmentReportPhoto, error) {
+	var photos []PhysicalAssessmentReportPhoto
+	if len(strPhotoURLs) > 0 {
+		if err := json.Unmarshal([]byte(strPhotoURLs), &photos); err != nil {
+			return photos, err
+		}
+	}
+	return photos, nil
 }
