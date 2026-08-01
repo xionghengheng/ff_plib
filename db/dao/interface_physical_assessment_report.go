@@ -16,6 +16,9 @@ type PhysicalAssessmentReportInterface interface {
 	// GetPhysicalAssessmentReportListByPackageID 获取课包下全部三个阶段的报告。
 	GetPhysicalAssessmentReportListByPackageID(packageID string) ([]model.PhysicalAssessmentReportModel, error)
 
+	// GetPhysicalAssessmentReportListByUid 获取用户全部体测报告，按创建时间倒序。
+	GetPhysicalAssessmentReportListByUid(uid int64) ([]model.PhysicalAssessmentReportModel, error)
+
 	// UnlockPhysicalAssessmentReport 将待解锁报告原子地变更为未提交；已解锁或已提交时不回退。
 	UnlockPhysicalAssessmentReport(packageID string, reportType int, unlockTs int64) error
 

@@ -59,6 +59,16 @@ func (imp *PhysicalAssessmentReportInterfaceImp) GetPhysicalAssessmentReportList
 	return reports, err
 }
 
+// GetPhysicalAssessmentReportListByUid 获取用户全部体测报告，按创建时间倒序。
+func (imp *PhysicalAssessmentReportInterfaceImp) GetPhysicalAssessmentReportListByUid(uid int64) ([]model.PhysicalAssessmentReportModel, error) {
+	var reports []model.PhysicalAssessmentReportModel
+	err := db.Get().Table(physical_assessment_report_table_name).
+		Where("uid = ?", uid).
+		Order("create_ts DESC").
+		Find(&reports).Error
+	return reports, err
+}
+
 // UnlockPhysicalAssessmentReport 仅允许待解锁变为未提交，确保解锁状态不会回退。
 func (imp *PhysicalAssessmentReportInterfaceImp) UnlockPhysicalAssessmentReport(packageID string, reportType int, unlockTs int64) error {
 	mapUpdates := map[string]interface{}{
