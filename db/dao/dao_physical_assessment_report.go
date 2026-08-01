@@ -40,6 +40,15 @@ func (imp *PhysicalAssessmentReportInterfaceImp) GetPhysicalAssessmentReport(pac
 	return report, err
 }
 
+// GetPhysicalAssessmentReportByReportID 根据报告 ID 获取报告详情。
+func (imp *PhysicalAssessmentReportInterfaceImp) GetPhysicalAssessmentReportByReportID(reportID string) (*model.PhysicalAssessmentReportModel, error) {
+	report := new(model.PhysicalAssessmentReportModel)
+	err := db.Get().Table(physical_assessment_report_table_name).
+		Where("report_id = ?", reportID).
+		First(report).Error
+	return report, err
+}
+
 // GetPhysicalAssessmentReportListByPackageID 获取课包下全部阶段的报告。
 func (imp *PhysicalAssessmentReportInterfaceImp) GetPhysicalAssessmentReportListByPackageID(packageID string) ([]model.PhysicalAssessmentReportModel, error) {
 	var reports []model.PhysicalAssessmentReportModel

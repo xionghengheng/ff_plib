@@ -10,6 +10,9 @@ type PhysicalAssessmentReportInterface interface {
 	// GetPhysicalAssessmentReport 获取课包指定阶段的报告。
 	GetPhysicalAssessmentReport(packageID string, reportType int) (*model.PhysicalAssessmentReportModel, error)
 
+	// GetPhysicalAssessmentReportByReportID 根据报告 ID 获取报告详情。
+	GetPhysicalAssessmentReportByReportID(reportID string) (*model.PhysicalAssessmentReportModel, error)
+
 	// GetPhysicalAssessmentReportListByPackageID 获取课包下全部三个阶段的报告。
 	GetPhysicalAssessmentReportListByPackageID(packageID string) ([]model.PhysicalAssessmentReportModel, error)
 
