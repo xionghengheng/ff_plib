@@ -17,10 +17,11 @@ const (
 // PhysicalAssessmentReportModel 体测报告模型。
 // 同一 PackageID + ReportType 只能有一条记录；UnlockTs 一旦写入不再回退。
 type PhysicalAssessmentReportModel struct {
-	ReportID   string `json:"report_id"`   // 报告唯一 ID
-	PackageID  string `json:"package_id"`  // 关联课包 ID
-	ReportType int    `json:"report_type"` // 初期 / 中期 / 结课
-	Status     int    `json:"status"`      // 待解锁 / 未提交 / 已提交
+	ReportID              string `json:"report_id"`                // 报告唯一 ID
+	PackageID             string `json:"package_id"`               // 关联课包 ID
+	RelatedTrialPackageID string `json:"related_trial_package_id"` // 当前课包为首个付费课包时，关联的体验课包 ID；否则为空
+	ReportType            int    `json:"report_type"`              // 初期 / 中期 / 结课
+	Status                int    `json:"status"`                   // 待解锁 / 未提交 / 已提交
 
 	Uid      int64 `json:"uid"`
 	GymID    int   `json:"gym_id"`
