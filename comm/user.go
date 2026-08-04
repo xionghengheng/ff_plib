@@ -43,8 +43,9 @@ type WebUserInfo struct {
 	RecPassCardGymId        int     `json:"rec_pass_card_gym_id"`             //通卡主页推荐的场地
 	IsOfficialAssistant     bool    `json:"is_official_assistant"`            //是否官方小助理，展示特定的运营操作入口
 	//IsFirstTrailBlock       bool    `json:"is_first_trail_block"`             //是否需要展示，首次约课加小助理微信的阻断
-	RemoveTrailBlockTs int64 `json:"remove_trail_block_ts"` //顾问是设置解除加小助理微信的阻断的时间，大于0表示设置过解除阻断
-	PassCardExpire     bool  `json:"pass_card_expire"`      //订阅通卡是否过期
+	RemoveTrailBlockTs           int64 `json:"remove_trail_block_ts"`            //顾问是设置解除加小助理微信的阻断的时间，大于0表示设置过解除阻断
+	PassCardExpire               bool  `json:"pass_card_expire"`                 //订阅通卡是否过期
+	IsAuthorizedCoachUploadPhoto bool  `json:"is_authorized_coach_upload_photo"` //用户是否已授权教练上传用户照片
 }
 
 func ConvertDbUser2RspUser(dbUser model.UserInfoModel) WebUserInfo {
@@ -56,42 +57,43 @@ func ConvertDbUser2RspUser(dbUser model.UserInfoModel) WebUserInfo {
 	}
 
 	return WebUserInfo{
-		UserID:                  dbUser.UserID,
-		WechatID:                dbUser.WechatID,
-		PhoneNumber:             dbUser.PhoneNumber,
-		Nick:                    dbUser.Nick,
-		HeadPic:                 dbUser.HeadPic,
-		Gender:                  dbUser.Gender,
-		Age:                     dbUser.Age,
-		Weight:                  dbUser.Weight,
-		Height:                  dbUser.Height,
-		FitnessExperience:       dbUser.FitnessExperience,
-		FitnessGoal:             dbUser.FitnessGoal,
-		DesiredWeight:           dbUser.DesiredWeight,
-		TimeFrame:               dbUser.TimeFrame,
-		PreferredBodyPart:       dbUser.PreferredBodyPart,
-		WeeklyExerciseFrequency: dbUser.WeeklyExerciseFrequency,
-		PreferredPriceRange:     dbUser.PreferredPriceRange,
-		PreferredLocationID:     dbUser.PreferredLocationID,
-		VipType:                 dbUser.VipType,
-		VipExpiredTs:            dbUser.VipExpiredTs,
-		IsCoach:                 dbUser.IsCoach,
-		CoachId:                 dbUser.CoachId,
-		HeadPicSafeStatus:       dbUser.HeadPicSafeStatus,
-		HeadPicWaitSafe:         dbUser.HeadPicWaitSafe,
-		HeadPicSafeTraceId:      dbUser.HeadPicSafeTraceId,
-		RegistTs:                dbUser.RegistTs,
-		BeVipTs:                 dbUser.BeVipTs,
-		LastLoginTs:             dbUser.LastLoginTs,
-		HasShownNoStoreHint:     dbUser.HasShownNoStoreHint,
-		BeVipFromType:           dbUser.BeVipFromType,
-		VipPassCardType:         dbUser.VipPassCardType,
-		VipPassCardExpiredTs:    dbUser.VipPassCardExpiredTs,
-		BeVipPassCardTs:         dbUser.BeVipPassCardTs,
-		BindPassCardGymId:       dbUser.BindPassCardGymId,
-		RecPassCardGymId:        dbUser.RecPassCardGymId,
-		IsOfficialAssistant:     dbUser.IsOfficialAssistant,
-		RemoveTrailBlockTs:      dbUser.RemoveTrailBlockTs,
-		PassCardExpire:          passCardExpire,
+		UserID:                       dbUser.UserID,
+		WechatID:                     dbUser.WechatID,
+		PhoneNumber:                  dbUser.PhoneNumber,
+		Nick:                         dbUser.Nick,
+		HeadPic:                      dbUser.HeadPic,
+		Gender:                       dbUser.Gender,
+		Age:                          dbUser.Age,
+		Weight:                       dbUser.Weight,
+		Height:                       dbUser.Height,
+		FitnessExperience:            dbUser.FitnessExperience,
+		FitnessGoal:                  dbUser.FitnessGoal,
+		DesiredWeight:                dbUser.DesiredWeight,
+		TimeFrame:                    dbUser.TimeFrame,
+		PreferredBodyPart:            dbUser.PreferredBodyPart,
+		WeeklyExerciseFrequency:      dbUser.WeeklyExerciseFrequency,
+		PreferredPriceRange:          dbUser.PreferredPriceRange,
+		PreferredLocationID:          dbUser.PreferredLocationID,
+		VipType:                      dbUser.VipType,
+		VipExpiredTs:                 dbUser.VipExpiredTs,
+		IsCoach:                      dbUser.IsCoach,
+		CoachId:                      dbUser.CoachId,
+		HeadPicSafeStatus:            dbUser.HeadPicSafeStatus,
+		HeadPicWaitSafe:              dbUser.HeadPicWaitSafe,
+		HeadPicSafeTraceId:           dbUser.HeadPicSafeTraceId,
+		RegistTs:                     dbUser.RegistTs,
+		BeVipTs:                      dbUser.BeVipTs,
+		LastLoginTs:                  dbUser.LastLoginTs,
+		HasShownNoStoreHint:          dbUser.HasShownNoStoreHint,
+		BeVipFromType:                dbUser.BeVipFromType,
+		VipPassCardType:              dbUser.VipPassCardType,
+		VipPassCardExpiredTs:         dbUser.VipPassCardExpiredTs,
+		BeVipPassCardTs:              dbUser.BeVipPassCardTs,
+		BindPassCardGymId:            dbUser.BindPassCardGymId,
+		RecPassCardGymId:             dbUser.RecPassCardGymId,
+		IsOfficialAssistant:          dbUser.IsOfficialAssistant,
+		RemoveTrailBlockTs:           dbUser.RemoveTrailBlockTs,
+		PassCardExpire:               passCardExpire,
+		IsAuthorizedCoachUploadPhoto: dbUser.IsAuthorizedCoachUploadPhoto,
 	}
 }
