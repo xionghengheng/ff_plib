@@ -39,7 +39,8 @@ type UserInfoModel struct {
 	RecPassCardGymId        int     `json:"rec_pass_card_gym_id"`             //通卡主页推荐的场地
 	IsOfficialAssistant     bool    `json:"is_official_assistant"`            //是否官方小助理，展示特定的运营操作入口
 	//IsFirstTrailBlock       bool    `json:"is_first_trail_block"`             //是否需要展示，首次约课加小助理微信的阻断
-	RemoveTrailBlockTs int64 `json:"remove_trail_block_ts"` //顾问是设置解除加小助理微信的阻断的时间，大于0表示设置过解除阻断
+	RemoveTrailBlockTs           int64 `json:"remove_trail_block_ts"`            //顾问是设置解除加小助理微信的阻断的时间，大于0表示设置过解除阻断
+	IsAuthorizedCoachUploadPhoto bool  `json:"is_authorized_coach_upload_photo"` //用户是否已授权教练上传用户照片
 }
 
 const (
