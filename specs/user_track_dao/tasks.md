@@ -21,3 +21,12 @@
   - 运行 `git diff --check` 检查格式问题。
   - 注：默认 `go test` 被现有 `db/init.go` 的 vet 告警拦截；使用 `-vet=off` 已完成全仓编译回归。
   - _Requirement: 1, 2, 3_
+
+- [x] 5. 增加未完成客资分页与阶段过滤
+  - 使用 `lastCreatedTs + lastTrackID + limit` 复合游标，按 `created_ts DESC, track_id DESC` 分页查询 `stage < 7` 的客资。
+  - 支持 `stage=0` 查询全部未完成阶段和 `stage=1~6` 精确过滤。
+  - _Requirement: 1_
+
+- [x] 6. 增加客资节点游标分页
+  - 使用 `lastNodeID + limit` 按 `node_id DESC` 分页查询指定客资的节点。
+  - _Requirement: 2_

@@ -16,6 +16,9 @@
 2. When 业务层按 `track_id` 查询时，the DAO shall 返回对应客资档案或 GORM 错误。
 3. When 业务层按微信号查询时，the DAO shall 返回对应客资档案或 GORM 错误。
 4. When 业务层传入 `track_id` 和更新字段时，the DAO shall 更新对应档案。
+5. When 业务层分页查询未完成客资时，the DAO shall 使用 `lastCreatedTs + lastTrackID + limit` 按创建时间倒序游标分页返回数据。
+6. While `stage` 为 1~6，when 业务层查询未完成客资时，the DAO shall 仅返回指定阶段数据。
+7. While `stage` 为 0，when 业务层查询未完成客资时，the DAO shall 返回全部 1~6 阶段数据。
 
 ### Requirement 2 - 客资节点访问
 
@@ -24,7 +27,7 @@
 #### Acceptance Criteria
 
 1. When 业务层提交一个节点模型时，the DAO shall 向 `user_track_node` 表创建记录。
-2. When 业务层按 `track_id` 查询节点列表时，the DAO shall 按阶段升序返回节点。
+2. When 业务层按 `track_id` 查询节点列表时，the DAO shall 使用 `lastNodeID + limit` 按节点 ID 倒序游标分页返回节点。
 3. When 业务层按 `track_id` 和 `stage` 查询时，the DAO shall 返回对应节点或 GORM 错误。
 4. When 业务层传入 `track_id`、`stage` 和更新字段时，the DAO shall 更新对应节点。
 

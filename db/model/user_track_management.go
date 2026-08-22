@@ -15,7 +15,7 @@ type UserTrackModel struct {
 	UserPhone     string `json:"user_phone"`     // 手机号（非必填，生成体验课链接后自动拉取或手填）
 	ProfileRemark string `json:"profile_remark"` // 建档的时候填写，档案备注
 	Stage         int    `json:"stage"`          // 当前状态（系统，参考 Enum_Track_Stage）
-	AdvisorName   int64  `json:"advisor_name"`   // 销售负责人名称
+	AdvisorName   string `json:"advisor_name"`   // 销售负责人名称
 	CreatedTs     int64  `json:"created_ts"`     // 创建时间
 	UpdatedTs     int64  `json:"updated_ts"`     // 更新时间
 }
