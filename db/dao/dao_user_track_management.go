@@ -36,6 +36,15 @@ func (imp *UserTrackManagementInterfaceImp) GetUserTrackByWechatNo(wechatNo stri
 	return track, err
 }
 
+// GetUserTrackByPhone 根据手机号查询基础档案。
+func (imp *UserTrackManagementInterfaceImp) GetUserTrackByPhone(phone string) (*model.UserTrackModel, error) {
+	track := new(model.UserTrackModel)
+	err := db.Get().Table(user_track_table_name).
+		Where("user_phone = ?", phone).
+		First(track).Error
+	return track, err
+}
+
 // UpdateUserTrack 根据客资 ID 更新基础档案。
 func (imp *UserTrackManagementInterfaceImp) UpdateUserTrack(trackID int64, updates map[string]interface{}) error {
 	return db.Get().Table(user_track_table_name).

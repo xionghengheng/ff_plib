@@ -15,6 +15,7 @@ type UserTrackManagementInterface interface {
 	CreateUserTrack(track *model.UserTrackModel) error
 	GetUserTrack(trackID int64) (*model.UserTrackModel, error)
 	GetUserTrackByWechatNo(wechatNo string) (*model.UserTrackModel, error)
+	GetUserTrackByPhone(phone string) (*model.UserTrackModel, error)
 	UpdateUserTrack(trackID int64, updates map[string]interface{}) error
 	GetUnfinishedUserTrackList(stage int, lastCreatedTs int64, lastTrackID int64, limit int) ([]model.UserTrackModel, error)
 	GetAllUserTrackList(lastCreatedTs int64, lastTrackID int64, limit int) ([]model.UserTrackModel, error)

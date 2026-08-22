@@ -15,7 +15,8 @@
 1. When 业务层提交一个客资模型时，the DAO shall 向 `user_track` 表创建记录。
 2. When 业务层按 `track_id` 查询时，the DAO shall 返回对应客资档案或 GORM 错误。
 3. When 业务层按微信号查询时，the DAO shall 返回对应客资档案或 GORM 错误。
-4. When 业务层传入 `track_id` 和更新字段时，the DAO shall 更新对应档案。
+4. When 业务层按手机号查询时，the DAO shall 返回对应客资档案或 GORM 错误。
+5. When 业务层传入 `track_id` 和更新字段时，the DAO shall 更新对应档案。
 5. When 业务层分页查询未完成客资时，the DAO shall 使用 `lastCreatedTs + lastTrackID + limit` 按创建时间倒序游标分页返回数据。
 6. While `stage` 为 1~6，when 业务层查询未完成客资时，the DAO shall 仅返回指定阶段数据。
 7. While `stage` 为 0，when 业务层查询未完成客资时，the DAO shall 返回全部 1~6 阶段数据。

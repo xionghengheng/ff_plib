@@ -13,6 +13,9 @@ type UserTrackManagementInterface interface {
 	// GetUserTrackByWechatNo 根据微信号查询基础档案。
 	GetUserTrackByWechatNo(wechatNo string) (*model.UserTrackModel, error)
 
+	// GetUserTrackByPhone 根据手机号查询基础档案。
+	GetUserTrackByPhone(phone string) (*model.UserTrackModel, error)
+
 	// UpdateUserTrack 根据客资 ID 更新基础档案。
 	UpdateUserTrack(trackID int64, updates map[string]interface{}) error
 
