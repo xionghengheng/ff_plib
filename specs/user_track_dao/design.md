@@ -36,6 +36,8 @@ type UserTrackManagementInterface interface {
 
 DAO 通过 `Table(...)` 显式指定表名，与现有代码风格一致。
 
+`UserTrackNodeModel` 通过 `TrialPackageInfo` 和 `PaidPackageInfo` 承载业务层组装的课包信息。两个字段使用 `gorm:"-"` 标记，不映射到 `user_track_node` 表。
+
 ## Follow-up Append Flow
 
 `AppendFollowUpRecord` 使用数据库事务：

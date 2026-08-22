@@ -24,12 +24,28 @@ type UserTrackModel struct {
 // 一个节点一行，记录到达该节点的时间 + 该节点的数据（含每次跟进明细）
 // 用于匹配 user_track_node 表的字段
 type UserTrackNodeModel struct {
-	NodeID        int64  `json:"node_id"`         // 主键
-	TrackID       int64  `json:"track_id"`        // 客资ID
-	Stage         int    `json:"stage"`           // 节点 1~7（参考 Enum_Track_Stage）
-	Data          string `json:"data"`            // 该节点的数据 JSON（结构按 stage 定，见注释）
-	NodeCreateTs  int64  `json:"node_create_ts"`  // 到达该节点时间
-	NodeUpdatedTs int64  `json:"node_updated_ts"` // 更新时间
+	NodeID           int64                     `json:"node_id"`            // 主键
+	TrackID          int64                     `json:"track_id"`           // 客资ID
+	Stage            int                       `json:"stage"`              // 节点 1~7（参考 Enum_Track_Stage）
+	Data             string                    `json:"data"`               // 该节点的数据 JSON（结构按 stage 定，见注释）
+	TrialPackageInfo UserTrackTrialPackageInfo `json:"trial_package_info"` // 体验课包信息（非数据库字段）
+	PaidPackageInfo  UserTrackPaidPackageInfo  `json:"paid_package_info"`  // 付费课包信息（非数据库字段）
+	NodeCreateTs     int64                     `json:"node_create_ts"`     // 到达该节点时间
+	NodeUpdatedTs    int64                     `json:"node_updated_ts"`    // 更新时间
+}
+
+// UserTrackTrialPackageInfo 体验课包信息，具体字段由业务方补充。
+type UserTrackTrialPackageInfo struct {
+	PreTrailID int64 `json:"id"` // 预体验课id
+
+	// 预体验课支付成功后，生成的
+	PackageID string `json:"package_id"`
+	LessonID  string `json:"lesson_id"`
+}
+
+// UserTrackPaidPackageInfo 付费课包信息，如果课包id已填充，说明用户购买成功
+type UserTrackPaidPackageInfo struct {
+	PackageID string `json:"package_id"`
 }
 
 // FollowUpRecord 表示一条跟进记录，可用于任意阶段。

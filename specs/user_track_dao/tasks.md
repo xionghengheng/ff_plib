@@ -34,3 +34,8 @@
 - [x] 7. 增加全阶段客资列表
   - 不过滤 stage，使用 `lastCreatedTs + lastTrackID + limit` 复合游标分页查询全部客资。
   - _Requirement: 1_
+
+- [x] 8. 增加节点课包信息结构体
+  - 增加体验课包与付费课包两个空结构体，由业务方补充字段。
+  - 在节点模型中以非数据库字段承载两类课包信息。
+  - _Requirement: 2_

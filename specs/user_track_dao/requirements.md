@@ -31,6 +31,7 @@
 2. When 业务层按 `track_id` 查询节点列表时，the DAO shall 按阶段和节点创建时间升序返回全部节点。
 3. When 业务层按 `track_id` 和 `stage` 查询时，the DAO shall 返回对应节点或 GORM 错误。
 4. When 业务层传入 `track_id`、`stage` 和更新字段时，the DAO shall 更新对应节点。
+5. When 业务层组装节点上的课包信息时，the node model shall 提供体验课包和付费课包两个独立结构体字段，并且 GORM shall 忽略这两个非数据库字段。
 
 ### Requirement 3 - 跟进记录 JSON
 
