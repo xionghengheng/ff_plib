@@ -17,10 +17,11 @@ type UserTrackManagementInterface interface {
 	GetUserTrackByWechatNo(wechatNo string) (*model.UserTrackModel, error)
 	UpdateUserTrack(trackID int64, updates map[string]interface{}) error
 	GetUnfinishedUserTrackList(stage int, lastCreatedTs int64, lastTrackID int64, limit int) ([]model.UserTrackModel, error)
+	GetAllUserTrackList(lastCreatedTs int64, lastTrackID int64, limit int) ([]model.UserTrackModel, error)
 
 	CreateUserTrackNode(node *model.UserTrackNodeModel) error
 	GetUserTrackNode(trackID int64, stage int) (*model.UserTrackNodeModel, error)
-	GetUserTrackNodeList(trackID int64, lastNodeID int64, limit int) ([]model.UserTrackNodeModel, error)
+	GetUserTrackNodeList(trackID int64) ([]model.UserTrackNodeModel, error)
 	UpdateUserTrackNode(trackID int64, stage int, updates map[string]interface{}) error
 	AppendFollowUpRecord(trackID int64, stage int, record model.FollowUpRecord) error
 }
@@ -49,8 +50,9 @@ DAO 通过 `Table(...)` 显式指定表名，与现有代码风格一致。
 
 ## Query and Update Behavior
 
-- `GetUserTrackNodeList` 按 `node_id DESC` 排序，并使用 `lastNodeID/limit` 游标分页；`lastNodeID<=0` 取第一页。
+- `GetUserTrackNodeList` 不分页，按 `stage ASC, node_create_ts ASC` 返回指定客资的全部节点。
 - `GetUnfinishedUserTrackList` 仅查询 `stage < 7` 的客资，按 `created_ts DESC, track_id DESC` 排序，并使用 `lastCreatedTs/lastTrackID/limit` 复合游标分页；`lastCreatedTs<=0` 取第一页。
+- `GetAllUserTrackList` 不过滤 stage，按 `created_ts DESC, track_id DESC` 排序，并使用相同的复合游标分页。
 - 未完成列表中 `stage<=0` 表示全部阶段，`stage>0` 表示精确过滤。
 - 单条查询无数据时直接返回 `gorm.ErrRecordNotFound`。
 - Update 方法使用 `Model(...).Where(...).Updates(...)`，不自动改写调用方传入的字段。

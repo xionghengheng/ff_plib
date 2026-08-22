@@ -20,15 +20,18 @@ type UserTrackManagementInterface interface {
 	// stage <= 0 查询全部未完成阶段，lastCreatedTs <= 0 取第一页。
 	GetUnfinishedUserTrackList(stage int, lastCreatedTs int64, lastTrackID int64, limit int) ([]model.UserTrackModel, error)
 
+	// GetAllUserTrackList 按创建时间倒序游标分页查询全部客资，不过滤 stage。
+	// lastCreatedTs <= 0 取第一页。
+	GetAllUserTrackList(lastCreatedTs int64, lastTrackID int64, limit int) ([]model.UserTrackModel, error)
+
 	// CreateUserTrackNode 创建客资流转节点。
 	CreateUserTrackNode(node *model.UserTrackNodeModel) error
 
 	// GetUserTrackNode 查询客资指定阶段的节点。
 	GetUserTrackNode(trackID int64, stage int) (*model.UserTrackNodeModel, error)
 
-	// GetUserTrackNodeList 按节点 ID 倒序游标分页查询客资流转节点。
-	// lastNodeID <= 0 取第一页。
-	GetUserTrackNodeList(trackID int64, lastNodeID int64, limit int) ([]model.UserTrackNodeModel, error)
+	// GetUserTrackNodeList 查询客资的全部流转节点。
+	GetUserTrackNodeList(trackID int64) ([]model.UserTrackNodeModel, error)
 
 	// UpdateUserTrackNode 更新客资指定阶段的节点。
 	UpdateUserTrackNode(trackID int64, stage int, updates map[string]interface{}) error

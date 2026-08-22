@@ -67,6 +67,25 @@ func (imp *UserTrackManagementInterfaceImp) GetUnfinishedUserTrackList(stage int
 	return tracks, err
 }
 
+// GetAllUserTrackList 按创建时间倒序游标分页查询全部客资，不过滤 stage。
+// 使用 track_id 作为相同 created_ts 时的稳定排序条件。
+// lastCreatedTs <= 0 取第一页。
+func (imp *UserTrackManagementInterfaceImp) GetAllUserTrackList(lastCreatedTs int64, lastTrackID int64, limit int) ([]model.UserTrackModel, error) {
+	var tracks []model.UserTrackModel
+	cli := db.Get()
+	tx := cli.Table(user_track_table_name)
+	if lastCreatedTs > 0 {
+		tx = tx.Where(
+			"(created_ts < ?) OR (created_ts = ? AND track_id < ?)",
+			lastCreatedTs,
+			lastCreatedTs,
+			lastTrackID,
+		)
+	}
+	err := tx.Order("created_ts DESC, track_id DESC").Limit(limit).Find(&tracks).Error
+	return tracks, err
+}
+
 // CreateUserTrackNode 创建客资流转节点。
 func (imp *UserTrackManagementInterfaceImp) CreateUserTrackNode(node *model.UserTrackNodeModel) error {
 	return db.Get().Table(user_track_node_table_name).Create(node).Error
@@ -81,16 +100,13 @@ func (imp *UserTrackManagementInterfaceImp) GetUserTrackNode(trackID int64, stag
 	return node, err
 }
 
-// GetUserTrackNodeList 按节点 ID 倒序游标分页查询客资流转节点。
-// lastNodeID <= 0 取第一页。
-func (imp *UserTrackManagementInterfaceImp) GetUserTrackNodeList(trackID int64, lastNodeID int64, limit int) ([]model.UserTrackNodeModel, error) {
+// GetUserTrackNodeList 查询客资的全部流转节点。
+func (imp *UserTrackManagementInterfaceImp) GetUserTrackNodeList(trackID int64) ([]model.UserTrackNodeModel, error) {
 	var nodes []model.UserTrackNodeModel
-	cli := db.Get()
-	tx := cli.Table(user_track_node_table_name).Where("track_id = ?", trackID)
-	if lastNodeID > 0 {
-		tx = tx.Where("node_id < ?", lastNodeID)
-	}
-	err := tx.Order("node_id DESC").Limit(limit).Find(&nodes).Error
+	err := db.Get().Table(user_track_node_table_name).
+		Where("track_id = ?", trackID).
+		Order("stage ASC, node_create_ts ASC").
+		Find(&nodes).Error
 	return nodes, err
 }
 

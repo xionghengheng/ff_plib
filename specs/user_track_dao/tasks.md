@@ -27,6 +27,10 @@
   - 支持 `stage=0` 查询全部未完成阶段和 `stage=1~6` 精确过滤。
   - _Requirement: 1_
 
-- [x] 6. 增加客资节点游标分页
-  - 使用 `lastNodeID + limit` 按 `node_id DESC` 分页查询指定客资的节点。
+- [x] 6. 调整客资节点列表查询
+  - 不分页，按 `stage ASC, node_create_ts ASC` 查询指定客资的全部节点。
   - _Requirement: 2_
+
+- [x] 7. 增加全阶段客资列表
+  - 不过滤 stage，使用 `lastCreatedTs + lastTrackID + limit` 复合游标分页查询全部客资。
+  - _Requirement: 1_
