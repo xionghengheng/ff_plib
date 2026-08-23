@@ -8,8 +8,10 @@ type UserTrackModel struct {
 	TrackID       int64  `json:"track_id"`       // 用户ID（系统自动生成）
 	WechatNick    string `json:"wechat_nick"`    // 微信昵称（必填）
 	WechatNo      string `json:"wechat_no"`      // 微信号（必填）
+	UserLoc       string `json:"user_loc"`       // 用户位置（非必填）
 	TrainingNeed  string `json:"training_need"`  // 训练需求（非必填）
 	ClassArea     string `json:"class_area"`     // 上课区域（非必填）
+	GymID         int    `json:"gym_id"`         // 上课门店ID（非必填）
 	ClassTime     string `json:"class_time"`     // 上课时间（非必填）
 	IntentLevel   int    `json:"intent_level"`   // 意向等级（非必填，参考 Enum_Intent_Level）
 	UserPhone     string `json:"user_phone"`     // 手机号（非必填，生成体验课链接后自动拉取或手填）
