@@ -69,6 +69,19 @@ func (imp *PhysicalAssessmentReportInterfaceImp) GetPhysicalAssessmentReportList
 	return reports, err
 }
 
+// UpdatePhysicalAssessmentReportFields 通用更新报告字段，供后台修改任意字段；自动写入 update_ts。
+func (imp *PhysicalAssessmentReportInterfaceImp) UpdatePhysicalAssessmentReportFields(reportID string, updateTs int64, mapUpdates map[string]interface{}) error {
+	if mapUpdates == nil {
+		mapUpdates = make(map[string]interface{})
+	}
+	mapUpdates["update_ts"] = updateTs
+
+	return db.Get().Table(physical_assessment_report_table_name).
+		Model(&model.PhysicalAssessmentReportModel{}).
+		Where("report_id = ?", reportID).
+		Updates(mapUpdates).Error
+}
+
 // UnlockPhysicalAssessmentReport 仅允许待解锁变为未提交，确保解锁状态不会回退。
 func (imp *PhysicalAssessmentReportInterfaceImp) UnlockPhysicalAssessmentReport(packageID string, reportType int, unlockTs int64) error {
 	mapUpdates := map[string]interface{}{

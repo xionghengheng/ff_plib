@@ -24,6 +24,9 @@ type PhysicalAssessmentReportInterface interface {
 
 	// SubmitPhysicalAssessmentReport 保存报告内容；未提交和已提交的报告均允许更新。
 	SubmitPhysicalAssessmentReport(reportID string, submitTs int64, mapUpdates map[string]interface{}) error
+
+	// UpdatePhysicalAssessmentReportFields 通用更新报告字段，供后台修改任意字段；自动写入 update_ts。
+	UpdatePhysicalAssessmentReportFields(reportID string, updateTs int64, mapUpdates map[string]interface{}) error
 }
 
 // PhysicalAssessmentReportInterfaceImp 体测报告数据访问实现。
