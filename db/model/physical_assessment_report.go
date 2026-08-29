@@ -24,6 +24,7 @@ type PhysicalAssessmentReportModel struct {
 	RelatedTrialPackageID string `json:"related_trial_package_id"` // 当前课包为首个付费课包时，关联的体验课包 ID；否则为空
 	ReportType            int    `json:"report_type"`              // 初期 / 中期 / 结课
 	Status                int    `json:"status"`                   // 待解锁 / 未提交 / 已提交
+	BringPay              int    `json:"bring_pay"`                // 体验课的体侧报告是否，已带入付费课包
 
 	Uid      int64 `json:"uid"`
 	GymID    int   `json:"gym_id"`
