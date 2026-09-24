@@ -722,14 +722,13 @@ func (imp *CoursePackageSingleLessonInterfaceImp) GetAllSingleLessonList(createT
 }
 
 func (imp *CoursePackageSingleLessonInterfaceImp) GetAllSingleLessonListWithoutQrCodePic(createTs int64) ([]model.CoursePackageSingleLessonModel, error) {
-	query := db.Get().Table(course_package_single_lesson_tableName).
-		Select(coursePackageSingleLessonColumnsWithoutQrCodePic)
+	query := db.Get().Table(course_package_single_lesson_tableName).Select(coursePackageSingleLessonColumnsWithoutQrCodePic)
 	if createTs != 0 {
 		query = query.Where("create_ts < ?", createTs)
 	}
 
 	var vecRes []model.CoursePackageSingleLessonModel
-	err := query.Order("create_ts DESC").Limit(500).Find(&vecRes).Error
+	err := query.Order("create_ts DESC").Limit(5000).Find(&vecRes).Error
 	return vecRes, err
 }
 
