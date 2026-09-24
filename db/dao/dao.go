@@ -615,6 +615,8 @@ func (imp *CoursePackageInterfaceImp) JudgeUserHadBuyPaidPackage(uid int64) (boo
 
 const course_package_single_lesson_tableName = "course_package_single_lessons"
 
+const coursePackageSingleLessonColumnsWithoutQrCodePic = "lesson_id, package_id, create_ts, schedule_beg_ts, schedule_end_ts, status, lesson_name, duration, uid, coach_id, gym_id, course_id, appointment_id, appointment_id2, cancel_by_coach, cancel_by_coach_del_card, write_off_missed_return_cnt, send_msg_go_lesson, train_content, scheduled_by_coach, is_confirm, send_msg_write_comment, is_gift_lesson, write_off_ts, cancel_ts, is_re_write_off, is_re_cancel_off, mark_missed_tag_ts, manual_op_reason, remark, overall, professional, environment, service, continue_attend_lesson, comment_content, anonymous_comment, comment_ts"
+
 func (imp *CoursePackageSingleLessonInterfaceImp) GetSingleLessonListByPackageId(uid int64, packageId string) ([]model.CoursePackageSingleLessonModel, error) {
 	var err error
 	var vecCoursePackageSingleLessonModel []model.CoursePackageSingleLessonModel
@@ -716,6 +718,18 @@ func (imp *CoursePackageSingleLessonInterfaceImp) GetAllSingleLessonList(createT
 	} else {
 		err = cli.Raw("SELECT * FROM course_package_single_lessons ORDER BY create_ts DESC Limit 500").Scan(&vecRes).Error
 	}
+	return vecRes, err
+}
+
+func (imp *CoursePackageSingleLessonInterfaceImp) GetAllSingleLessonListWithoutQrCodePic(createTs int64) ([]model.CoursePackageSingleLessonModel, error) {
+	query := db.Get().Table(course_package_single_lesson_tableName).
+		Select(coursePackageSingleLessonColumnsWithoutQrCodePic)
+	if createTs != 0 {
+		query = query.Where("create_ts < ?", createTs)
+	}
+
+	var vecRes []model.CoursePackageSingleLessonModel
+	err := query.Order("create_ts DESC").Limit(500).Find(&vecRes).Error
 	return vecRes, err
 }
 

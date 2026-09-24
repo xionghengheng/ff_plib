@@ -248,6 +248,9 @@ type CoursePackageSingleLessonInterface interface {
 	//获取所有次课信息，通过创建时间来分页
 	GetAllSingleLessonList(createTs int64) ([]model.CoursePackageSingleLessonModel, error)
 
+	// 获取所有次课信息，通过创建时间来分页，不查询二维码图片
+	GetAllSingleLessonListWithoutQrCodePic(createTs int64) ([]model.CoursePackageSingleLessonModel, error)
+
 	//获取所有旷课的课程，通过创建时间来分页
 	GetAllMissedSingleLessonList(createTs int64) ([]model.CoursePackageSingleLessonModel, error)
 
