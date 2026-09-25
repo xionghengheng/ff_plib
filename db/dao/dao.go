@@ -1493,13 +1493,31 @@ func (imp *PreTrailManageInterfaceImp) GetTrailManageListByLessonDate(lessonDate
 	return vecTrailManage, err
 }
 
-// GetTrailManageListByLessonTime 根据体验课开始、结束时间获取体验课列表
-func (imp *PreTrailManageInterfaceImp) GetTrailManageListByLessonTime(lessonTimeBeg, lessonTimeEnd int64) ([]model.PreTrailManageModel, error) {
+// GetTrailManageListByLessonTime 按课程开始时间范围获取体验课列表
+// 游标翻页：首页传 lastLessonTimeBeg=0，后续传上一页最后一条的 lesson_time_beg
+func (imp *PreTrailManageInterfaceImp) GetTrailManageListByLessonTime(lessonTimeBeg, lessonTimeEnd, lastLessonTimeBeg int64, limit int) ([]model.PreTrailManageModel, error) {
 	var vecTrailManage []model.PreTrailManageModel
-	err := db.Get().Table(pre_trail_manage_tableName).
-		Where("lesson_time_beg = ? AND lesson_time_end = ?", lessonTimeBeg, lessonTimeEnd).
-		Order("lesson_time_beg ASC").
-		Find(&vecTrailManage).Error
+	var err error
+	if lastLessonTimeBeg > 0 {
+		err = db.Get().Raw(`
+			SELECT *
+			FROM pre_trail_manage
+			WHERE lesson_time_beg >= ?
+			  AND lesson_time_beg < ?
+			  AND lesson_time_beg < ?
+			ORDER BY lesson_time_beg DESC, created_ts DESC
+			LIMIT ?`, lessonTimeBeg, lessonTimeEnd, lastLessonTimeBeg, limit).
+			Scan(&vecTrailManage).Error
+	} else {
+		err = db.Get().Raw(`
+			SELECT *
+			FROM pre_trail_manage
+			WHERE lesson_time_beg >= ?
+			  AND lesson_time_beg < ?
+			ORDER BY lesson_time_beg DESC, created_ts DESC
+			LIMIT ?`, lessonTimeBeg, lessonTimeEnd, limit).
+			Scan(&vecTrailManage).Error
+	}
 	return vecTrailManage, err
 }
 
