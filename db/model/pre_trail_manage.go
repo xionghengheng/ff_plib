@@ -22,6 +22,15 @@ type PreTrailManageModel struct {
 	UpdatedTs     int64  `json:"updated_ts"`      // 更新时间
 }
 
+// PreTrailManageStatusCountModel 体验课链接各状态的数量统计
+type PreTrailManageStatusCountModel struct {
+	TotalCount   int64 `json:"total_count"`   // 总数
+	PendingCount int64 `json:"pending_count"` // 待使用数量
+	UsedCount    int64 `json:"used_count"`    // 已使用数量
+	CancelCount  int64 `json:"cancel_count"`  // 已取消数量
+	ExpiredCount int64 `json:"expired_count"` // 已过期数量
+}
+
 // LinkStatus 枚举类型
 const (
 	Enum_Link_Status_Pending int = iota // 0 - 待使用

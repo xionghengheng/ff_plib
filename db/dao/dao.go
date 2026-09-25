@@ -1444,6 +1444,25 @@ func (imp *PreTrailManageInterfaceImp) GetTrailManageList(offset, pageSize int) 
 	return vecTrailManage, err
 }
 
+// GetTrailManageStatusCount 获取体验课链接总数及各状态数量
+func (imp *PreTrailManageInterfaceImp) GetTrailManageStatusCount() (*model.PreTrailManageStatusCountModel, error) {
+	count := new(model.PreTrailManageStatusCountModel)
+	err := db.Get().Raw(`
+		SELECT
+			COUNT(*) AS total_count,
+			COUNT(CASE WHEN link_status = ? THEN 1 END) AS pending_count,
+			COUNT(CASE WHEN link_status = ? THEN 1 END) AS used_count,
+			COUNT(CASE WHEN link_status = ? THEN 1 END) AS cancel_count,
+			COUNT(CASE WHEN link_status = ? THEN 1 END) AS expired_count
+		FROM pre_trail_manage`,
+		model.Enum_Link_Status_Pending,
+		model.Enum_Link_Status_Used,
+		model.Enum_Link_Status_Cancel,
+		model.Enum_Link_Status_Expired,
+	).Scan(count).Error
+	return count, err
+}
+
 // GetTrailManageListByCoachId 根据教练ID获取体验课列表
 func (imp *PreTrailManageInterfaceImp) GetTrailManageListByCoachId(coachId int, page, pageSize int) ([]model.PreTrailManageModel, error) {
 	var err error

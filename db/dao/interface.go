@@ -441,6 +441,9 @@ type PreTrailManageInterface interface {
 	// 分页获取体验课列表（按创建时间降序）
 	GetTrailManageList(page, pageSize int) ([]model.PreTrailManageModel, error)
 
+	// 获取体验课链接总数及各状态数量
+	GetTrailManageStatusCount() (*model.PreTrailManageStatusCountModel, error)
+
 	// 根据教练ID获取体验课列表
 	GetTrailManageListByCoachId(coachId int, page, pageSize int) ([]model.PreTrailManageModel, error)
 
