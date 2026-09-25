@@ -453,6 +453,9 @@ type PreTrailManageInterface interface {
 	// 根据课程日期获取体验课列表
 	GetTrailManageListByLessonDate(lessonDate int64, page, pageSize int) ([]model.PreTrailManageModel, error)
 
+	// 根据体验课开始、结束时间获取体验课列表
+	GetTrailManageListByLessonTime(lessonTimeBeg, lessonTimeEnd int64) ([]model.PreTrailManageModel, error)
+
 	// 根据手机号获取体验课列表
 	GetTrailManageListByPhone(userPhone string) ([]model.PreTrailManageModel, error)
 }

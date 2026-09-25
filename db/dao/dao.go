@@ -1493,6 +1493,16 @@ func (imp *PreTrailManageInterfaceImp) GetTrailManageListByLessonDate(lessonDate
 	return vecTrailManage, err
 }
 
+// GetTrailManageListByLessonTime 根据体验课开始、结束时间获取体验课列表
+func (imp *PreTrailManageInterfaceImp) GetTrailManageListByLessonTime(lessonTimeBeg, lessonTimeEnd int64) ([]model.PreTrailManageModel, error) {
+	var vecTrailManage []model.PreTrailManageModel
+	err := db.Get().Table(pre_trail_manage_tableName).
+		Where("lesson_time_beg = ? AND lesson_time_end = ?", lessonTimeBeg, lessonTimeEnd).
+		Order("lesson_time_beg ASC").
+		Find(&vecTrailManage).Error
+	return vecTrailManage, err
+}
+
 // GetTrailManageListByPhone 根据手机号获取体验课列表
 func (imp *PreTrailManageInterfaceImp) GetTrailManageListByPhone(userPhone string) ([]model.PreTrailManageModel, error) {
 	var err error
