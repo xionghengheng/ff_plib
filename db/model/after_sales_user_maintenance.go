@@ -10,7 +10,6 @@ type AfterSalesUserMaintenanceModel struct {
 
 	// 用户基础信息
 	Uid               int64  `json:"uid"`                 // 用户uid（小程序）
-	MiniProgramNick   string `json:"mini_program_nick"`   // 用户昵称（小程序）
 	WechatNick        string `json:"wechat_nick"`         // 微信昵称
 	WecomGroupName    string `json:"wecom_group_name"`    // 企微群名
 	Salutation        string `json:"salutation"`          // 称呼
@@ -21,6 +20,7 @@ type AfterSalesUserMaintenanceModel struct {
 	Age               int    `json:"age"`                 // 年龄
 	MedicalHistory    string `json:"medical_history"`     // 历史病史
 	RegularLessonTime string `json:"regular_lesson_time"` // 日常上课时间
+	//MiniProgramNick   string `json:"mini_program_nick"`   // 用户昵称（小程序）（后台吐的时候，实时拉取）
 	//LessonFrequencyStatus string `json:"lesson_frequency_status"` // 用户上课频次状态（后台吐的时候，实时拉取）
 	//IsRenewed             bool   `json:"is_renewed"`              // 是否续费（后台吐的时候，实时拉取）
 	//RenewalCount          int    `json:"renewal_count"`           // 续费次数（后台吐的时候，实时拉取）
