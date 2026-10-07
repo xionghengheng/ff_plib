@@ -1,0 +1,23 @@
+CREATE TABLE `after_sales_user_maintenance` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键 ID',
+  `uid` BIGINT NOT NULL DEFAULT 0 COMMENT '用户 ID',
+  `mini_program_nick` VARCHAR(128) NOT NULL DEFAULT '' COMMENT '用户昵称（小程序）',
+  `wechat_nick` VARCHAR(128) NOT NULL DEFAULT '' COMMENT '微信昵称',
+  `wecom_group_name` VARCHAR(128) NOT NULL DEFAULT '' COMMENT '企微群名',
+  `salutation` VARCHAR(64) NOT NULL DEFAULT '' COMMENT '称呼',
+  `user_phone` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '手机号',
+  `training_need` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '训练需求',
+  `height` INT NOT NULL DEFAULT 0 COMMENT '身高，单位：厘米',
+  `weight` INT NOT NULL DEFAULT 0 COMMENT '体重，单位：kg',
+  `age` INT NOT NULL DEFAULT 0 COMMENT '年龄',
+  `medical_history` TEXT COMMENT '历史病史',
+  `regular_lesson_time` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '日常上课时间',
+  `package_info` JSON NOT NULL COMMENT '多个课包及其反馈、体测信息，JSON 数组',
+  `remark` TEXT COMMENT '备注',
+  `created_ts` BIGINT NOT NULL DEFAULT 0 COMMENT '创建时间，Unix 秒',
+  `updated_ts` BIGINT NOT NULL DEFAULT 0 COMMENT '更新时间，Unix 秒',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_uid` (`uid`),
+  UNIQUE KEY `uk_user_phone` (`user_phone`),
+  KEY `idx_created_ts_id` (`created_ts`, `id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='售后用户维护档案';
