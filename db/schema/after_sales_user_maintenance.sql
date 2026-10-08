@@ -13,6 +13,7 @@ CREATE TABLE `after_sales_user_maintenance` (
   `medical_history` TEXT COMMENT '历史病史',
   `regular_lesson_time` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '日常上课时间',
   `package_info` JSON NOT NULL COMMENT '多个课包及其反馈、体测信息，JSON 数组',
+  `latest_package_purchase_ts` BIGINT NOT NULL DEFAULT 0 COMMENT '最新课包购买时间，Unix 秒',
   `remark` TEXT COMMENT '备注',
   `created_ts` BIGINT NOT NULL DEFAULT 0 COMMENT '创建时间，Unix 秒',
   `updated_ts` BIGINT NOT NULL DEFAULT 0 COMMENT '更新时间，Unix 秒',

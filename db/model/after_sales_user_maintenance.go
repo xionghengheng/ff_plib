@@ -27,7 +27,8 @@ type AfterSalesUserMaintenanceModel struct {
 	//TrialLessonTs         int64  `json:"trial_lesson_ts"`         // 试课时间，Unix 秒（后台吐的时候，实时拉取）
 
 	// 课包信息，JSON 数组字符串；一个元素对应一个课包。
-	PackageInfo string `json:"package_info"`
+	PackageInfo             string `json:"package_info"`
+	LatestPackagePurchaseTs int64  `json:"latest_package_purchase_ts"` // 最新课包购买时间，Unix 秒
 
 	// 补充说明与审计时间
 	Remark    string `json:"remark"`     // 备注
