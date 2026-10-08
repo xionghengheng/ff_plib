@@ -20,5 +20,6 @@ CREATE TABLE `after_sales_user_maintenance` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_uid` (`uid`),
   UNIQUE KEY `uk_user_phone` (`user_phone`),
-  KEY `idx_created_ts_id` (`created_ts`, `id`)
+  KEY `idx_created_ts_id` (`created_ts`, `id`),
+  KEY `idx_latest_package_purchase_ts_id` (`latest_package_purchase_ts`, `id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='售后用户维护档案';

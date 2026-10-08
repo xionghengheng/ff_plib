@@ -33,6 +33,30 @@ func (imp *AfterSalesUserMaintenanceInterfaceImp) GetAfterSalesUserMaintenanceLi
 	return maintenanceList, err
 }
 
+// GetAfterSalesUserMaintenanceListByLatestPackagePurchaseTs 按最新课包购买时间倒序游标分页查询档案列表。
+func (imp *AfterSalesUserMaintenanceInterfaceImp) GetAfterSalesUserMaintenanceListByLatestPackagePurchaseTs(lastLatestPackagePurchaseTs, lastID int64, limit int) ([]model.AfterSalesUserMaintenanceModel, error) {
+	var maintenanceList []model.AfterSalesUserMaintenanceModel
+	var err error
+	if lastID > 0 {
+		err = db.Get().Raw(`
+			SELECT *
+			FROM after_sales_user_maintenance
+			WHERE latest_package_purchase_ts < ?
+			   OR (latest_package_purchase_ts = ? AND id < ?)
+			ORDER BY latest_package_purchase_ts DESC, id DESC
+			LIMIT ?`, lastLatestPackagePurchaseTs, lastLatestPackagePurchaseTs, lastID, limit).
+			Scan(&maintenanceList).Error
+	} else {
+		err = db.Get().Raw(`
+			SELECT *
+			FROM after_sales_user_maintenance
+			ORDER BY latest_package_purchase_ts DESC, id DESC
+			LIMIT ?`, limit).
+			Scan(&maintenanceList).Error
+	}
+	return maintenanceList, err
+}
+
 // GetAfterSalesUserMaintenanceByPhone 根据手机号查询单条档案。
 func (imp *AfterSalesUserMaintenanceInterfaceImp) GetAfterSalesUserMaintenanceByPhone(userPhone string) (*model.AfterSalesUserMaintenanceModel, error) {
 	maintenance := new(model.AfterSalesUserMaintenanceModel)

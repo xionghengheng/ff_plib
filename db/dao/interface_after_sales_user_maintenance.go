@@ -11,6 +11,10 @@ type AfterSalesUserMaintenanceInterface interface {
 	// 首页传 lastCreatedTs=0、lastID=0；后续传上一页最后一条记录的 created_ts 和 id。
 	GetAfterSalesUserMaintenanceList(lastCreatedTs, lastID int64, limit int) ([]model.AfterSalesUserMaintenanceModel, error)
 
+	// GetAfterSalesUserMaintenanceListByLatestPackagePurchaseTs 按最新课包购买时间倒序游标分页查询档案列表。
+	// 首页传 lastLatestPackagePurchaseTs=0、lastID=0；后续传上一页最后一条记录的 latest_package_purchase_ts 和 id。
+	GetAfterSalesUserMaintenanceListByLatestPackagePurchaseTs(lastLatestPackagePurchaseTs, lastID int64, limit int) ([]model.AfterSalesUserMaintenanceModel, error)
+
 	// GetAfterSalesUserMaintenanceByPhone 根据手机号查询单条档案。
 	GetAfterSalesUserMaintenanceByPhone(userPhone string) (*model.AfterSalesUserMaintenanceModel, error)
 
