@@ -56,6 +56,13 @@ func (imp *UserInterfaceImp) GetUserByPhone(phone string) (*model.UserInfoModel,
 	return user, err
 }
 
+// GetUserByNick 根据昵称获取用户信息
+func (imp *UserInterfaceImp) GetUserByNick(nick string) (*model.UserInfoModel, error) {
+	var user = new(model.UserInfoModel)
+	err := db.Get().Table(user_tableName).Where("nick = ?", nick).First(user).Error
+	return user, err
+}
+
 func (imp *UserInterfaceImp) GetUserByTraceId(traceid string) (*model.UserInfoModel, error) {
 	var err error
 	var user = new(model.UserInfoModel)

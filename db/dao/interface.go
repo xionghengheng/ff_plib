@@ -18,6 +18,9 @@ type UserInterface interface {
 	//根据手机号获取用户信息
 	GetUserByPhone(phone string) (*model.UserInfoModel, error)
 
+	//根据昵称获取用户信息
+	GetUserByNick(nick string) (*model.UserInfoModel, error)
+
 	//插入用户信息
 	UpsertUser(user *model.UserInfoModel) error
 
