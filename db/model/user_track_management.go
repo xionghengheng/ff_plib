@@ -17,6 +17,7 @@ type UserTrackModel struct {
 	UserPhone     string `json:"user_phone"`     // 手机号（非必填，生成体验课链接后自动拉取或手填）
 	ProfileRemark string `json:"profile_remark"` // 建档的时候填写，档案备注
 	Stage         int    `json:"stage"`          // 当前状态（系统，参考 Enum_Track_Stage）
+	PreTrialTag   int    `json:"pre_trial_tag"`  // 排体验课前标签（参考 Enum_Pre_Trial_Tag，0 表示未设置）
 	AdvisorName   string `json:"advisor_name"`   // 销售负责人名称
 	CreatedTs     int64  `json:"created_ts"`     // 创建时间
 	UpdatedTs     int64  `json:"updated_ts"`     // 更新时间
@@ -84,4 +85,18 @@ const (
 	Enum_Intent_Level_High int = iota + 1 // 高：明确表达体验/近期购买意愿
 	Enum_Intent_Level_Mid                 // 中：有需求，但仍在考虑
 	Enum_Intent_Level_Low                 // 低：暂无明确行动意愿
+)
+
+// 排体验课前标签。
+const (
+	Enum_Pre_Trial_Tag_WechatSilent        int = iota + 1 // 01 加微后沉默
+	Enum_Pre_Trial_Tag_MissingLocation                    // 02 没推进到试课：缺地点位置
+	Enum_Pre_Trial_Tag_MissingTrainingNeed                // 03 没推进到试课：缺训练需求
+	Enum_Pre_Trial_Tag_MissingTrainingTime                // 04 没推进到试课：缺训练时间
+	Enum_Pre_Trial_Tag_PriceSilent                        // 05 价格沉默
+	Enum_Pre_Trial_Tag_GymTooFar                          // 06 门店位置过远
+	Enum_Pre_Trial_Tag_CoachUnavailable                   // 07 教练供给不足，无法排
+	Enum_Pre_Trial_Tag_Other                              // 08 其他（不接受模式、需要按次等）
+	Enum_Pre_Trial_Tag_LinkUnpaid                         // 09 已生成试课链接，未支付
+	Enum_Pre_Trial_Tag_Scheduled                          // 10 已排体验课
 )
