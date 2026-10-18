@@ -1,15 +1,12 @@
 package dao
 
-import (
-	"github.com/jinzhu/gorm"
-	"github.com/xionghengheng/ff_plib/db/model"
-)
+import "github.com/xionghengheng/ff_plib/db/model"
 
 // CoursePackagePurchaseWhitelistInterface 课包购买最低次数白名单数据访问接口。
 // 参数有效性及新增授权的初始状态由调用方校验。
 type CoursePackagePurchaseWhitelistInterface interface {
 	// AddCoursePackagePurchaseWhitelist 新增未使用的授权，自增 ID 回填到 record。
-	// 同一用户已有未使用授权时，由 uk_unused_uid 唯一索引拒绝新增。
+	// 是否已有未使用授权及是否允许新增，由业务上层查询后决定。
 	AddCoursePackagePurchaseWhitelist(record *model.CoursePackagePurchaseWhitelistModel) error
 
 	// GetUnusedCoursePackagePurchaseWhitelistByUid 查询用户当前未使用的授权。
@@ -20,10 +17,9 @@ type CoursePackagePurchaseWhitelistInterface interface {
 	// lastID <= 0 取首页，后续传上一页最后一条记录的 ID；limit 必须大于 0。
 	GetCoursePackagePurchaseWhitelistListByUid(uid, lastID int64, limit int) ([]model.CoursePackagePurchaseWhitelistModel, error)
 
-	// UseCoursePackagePurchaseWhitelist 在调用方传入的支付事务 tx 中消费授权。
-	// 调用方需检查返回错误，并与订单支付、课时发放一起提交或回滚。
-	// 授权不存在、不属于该用户或已使用时，返回 ErrCoursePackagePurchaseWhitelistUnavailable。
-	UseCoursePackagePurchaseWhitelist(tx *gorm.DB, id, uid int64, orderID string, usedTs int64) error
+	// UpdateCoursePackagePurchaseWhitelist 根据主键 ID 更新指定字段。
+	// 支付成功后，由业务上层更新使用状态、订单 ID 及使用时间。
+	UpdateCoursePackagePurchaseWhitelist(id int64, updates map[string]interface{}) error
 }
 
 // CoursePackagePurchaseWhitelistInterfaceImp 课包购买最低次数白名单数据访问实现。

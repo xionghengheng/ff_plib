@@ -1,15 +1,10 @@
 package dao
 
 import (
-	"errors"
-
 	"github.com/jinzhu/gorm"
 	"github.com/xionghengheng/ff_plib/db"
 	"github.com/xionghengheng/ff_plib/db/model"
 )
-
-// ErrCoursePackagePurchaseWhitelistUnavailable 授权不存在、不属于当前用户或已使用。
-var ErrCoursePackagePurchaseWhitelistUnavailable = errors.New("course package purchase whitelist is unavailable")
 
 // AddCoursePackagePurchaseWhitelist 新增未使用的授权。
 func (imp *CoursePackagePurchaseWhitelistInterfaceImp) AddCoursePackagePurchaseWhitelist(record *model.CoursePackagePurchaseWhitelistModel) error {
@@ -22,7 +17,7 @@ func (imp *CoursePackagePurchaseWhitelistInterfaceImp) GetUnusedCoursePackagePur
 	result := db.Get().Raw(`
 		SELECT *
 		FROM course_package_purchase_whitelist
-		WHERE unused_uid = ?
+		WHERE uid = ? AND is_used = 0
 		LIMIT 1`, uid).Scan(record)
 	if result.Error != nil {
 		return nil, result.Error
@@ -55,20 +50,10 @@ func (imp *CoursePackagePurchaseWhitelistInterfaceImp) GetCoursePackagePurchaseW
 	return records, err
 }
 
-// UseCoursePackagePurchaseWhitelist 在调用方的支付事务中原子消费未使用授权。
-func (imp *CoursePackagePurchaseWhitelistInterfaceImp) UseCoursePackagePurchaseWhitelist(tx *gorm.DB, id, uid int64, orderID string, usedTs int64) error {
-	if tx.Error != nil {
-		return tx.Error
-	}
-	result := tx.Exec(`
-		UPDATE course_package_purchase_whitelist
-		SET is_used = 1, order_id = ?, used_ts = ?, updated_ts = ?
-		WHERE id = ? AND uid = ? AND is_used = 0`, orderID, usedTs, usedTs, id, uid)
-	if result.Error != nil {
-		return result.Error
-	}
-	if result.RowsAffected != 1 {
-		return ErrCoursePackagePurchaseWhitelistUnavailable
-	}
-	return nil
+// UpdateCoursePackagePurchaseWhitelist 根据主键 ID 更新指定字段。
+func (imp *CoursePackagePurchaseWhitelistInterfaceImp) UpdateCoursePackagePurchaseWhitelist(id int64, updates map[string]interface{}) error {
+	return db.Get().Table("course_package_purchase_whitelist").
+		Model(&model.CoursePackagePurchaseWhitelistModel{}).
+		Where("id = ?", id).
+		Updates(updates).Error
 }
