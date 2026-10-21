@@ -12,6 +12,7 @@ type CoursePackagePurchaseWhitelistModel struct {
 	MinCourseCnt int    `json:"min_course_cnt"` // 本次授权允许的最低购买次数，必须大于 0；不改变课包价格
 	IsUsed       bool   `json:"is_used"`        // 是否已使用，支付成功并发放课时后置为 true
 	OrderID      string `json:"order_id"`       // 使用本次优惠的支付订单 ID，未使用时为空
+	PackageID    string `json:"package_id"`     // 关联课包 ID
 	UsedTs       int64  `json:"used_ts"`        // 使用时间，Unix 秒；未使用时为 0
 	CreatedBy    string `json:"created_by"`     // 创建人（顾问/运营）
 	Remark       string `json:"remark"`         // 授权原因或备注
