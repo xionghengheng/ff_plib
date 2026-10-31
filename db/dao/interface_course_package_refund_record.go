@@ -10,17 +10,9 @@ type CoursePackageRefundRecordInterface interface {
 	// 与现有课包更新接口先后调用不具备跨调用事务保证。
 	AddCoursePackageRefundRecord(record *model.CoursePackageRefundRecordModel) error
 
-	// GetCoursePackageRefundRecordList 按 ID 倒序游标分页查询全量历史。
-	// lastID <= 0 取首页，后续传上一页最后一条记录的 ID；limit 必须大于 0。
-	GetCoursePackageRefundRecordList(lastID int64, limit int) ([]model.CoursePackageRefundRecordModel, error)
-
-	// GetCoursePackageRefundRecordListByUid 按用户查询历史，按 ID 倒序游标分页。
-	// lastID <= 0 取首页，后续传上一页最后一条记录的 ID；limit 必须大于 0。
-	GetCoursePackageRefundRecordListByUid(uid, lastID int64, limit int) ([]model.CoursePackageRefundRecordModel, error)
-
-	// GetCoursePackageRefundRecordListByPackageId 按课包查询历史，按 ID 倒序游标分页。
-	// lastID <= 0 取首页，后续传上一页最后一条记录的 ID；limit 必须大于 0。
-	GetCoursePackageRefundRecordListByPackageId(packageID string, lastID int64, limit int) ([]model.CoursePackageRefundRecordModel, error)
+	// GetCoursePackageRefundRecordList 按退费时间倒序分页查询全量历史，同一时间按 ID 倒序。
+	// 首页传 (0, 0)，后续传上一页最后一条的 RefundTs、ID；limit 必须大于 0。
+	GetCoursePackageRefundRecordList(lastRefundTs, lastID int64, limit int) ([]model.CoursePackageRefundRecordModel, error)
 }
 
 // CoursePackageRefundRecordInterfaceImp 课包退费历史数据访问实现。

@@ -10,17 +10,9 @@ type CoursePackageCoachChangeRecordInterface interface {
 	// 与现有课包更新接口先后调用不具备跨调用事务保证。
 	AddCoursePackageCoachChangeRecord(record *model.CoursePackageCoachChangeRecordModel) error
 
-	// GetCoursePackageCoachChangeRecordList 按 ID 倒序游标分页查询全量记录。
-	// lastID <= 0 取首页，后续传上一页最后一条记录的 ID；limit 必须大于 0。
-	GetCoursePackageCoachChangeRecordList(lastID int64, limit int) ([]model.CoursePackageCoachChangeRecordModel, error)
-
-	// GetCoursePackageCoachChangeRecordListByUid 按用户查询记录，按 ID 倒序游标分页。
-	// lastID <= 0 取首页，后续传上一页最后一条记录的 ID；limit 必须大于 0。
-	GetCoursePackageCoachChangeRecordListByUid(uid, lastID int64, limit int) ([]model.CoursePackageCoachChangeRecordModel, error)
-
-	// GetCoursePackageCoachChangeRecordListByPackageId 按课包查询记录，按 ID 倒序游标分页。
-	// lastID <= 0 取首页，后续传上一页最后一条记录的 ID；limit 必须大于 0。
-	GetCoursePackageCoachChangeRecordListByPackageId(packageID string, lastID int64, limit int) ([]model.CoursePackageCoachChangeRecordModel, error)
+	// GetCoursePackageCoachChangeRecordList 按变更时间倒序分页查询全量记录，同一时间按 ID 倒序。
+	// 首页传 (0, 0)，后续传上一页最后一条的 ChangeCoachTs、ID；limit 必须大于 0。
+	GetCoursePackageCoachChangeRecordList(lastChangeCoachTs, lastID int64, limit int) ([]model.CoursePackageCoachChangeRecordModel, error)
 }
 
 // CoursePackageCoachChangeRecordInterfaceImp 课包更换教练操作记录数据访问实现。

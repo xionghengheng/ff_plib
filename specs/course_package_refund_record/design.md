@@ -31,24 +31,21 @@
 
 索引：
 
-- `PRIMARY KEY (id)`：全量游标分页。
-- `idx_uid_id (uid, id)`：按用户游标分页。
-- `idx_package_id_id (package_id, id)`：按课包游标分页。
+- `PRIMARY KEY (id)`：记录主键。
+- `idx_refund_ts_id (refund_ts, id)`：全量按退费时间分页。
 
 ## DAO 接口
 
 ```go
 type CoursePackageRefundRecordInterface interface {
     AddCoursePackageRefundRecord(record *model.CoursePackageRefundRecordModel) error
-    GetCoursePackageRefundRecordList(lastID int64, limit int) ([]model.CoursePackageRefundRecordModel, error)
-    GetCoursePackageRefundRecordListByUid(uid, lastID int64, limit int) ([]model.CoursePackageRefundRecordModel, error)
-    GetCoursePackageRefundRecordListByPackageId(packageID string, lastID int64, limit int) ([]model.CoursePackageRefundRecordModel, error)
+    GetCoursePackageRefundRecordList(lastRefundTs, lastID int64, limit int) ([]model.CoursePackageRefundRecordModel, error)
 }
 ```
 
 使用 `CoursePackageRefundRecordInterfaceImp` 实现，导出 `ImpCoursePackageRefundRecord` 实例，并添加接口实现的编译期断言。
 
-新增使用 `db.Get().Table(...).Create(record)`，自增 ID 回填到 record。查询使用参数化 Raw SQL 和 Scan，空列表不视为错误，数据库错误原样返回。lastID <= 0 为首页，后续增加 `id < ?`，统一 `ORDER BY id DESC LIMIT ?`。过滤值、游标和条数均使用占位符。
+新增使用 `db.Get().Table(...).Create(record)`，自增 ID 回填到 record。查询使用参数化 Raw SQL 和 Scan，空列表不视为错误，数据库错误原样返回。首页传 (0, 0)，后续传上一页最后一条的 RefundTs、ID，增加 `refund_ts < ? OR (refund_ts = ? AND id < ?)`，统一 `ORDER BY refund_ts DESC, id DESC LIMIT ?`。同秒记录用 ID 排序避免翻页遗漏；lastID > 0 标识有游标，以支持 refund_ts 为 0 的记录。过滤值、游标和条数均使用占位符。
 
 DAO 不校验业务参数，不自动填写时间，不提供修改或删除历史的接口。调用方负责正数 limit、金额/课时有效性、鉴权、课包归属及重复请求控制。
 

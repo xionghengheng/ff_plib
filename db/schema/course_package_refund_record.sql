@@ -10,6 +10,5 @@ CREATE TABLE `course_package_refund_record` (
   `remark` TEXT COMMENT '操作原因或备注',
   `created_ts` BIGINT NOT NULL DEFAULT 0 COMMENT '记录创建时间，Unix 秒',
   PRIMARY KEY (`id`),
-  KEY `idx_uid_id` (`uid`, `id`),
-  KEY `idx_package_id_id` (`package_id`, `id`)
+  KEY `idx_refund_ts_id` (`refund_ts`, `id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='课包退费及课时归零历史记录';
