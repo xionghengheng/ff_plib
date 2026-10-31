@@ -18,8 +18,6 @@
 | ID | int64 | id BIGINT | 自增主键 |
 | Uid | int64 | uid BIGINT | 用户 ID |
 | PackageID | string | package_id VARCHAR(64) | 课包 ID |
-| BeforeRemainCnt | int | before_remain_cnt INT | 操作前剩余课时 |
-| AfterRemainCnt | int | after_remain_cnt INT | 操作后剩余课时 |
 | RefundLessonCnt | int | refund_lesson_cnt INT | 本次退费或清零课时数 |
 | RefundAmount | int64 | refund_amount BIGINT | 本次退款金额，整数元；0 表示未登记退款金额 |
 | RefundTs | int64 | refund_ts BIGINT | 退费或归零操作时间，Unix 秒 |
@@ -58,7 +56,7 @@ DAO 不校验业务参数，不自动填写时间，不提供修改或删除历�
 
 本次不修改用户提供的 HTTP handler，不发起退款，不直接执行建表 SQL，也不自动补历史。
 
-归零时记录 before_remain_cnt 为清零前剩余次数、after_remain_cnt 为 0、refund_lesson_cnt 为清零次数；refund_amount 记录本次登记金额而非课包累计金额。记录中不保存管理员密码或认证头。
+归零时记录 refund_lesson_cnt 为清零次数；refund_amount 记录本次登记金额而非课包累计金额。记录中不保存管理员密码或认证头。
 
 独立的新增 DAO 与现有 UpdateCoursePackage 各自使用 db.Get()，先后调用不具备跨调用事务保证。正式接入时须另行将课包条件更新和记录插入置于同一事务，处理并发扣课和重复请求；本次不声称已实现该原子操作。
 

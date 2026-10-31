@@ -3,8 +3,6 @@ CREATE TABLE `course_package_refund_record` (
   `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '自增记录 ID',
   `uid` BIGINT NOT NULL DEFAULT 0 COMMENT '用户 ID',
   `package_id` VARCHAR(64) NOT NULL DEFAULT '' COMMENT '课包 ID',
-  `before_remain_cnt` INT NOT NULL DEFAULT 0 COMMENT '操作前剩余课时',
-  `after_remain_cnt` INT NOT NULL DEFAULT 0 COMMENT '操作后剩余课时',
   `refund_lesson_cnt` INT NOT NULL DEFAULT 0 COMMENT '本次退费或清零课时数',
   `refund_amount` BIGINT NOT NULL DEFAULT 0 COMMENT '本次退款金额，单位元；0表示未登记退款金额',
   `refund_ts` BIGINT NOT NULL DEFAULT 0 COMMENT '退费或归零操作时间，Unix 秒',
