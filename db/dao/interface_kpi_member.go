@@ -4,6 +4,8 @@ import "github.com/xionghengheng/ff_plib/db/model"
 
 // KPIMemberInterface KPI 人员配置接口，参数校验和时间字段由业务层负责。
 type KPIMemberInterface interface {
+	// DeleteKPIMember 删除人员，保留历史月度配置。
+	DeleteKPIMember(id int64) error
 	// AddKPIMember 新增人员，自增 ID 回填到 record。
 	AddKPIMember(record *model.KPIMemberModel) error
 	// UpdateKPIMember 按人员 ID 更新指定字段，支持写入零值。

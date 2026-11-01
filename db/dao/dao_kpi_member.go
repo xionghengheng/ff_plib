@@ -1,6 +1,7 @@
 package dao
 
 import (
+	"github.com/jinzhu/gorm"
 	"github.com/xionghengheng/ff_plib/db"
 	"github.com/xionghengheng/ff_plib/db/model"
 )
@@ -10,8 +11,13 @@ func (imp *KPIMemberInterfaceImp) AddKPIMember(record *model.KPIMemberModel) err
 }
 
 func (imp *KPIMemberInterfaceImp) UpdateKPIMember(id int64, updates map[string]interface{}) error {
-	return db.Get().Table("kpi_member").Model(&model.KPIMemberModel{}).
-		Where("id = ?", id).Updates(updates).Error
+	return db.Get().Transaction(func(tx *gorm.DB) error {
+		var member model.KPIMemberModel
+		if err := tx.Table("kpi_member").Set("gorm:query_option", "FOR UPDATE").Where("id = ?", id).First(&member).Error; err != nil {
+			return err
+		}
+		return tx.Table("kpi_member").Model(&model.KPIMemberModel{}).Where("id = ?", id).Updates(updates).Error
+	})
 }
 
 func (imp *KPIMemberInterfaceImp) GetKPIMemberList(memberType int) ([]model.KPIMemberModel, error) {

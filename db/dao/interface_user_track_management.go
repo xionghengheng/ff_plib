@@ -4,6 +4,9 @@ import "github.com/xionghengheng/ff_plib/db/model"
 
 // UserTrackManagementInterface 客资档案与流转节点数据访问接口。
 type UserTrackManagementInterface interface {
+	GetKPITrackDailyStats(begin, end int64) ([]model.KPIDailyStat, error)
+	// GetKPITrackStats 按本月建档群体和当前顾问姓名汇总，范围为[begin,end)。
+	GetKPITrackStats(begin, end int64) ([]model.KPITrackStat, error)
 	// CreateUserTrack 创建客资基础档案。
 	CreateUserTrack(track *model.UserTrackModel) error
 

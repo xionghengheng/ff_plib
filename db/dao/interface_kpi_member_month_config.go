@@ -5,6 +5,8 @@ import "github.com/xionghengheng/ff_plib/db/model"
 // KPIMemberMonthConfigInterface 每人每月指标配置接口。
 // 月份、数值、人员校验以及快照和时间字段由业务层负责。
 type KPIMemberMonthConfigInterface interface {
+	// MutateKPIMemberMonthConfig 锁定人员及月度配置后校验并修改；回调不得访问数据库。
+	MutateKPIMemberMonthConfig(month string, memberID, now int64, mutate func(*model.KPIMemberMonthConfigModel) error) (*model.KPIMemberMonthConfigModel, error)
 	// AddKPIMemberMonthConfig 新增配置，ID 回填；重复月份+人员由数据库唯一键报错。
 	AddKPIMemberMonthConfig(record *model.KPIMemberMonthConfigModel) error
 	// UpdateKPIMemberMonthConfig 按月份、人员更新，map 值为 nil 可清空可空指标，0 可写入零值。
