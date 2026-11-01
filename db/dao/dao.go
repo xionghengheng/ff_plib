@@ -739,16 +739,16 @@ func (imp *CoursePackageSingleLessonInterfaceImp) GetAllSingleLessonListWithoutQ
 	return vecRes, err
 }
 
-// GetAllSingleLessonListWithoutQrCodePicFromTs 从固定创建时间起点开始，按创建时间倒序分页，不查询二维码图片。
-func (imp *CoursePackageSingleLessonInterfaceImp) GetAllSingleLessonListWithoutQrCodePicFromTs(startTs, createTs int64) ([]model.CoursePackageSingleLessonModel, error) {
+// 按核销时间范围查询已完成次课，按核销时间、次课 ID 倒序分页，不查询二维码图片。
+func (imp *CoursePackageSingleLessonInterfaceImp) GetAllSingleLessonListWithoutQrCodePicFromTs(begin, end, lastWriteOffTs int64, lastLessonID string) ([]model.CoursePackageSingleLessonModel, error) {
 	query := "SELECT " + coursePackageSingleLessonColumnsWithoutQrCodePic +
-		" FROM course_package_single_lessons WHERE create_ts >= ?"
-	args := []interface{}{startTs}
-	if createTs != 0 {
-		query += " AND create_ts < ?"
-		args = append(args, createTs)
+		" FROM course_package_single_lessons WHERE status = ? AND write_off_ts >= ? AND write_off_ts < ?"
+	args := []interface{}{model.En_LessonStatusCompleted, begin, end}
+	if lastLessonID != "" {
+		query += " AND (write_off_ts < ? OR (write_off_ts = ? AND lesson_id < ?))"
+		args = append(args, lastWriteOffTs, lastWriteOffTs, lastLessonID)
 	}
-	query += " ORDER BY create_ts DESC LIMIT 5000"
+	query += " ORDER BY write_off_ts DESC, lesson_id DESC LIMIT 500"
 
 	var records []model.CoursePackageSingleLessonModel
 	err := db.Get().Raw(query, args...).Scan(&records).Error
