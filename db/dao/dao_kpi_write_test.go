@@ -29,27 +29,25 @@ func kpiMockDB(t *testing.T) (*gorm.DB, sqlmock.Sqlmock) {
 	})
 	return db, mock
 }
-func TestSaveKPITargetAuditRollback(t *testing.T) {
+func TestSaveKPITargetUpdatePreservesCreation(t *testing.T) {
 	db, mock := kpiMockDB(t)
 	mock.ExpectBegin()
 	mock.ExpectQuery("SELECT .*kpi_month_target.*FOR UPDATE").WillReturnRows(sqlmock.NewRows([]string{"id", "stat_month", "created_by", "created_ts"}).AddRow(1, "202611", "original", 100))
 	mock.ExpectExec("UPDATE .*kpi_month_target").WillReturnResult(sqlmock.NewResult(0, 1))
-	mock.ExpectExec("INSERT INTO kpi_target_change_log").WillReturnError(errors.New("audit insert failed"))
-	mock.ExpectRollback()
+	mock.ExpectCommit()
 	record := &model.KPIMonthTargetModel{StatMonth: "202611", LessonBaselineTarget: 100, LessonSprintTarget: 120, NewPaidUserTarget: 10, GMVTargetFen: 12345, UpdatedBy: "admin", CreatedBy: "new", CreatedTs: 200, UpdatedTs: 200}
-	if err := saveKPIMonthTarget(db, record); err == nil {
-		t.Fatal("audit failure must roll back")
+	if err := saveKPIMonthTarget(db, record); err != nil {
+		t.Fatal(err)
 	}
 	if record.CreatedBy != "original" || record.CreatedTs != 100 {
 		t.Fatal("creation identity overwritten")
 	}
 }
-func TestSaveKPITargetCreationCommitsAudit(t *testing.T) {
+func TestSaveKPITargetCreationCommits(t *testing.T) {
 	db, mock := kpiMockDB(t)
 	mock.ExpectBegin()
 	mock.ExpectQuery("SELECT .*kpi_month_target.*FOR UPDATE").WillReturnRows(sqlmock.NewRows([]string{"id"}))
 	mock.ExpectExec("INSERT INTO .*kpi_month_target").WillReturnResult(sqlmock.NewResult(8, 1))
-	mock.ExpectExec("INSERT INTO kpi_target_change_log").WithArgs(int64(8), 1, "{}", sqlmock.AnyArg(), "admin", "admin", int64(200)).WillReturnResult(sqlmock.NewResult(1, 1))
 	mock.ExpectCommit()
 	record := &model.KPIMonthTargetModel{StatMonth: "202611", UpdatedBy: "admin", UpdatedTs: 200}
 	if err := saveKPIMonthTarget(db, record); err != nil {
@@ -57,6 +55,34 @@ func TestSaveKPITargetCreationCommitsAudit(t *testing.T) {
 	}
 	if record.ID != 8 {
 		t.Fatal("ID not filled")
+	}
+}
+func TestSaveKPITargetWriteFailureRollsBack(t *testing.T) {
+	for _, creating := range []bool{true, false} {
+		name := "update"
+		if creating {
+			name = "create"
+		}
+		t.Run(name, func(t *testing.T) {
+			db, mock := kpiMockDB(t)
+			mock.ExpectBegin()
+			rows := sqlmock.NewRows([]string{"id", "stat_month", "created_by", "created_ts"})
+			if !creating {
+				rows.AddRow(1, "202611", "original", 100)
+			}
+			mock.ExpectQuery("SELECT .*kpi_month_target.*FOR UPDATE").WillReturnRows(rows)
+			writeErr := errors.New("target write failed")
+			if creating {
+				mock.ExpectExec("INSERT INTO .*kpi_month_target").WillReturnError(writeErr)
+			} else {
+				mock.ExpectExec("UPDATE .*kpi_month_target").WillReturnError(writeErr)
+			}
+			mock.ExpectRollback()
+			err := saveKPIMonthTarget(db, &model.KPIMonthTargetModel{StatMonth: "202611", UpdatedBy: "admin", UpdatedTs: 200})
+			if !errors.Is(err, writeErr) {
+				t.Fatalf("got %v, want %v", err, writeErr)
+			}
+		})
 	}
 }
 func TestMutateKPIMonthPreservesSnapshotAndNull(t *testing.T) {
