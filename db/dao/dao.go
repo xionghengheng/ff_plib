@@ -739,6 +739,22 @@ func (imp *CoursePackageSingleLessonInterfaceImp) GetAllSingleLessonListWithoutQ
 	return vecRes, err
 }
 
+// GetAllSingleLessonListWithoutQrCodePicFromTs 从固定创建时间起点开始，按创建时间倒序分页，不查询二维码图片。
+func (imp *CoursePackageSingleLessonInterfaceImp) GetAllSingleLessonListWithoutQrCodePicFromTs(startTs, createTs int64) ([]model.CoursePackageSingleLessonModel, error) {
+	query := "SELECT " + coursePackageSingleLessonColumnsWithoutQrCodePic +
+		" FROM course_package_single_lessons WHERE create_ts >= ?"
+	args := []interface{}{startTs}
+	if createTs != 0 {
+		query += " AND create_ts < ?"
+		args = append(args, createTs)
+	}
+	query += " ORDER BY create_ts DESC LIMIT 5000"
+
+	var records []model.CoursePackageSingleLessonModel
+	err := db.Get().Raw(query, args...).Scan(&records).Error
+	return records, err
+}
+
 func (imp *CoursePackageSingleLessonInterfaceImp) GetAllMissedSingleLessonList(createTs int64) ([]model.CoursePackageSingleLessonModel, error) {
 	cli := db.Get()
 	var vecRes []model.CoursePackageSingleLessonModel

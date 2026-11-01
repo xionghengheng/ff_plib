@@ -254,6 +254,11 @@ type CoursePackageSingleLessonInterface interface {
 	// 获取所有次课信息，通过创建时间来分页，不查询二维码图片
 	GetAllSingleLessonListWithoutQrCodePic(createTs int64) ([]model.CoursePackageSingleLessonModel, error)
 
+	// 获取创建时间 >= startTs 的次课信息，不查询二维码图片，按创建时间倒序，每页最多 5000 条。
+	// startTs 为固定起点（包含），例如某月 1 日零点的 Unix 秒；不是课程安排时间。
+	// createTs 首页传 0，后续传上一页最后一条的 CreateTs；每页保持 startTs 不变。
+	GetAllSingleLessonListWithoutQrCodePicFromTs(startTs, createTs int64) ([]model.CoursePackageSingleLessonModel, error)
+
 	//获取所有旷课的课程，通过创建时间来分页
 	GetAllMissedSingleLessonList(createTs int64) ([]model.CoursePackageSingleLessonModel, error)
 
