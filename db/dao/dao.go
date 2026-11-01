@@ -740,7 +740,7 @@ func (imp *CoursePackageSingleLessonInterfaceImp) GetAllSingleLessonListWithoutQ
 }
 
 // 按核销时间范围查询已完成次课，按核销时间、次课 ID 倒序分页，不查询二维码图片。
-func (imp *CoursePackageSingleLessonInterfaceImp) GetAllSingleLessonListWithoutQrCodePicFromTs(begin, end, lastWriteOffTs int64, lastLessonID string) ([]model.CoursePackageSingleLessonModel, error) {
+func (imp *CoursePackageSingleLessonInterfaceImp) GetCompletedListByWriteOffTsWithoutQr(begin, end, lastWriteOffTs int64, lastLessonID string) ([]model.CoursePackageSingleLessonModel, error) {
 	query := "SELECT " + coursePackageSingleLessonColumnsWithoutQrCodePic +
 		" FROM course_package_single_lessons WHERE status = ? AND write_off_ts >= ? AND write_off_ts < ?"
 	args := []interface{}{model.En_LessonStatusCompleted, begin, end}
