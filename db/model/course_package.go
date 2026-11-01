@@ -27,6 +27,6 @@ type CoursePackageModel struct {
 }
 
 const (
-	Enum_PackageType_TrialFree   int = iota + 1 // 1 = 体验免费课包
+	Enum_PackageType_TrialFree   int = iota + 1 // 1 = 体验免费课包（赠送的是一种特殊的免费课包）
 	Enum_PackageType_PaidPackage                // 2 = 付费课包
 )
