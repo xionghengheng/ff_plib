@@ -1,0 +1,25 @@
+-- 课包及唯一支付订单转移成功后新增一条记录；昵称、手机号和课包信息保留操作时快照。
+CREATE TABLE IF NOT EXISTS `course_package_transfer_record` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '自增记录 ID',
+  `source_uid` BIGINT NOT NULL COMMENT '转出用户 UID',
+  `source_nick` VARCHAR(128) NOT NULL DEFAULT '' COMMENT '转出用户昵称快照',
+  `source_phone` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '转出用户手机号快照',
+  `target_uid` BIGINT NOT NULL COMMENT '转入用户 UID',
+  `target_nick` VARCHAR(128) NOT NULL DEFAULT '' COMMENT '转入用户昵称快照',
+  `target_phone` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '转入用户手机号快照',
+  `old_package_id` VARCHAR(64) NOT NULL COMMENT '转移前课包 ID',
+  `new_package_id` VARCHAR(64) NOT NULL COMMENT '转移后课包 ID',
+  `package_name` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '课包名称快照',
+  `order_id` VARCHAR(128) NOT NULL COMMENT '关联支付订单 ID',
+  `total_cnt` INT NOT NULL DEFAULT 0 COMMENT '转移时总课时',
+  `remain_cnt` INT NOT NULL DEFAULT 0 COMMENT '转移时剩余课时',
+  `coach_id` INT NOT NULL DEFAULT 0 COMMENT '教练 ID',
+  `coach_name` VARCHAR(128) NOT NULL DEFAULT '' COMMENT '教练名称快照',
+  `transfer_ts` BIGINT NOT NULL COMMENT '转移时间，Unix 秒',
+  `created_by` VARCHAR(128) NOT NULL DEFAULT '' COMMENT '管理员账号',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_old_package_id` (`old_package_id`),
+  KEY `idx_transfer_ts_id` (`transfer_ts`, `id`),
+  KEY `idx_target_uid` (`target_uid`),
+  KEY `idx_new_package_id` (`new_package_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='课包转移成功历史记录';
