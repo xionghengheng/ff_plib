@@ -247,6 +247,8 @@ type CoursePackageSingleLessonInterface interface {
 	GetSingleLessonListMissed(limit int) ([]model.CoursePackageSingleLessonModel, error)
 	GetTodaySingleLessonListNotSendMsgGoLesson(ts int64, limit int) ([]model.CoursePackageSingleLessonModel, error)
 	GetCompletedSingleLessonListByCoachId(coachId int, uBegTs int64) ([]model.CoursePackageSingleLessonModel, error)
+	// 统计教练在 [beginTs, endTs) 内预约上课、当前状态为已旷课的课程数，包含所有课包类型。
+	CountMissedSingleLessonsByCoachID(coachID int, beginTs, endTs int64) (uint32, error)
 
 	//获取所有次课信息，通过创建时间来分页
 	GetAllSingleLessonList(createTs int64) ([]model.CoursePackageSingleLessonModel, error)

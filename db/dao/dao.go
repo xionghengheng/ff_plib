@@ -716,6 +716,15 @@ func (imp *CoursePackageSingleLessonInterfaceImp) GetCompletedSingleLessonListBy
 	return vecCoursePackageSingleLessonModel, err
 }
 
+func (imp *CoursePackageSingleLessonInterfaceImp) CountMissedSingleLessonsByCoachID(coachID int, beginTs, endTs int64) (uint32, error) {
+	var count uint32
+	err := db.Get().Table(course_package_single_lesson_tableName).
+		Where("coach_id = ? AND schedule_beg_ts >= ? AND schedule_beg_ts < ? AND status = ?",
+			coachID, beginTs, endTs, model.En_LessonStatusMissed).
+		Count(&count).Error
+	return count, err
+}
+
 func (imp *CoursePackageSingleLessonInterfaceImp) GetAllSingleLessonList(createTs int64) ([]model.CoursePackageSingleLessonModel, error) {
 	cli := db.Get()
 	var vecRes []model.CoursePackageSingleLessonModel

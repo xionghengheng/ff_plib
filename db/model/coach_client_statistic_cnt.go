@@ -6,6 +6,7 @@ type CoachMonthlyStatisticModel struct {
 	MonthBegTs        int64  `gorm:"primary_key" json:"month_beg_ts"` // 统计计数对应的月份
 	PayUserCnt        uint32 `json:"pay_user_cnt"`                    // 付费用户数(去重的)
 	LessonCnt         uint32 `json:"lesson_cnt"`                      // 上课数
+	MissedLessonCnt   uint32 `json:"missed_lesson_cnt"`               // 当月旷课数（付费课、体验课、赠课，按预约上课时间统计）
 	LessonUserCnt     uint32 `json:"lesson_user_cnt"`                 // 上课用户数(去重的)
 	SaleRevenue       uint32 `json:"sale_revenue"`                    // 销售额(单位元)
 	TrialUserCnt      uint32 `json:"trial_user_cnt"`                  // 体验用户数-体验课包
