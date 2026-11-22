@@ -1,10 +1,9 @@
 package model
 
-// GymClientActivationModel 保存管理员成功开通门店端时的快照。
-// 与用户绑定变更在同一事务内写入；失败操作不产生成功历史。
-type GymClientActivationModel struct {
+// GymClientActivationHistoryModel 保存管理员成功开通门店端时的快照。
+// 由业务层完成开通后填充快照，DAO 仅负责历史记录的存取。
+type GymClientActivationHistoryModel struct {
 	ID              int64  `json:"id" gorm:"primary_key"`
-	RequestID       string `json:"request_id"`
 	UserPhone       string `json:"user_phone"`
 	UID             int64  `json:"uid"`
 	UserNick        string `json:"user_nick"`
