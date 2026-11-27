@@ -6,6 +6,9 @@ import (
 
 // 通卡场地信息
 type PassCardGymInterface interface {
+	// 新增通卡场地
+	Add(gym *pass_card_model.PassCardGymInfoModel) error
+
 	// 获取全量场地列表
 	GetGymList() ([]pass_card_model.PassCardGymInfoModel, error)
 

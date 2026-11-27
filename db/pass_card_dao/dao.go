@@ -14,6 +14,10 @@ import (
 
 const pass_card_gym_tableName = "pass_card_gym_info"
 
+func (imp *PassCardGymInterfaceImp) Add(gym *pass_card_model.PassCardGymInfoModel) error {
+	return db.Get().Table(pass_card_gym_tableName).Create(gym).Error
+}
+
 func (imp *PassCardGymInterfaceImp) GetGymList() ([]pass_card_model.PassCardGymInfoModel, error) {
 	var err error
 	var vecGyms []pass_card_model.PassCardGymInfoModel

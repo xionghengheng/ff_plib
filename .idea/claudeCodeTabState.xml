@@ -15,6 +15,7 @@
               <option name="claudeSupplierId" value="__cli_login__" />
               <option name="codexSupplierId" value="__codex_cli_login__" />
               <option name="ompApprovalMode" value="" />
+              <option name="reviewTargetId" value="a0a4723c-43fb-4edd-9c0b-5c542fb62ec0" />
             </TabSessionState>
           </value>
         </entry>
